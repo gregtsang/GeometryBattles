@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+
+namespace BoardManager {
 
 public class Tuple3<T, U, V>
 {
@@ -19,7 +20,7 @@ public class Tuple3<T, U, V>
 };
 
 [CreateAssetMenu]
-public class GameState : ScriptableObject
+public class BoardState : ScriptableObject
 {
     int cap = -1;
     List< List< Tuple3< GameObject, int, int> > > grid;
@@ -120,4 +121,6 @@ public class GameState : ScriptableObject
         }
         return neighbors;
     }
+}
+
 }

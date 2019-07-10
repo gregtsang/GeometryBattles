@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 
+namespace BoardManager {
+
 public class TilePrefab : MonoBehaviour
 {
-    public GameState gameState;
+    public BoardState boardState;
 
     int q, r;
 
@@ -14,15 +16,17 @@ public class TilePrefab : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (gameState.GetNode(q, r) == -1)
+        if (boardState.GetNode(q, r) == -1)
         {
-            int player = gameState.GetPlayer();
+            int player = boardState.GetPlayer();
             this.GetComponent<MeshRenderer>().material.color = player == 0 ? Color.red : Color.blue;
-            gameState.SetNode(q, r, player);
-            if (gameState.GameOver(q, r, player))
+            boardState.SetNode(q, r, player);
+            if (boardState.GameOver(q, r, player))
                 Debug.Log("Game Over");
             else
-                gameState.NextPlayer();
+                boardState.NextPlayer();
         }
     }
+}
+
 }

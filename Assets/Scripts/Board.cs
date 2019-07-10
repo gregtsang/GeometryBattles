@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 
+namespace BoardManager {
+
 public class Board : MonoBehaviour
 {
     public Camera gameCam;
-    public GameState gameState;
+    public BoardState boardState;
     public GameObject tilePrefab;
 
     public int boardWidth = 20;
@@ -14,7 +16,7 @@ public class Board : MonoBehaviour
     
     void Start()
     {
-        gameState.SetCap(boardWidth);
+        boardState.SetCap(boardWidth);
         gameCam.orthographicSize = boardWidth;
         SetGaps(tileGap);
         CreateBoard();
@@ -48,9 +50,11 @@ public class Board : MonoBehaviour
                 int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                 int r = y < boardWidth ? x : y - boardWidth + 1 + x;
                 tile.name = "Tile" + q + "." + r;
-                gameState.InitNode(tile, q, r);
+                boardState.InitNode(tile, q, r);
                 tile.GetComponent<TilePrefab>().SetCoords(q, r);
             }
         }
     }
+}
+
 }
