@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 562494486}
   - component: {fileID: 562494485}
   m_Layer: 0
-  m_Name: Map
+  m_Name: Board
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,11 +150,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCam: {fileID: 963194227}
-  gameState: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
+  boardState: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
   tilePrefab: {fileID: 6418696165290788695, guid: c175786bd89374684829114b7d55c504,
     type: 3}
-  mapWidth: 11
-  gap: 0.15
+  boardWidth: 20
+  tileGap: 0.15
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0

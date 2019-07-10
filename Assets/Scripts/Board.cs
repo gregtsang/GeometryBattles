@@ -50,7 +50,6 @@ public class Board : MonoBehaviour
                 int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                 int r = y < boardWidth ? x : y - boardWidth + 1 + x;
                 tile.name = "Tile" + q + "." + r;
-                boardState.InitNode(tile, q, r);
                 tile.GetComponent<TilePrefab>().SetCoords(q, r);
             }
         }
