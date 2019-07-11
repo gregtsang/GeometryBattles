@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4384669, g: 0.48655343, b: 0.5668278, a: 1}
+  m_IndirectSpecularColor: {r: 0.17412789, g: 0.21774751, b: 0.2999438, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameCam: {fileID: 963194227}
   boardState: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
-  tilePrefab: {fileID: 6418696165290788695, guid: c175786bd89374684829114b7d55c504,
+  tilePrefab: {fileID: 424929264639770933, guid: 98c5e67f03c1940c48aed1dcd8e0f05d,
     type: 3}
   boardWidth: 20
   tileGap: 0.15
