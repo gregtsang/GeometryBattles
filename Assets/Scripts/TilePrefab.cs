@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 
-namespace BoardManager {
-
-public class TilePrefab : MonoBehaviour
+namespace BoardManager
 {
-    public BoardState boardState;
-
-    int q, r;
-
-    public void SetCoords(int x, int y)
+    public class TilePrefab : MonoBehaviour
     {
-        q = x;
-        r = y;
-    }
-}
+        public BoardState boardState;
 
+        int q, r;
+
+        public void SetCoords(int x, int y)
+        {
+            q = x;
+            r = y;
+        }
+
+        public void SetColor(float hue, float sat, float val)
+        {
+            this.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(hue, sat, val);
+        }
+    }
 }
