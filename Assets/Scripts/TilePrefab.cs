@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace BoardManager
+namespace GeometryBattles.BoardManager
 {
     public class TilePrefab : MonoBehaviour
     {
