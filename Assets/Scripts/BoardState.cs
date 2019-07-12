@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace BoardManager
+namespace GeometryBattles.BoardManager
 {
     public class TileState
     {
@@ -53,7 +53,8 @@ namespace BoardManager
         public int spreadAmount = 5;
         public float spreadRate = 0.1f;
         public float spreadTimer = 0.1f;
-        public int maxInfluence = 100;
+        public int infMax = 200;
+        public int infThreshold = 100;
         int cap = -1;
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
@@ -101,13 +102,13 @@ namespace BoardManager
             int owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (owner == -1 || owner == player)
-                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, maxInfluence));
+                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
             else
             {
                 if (influence < value)
-                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, maxInfluence));
+                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
                 else if (influence > value)
-                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, maxInfluence));
+                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
                 else
                     gridbuffer[q][r].Set(-1, 0);
             }
@@ -122,7 +123,7 @@ namespace BoardManager
             while (queue.Count > 0)
             {
                 Vector3Int curr = queue.Dequeue();
-                if (grid[curr[0]][curr[1]].GetOwner() == player && grid[curr[0]][curr[1]].GetInfluence() == maxInfluence)
+                if (grid[curr[0]][curr[1]].GetOwner() == player && grid[curr[0]][curr[1]].GetInfluence() >= infThreshold)
                     return curr[2];
                 else
                 {
@@ -176,7 +177,7 @@ namespace BoardManager
                     buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
-                        if (grid[n[0]][n[1]].GetInfluence() == maxInfluence)
+                        if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
                             AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount, 1);
                 }
             }

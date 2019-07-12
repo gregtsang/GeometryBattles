@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 
-namespace BoardManager
+namespace GeometryBattles.BoardManager
 {
-    public class Board : MonoBehaviour
+    public class BoardGenerator : MonoBehaviour
     {
         public Camera gameCam;
         public BoardState boardState;
         public GameObject tilePrefab;
+        public Resource resource;
 
         public int boardWidth = 20;
+        public int baseOffset = 2;
 
         float tileWidth = 1.73205f;
         float tileLength = 2.0f;
@@ -17,6 +19,7 @@ namespace BoardManager
         void Start()
         {
             boardState.SetCap(boardWidth);
+            resource.InitResourceTiles(boardWidth, baseOffset);
             gameCam.orthographicSize = boardWidth;
             SetGaps(tileGap);
             CreateBoard();
@@ -63,6 +66,8 @@ namespace BoardManager
                     tile.name = "Tile" + q + "." + r;
                     tile.GetComponent<TilePrefab>().SetCoords(q, r);
                     boardState.InitNode(tile, q, r);
+                    if (resource.IsResourceTile(q, r))
+                        tile.GetComponent<MeshRenderer>().material.color = Color.yellow;
                 }
             }
         }
