@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48d4bc31382fd4111b804df0f0cbe2f9, type: 3}
   m_Name: BoardState
   m_EditorClassIdentifier: 
+  resource: {fileID: 11400000, guid: f59236a548c64433385282b1f8945265, type: 2}
+  playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
+    type: 3}
   spreadAmount: 5
   spreadRate: 5
-  spreadTimer: 4.581759
   infMax: 200
   infThreshold: 100
