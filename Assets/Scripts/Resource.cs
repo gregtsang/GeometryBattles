@@ -6,13 +6,13 @@ namespace GeometryBattles.BoardManager
     [CreateAssetMenu]
     public class Resource : ScriptableObject
     {
-        public int numResourceTilesPerSide = 5;
+        public int resourceTilesPerSide = 5;
         public int minDistance = 3;
         HashSet<Vector2Int> resourceTiles = new HashSet<Vector2Int>();
 
         public void InitResourceTiles(int boardWidth, int baseOffset)
         {
-            for (int i = 0; i < numResourceTilesPerSide; i++)
+            for (int i = 0; i < resourceTilesPerSide; i++)
             {   
                 int qRand, rRand;
                 do

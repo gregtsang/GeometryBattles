@@ -146,7 +146,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 562494484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4fa3e4c458254dc5b472d82ce8e59ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b8f27cd4e0d54d57a3e3c6abd21bd59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gameCam: {fileID: 963194227}
@@ -155,6 +155,7 @@ MonoBehaviour:
     type: 3}
   resource: {fileID: 11400000, guid: f59236a548c64433385282b1f8945265, type: 2}
   boardWidth: 20
+  baseOffset: 2
   tileGap: 0.15
 --- !u!4 &562494486
 Transform:

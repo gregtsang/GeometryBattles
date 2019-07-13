@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f42e8589f7f47aeb140909bbb300f2, type: 3}
   m_Name: Resource
   m_EditorClassIdentifier: 
-  numResourceTiles: 6
-  avgDistance: 10
+  numResourceTilesPerSide: 5
   minDistance: 3
