@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.BoardManager
 {
@@ -7,10 +8,12 @@ namespace GeometryBattles.BoardManager
         public Camera gameCam;
         public BoardState boardState;
         public GameObject tilePrefab;
+        public GameObject playerPrefab;
         public Resource resource;
 
         public int boardWidth = 20;
         public int baseOffset = 2;
+        public int numPlayers = 2;
 
         float tileWidth = 1.73205f;
         float tileLength = 2.0f;
@@ -23,14 +26,16 @@ namespace GeometryBattles.BoardManager
             gameCam.orthographicSize = boardWidth;
             SetGaps(tileGap);
             CreateBoard();
+            CreatePlayers(numPlayers);
+            boardState.ResetTimer();
         }
 
         void Update()
         {
-            boardState.spreadTimer -= Time.deltaTime;
-            if (boardState.spreadTimer <= 0.0f)
+            boardState.SubTimer(Time.deltaTime);
+            if (boardState.GetTimer() <= 0.0f)
             {
-                boardState.spreadTimer = boardState.spreadRate;
+                boardState.ResetTimer();
                 boardState.CalcBuffer();
                 boardState.SwapBuffer();
             }
@@ -69,6 +74,17 @@ namespace GeometryBattles.BoardManager
                     if (resource.IsResourceTile(q, r))
                         tile.GetComponent<MeshRenderer>().material.color = Color.yellow;
                 }
+            }
+        }
+
+        void CreatePlayers(int numPlayers)
+        {
+            for (int i = 0; i < numPlayers; i++)
+            {
+                GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
+                player.name = "Player" + (i + 1);
+                player.GetComponent<PlayerPrefab>().SetColor(1.0f * i / numPlayers);
+                boardState.AddPlayer(player);
             }
         }
     }
