@@ -28,6 +28,8 @@ namespace GeometryBattles.BoardManager
             CreateBoard();
             CreatePlayers(numPlayers);
             boardState.ResetTimer();
+            boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+            boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
         }
 
         void Update()
@@ -85,6 +87,7 @@ namespace GeometryBattles.BoardManager
                 player.name = "Player" + (i + 1);
                 player.GetComponent<PlayerPrefab>().SetColor(1.0f * i / numPlayers);
                 boardState.AddPlayer(player);
+                Debug.Log(boardState.GetPlayer(i));
             }
         }
     }
