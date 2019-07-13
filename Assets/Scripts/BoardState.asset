@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48d4bc31382fd4111b804df0f0cbe2f9, type: 3}
   m_Name: BoardState
   m_EditorClassIdentifier: 
-  numPlayers: 2
+  spreadAmount: 5
   spreadRate: 5
+  spreadTimer: 4.581759
+  infMax: 200
+  infThreshold: 100

@@ -2,7 +2,7 @@
 
 namespace GeometryBattles.BoardManager
 {
-    public class BoardGenerator : MonoBehaviour
+    public class Board : MonoBehaviour
     {
         public Camera gameCam;
         public BoardState boardState;

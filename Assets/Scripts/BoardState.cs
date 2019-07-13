@@ -49,12 +49,13 @@ namespace GeometryBattles.BoardManager
     [CreateAssetMenu]
     public class BoardState : ScriptableObject
     {
-        public int numPlayers = 2;
         public int spreadAmount = 5;
         public float spreadRate = 0.1f;
         public float spreadTimer = 0.1f;
+        
         public int infMax = 200;
         public int infThreshold = 100;
+        
         int cap = -1;
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
