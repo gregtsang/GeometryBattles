@@ -87,7 +87,6 @@ namespace GeometryBattles.BoardManager
                 player.name = "Player" + (i + 1);
                 player.GetComponent<PlayerPrefab>().SetColor(1.0f * i / numPlayers);
                 boardState.AddPlayer(player);
-                Debug.Log(boardState.GetPlayer(i));
             }
         }
     }

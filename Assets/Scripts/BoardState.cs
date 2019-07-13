@@ -86,7 +86,6 @@ namespace GeometryBattles.BoardManager
 
         public void AddPlayer(GameObject player)
         {
-            Debug.Log("test");
             players.Add(player);
         }
 
