@@ -6,12 +6,12 @@ namespace GeometryBattles.PlayerManager
     {
         public int miningAmount = 1;
         public float miningRate = 1.0f;
-        public float miningTimer = 1.0f;
+        float miningTimer = 1.0f;
         
         public int startResource = 0;
-        public int resource;
+        int resource;
 
-        public float colorHue;
+        float colorHue;
 
         void Start()
         {
@@ -42,6 +42,11 @@ namespace GeometryBattles.PlayerManager
         public void AddMiningAmount(int amount)
         {
             miningAmount += amount;
+        }
+
+        public float GetColor()
+        {
+            return colorHue;
         }
 
         public void SetColor(float hue)

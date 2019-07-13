@@ -43,7 +43,8 @@ namespace GeometryBattles.BoardManager
         {
             this.Owner = owner;
             this.Influence = influence;
-            //this.Tile.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(owner / 2.0f, influence / 100.0f, 1);
+            if (owner != null)
+                this.Tile.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f);
         }
     }
 
@@ -52,9 +53,9 @@ namespace GeometryBattles.BoardManager
     {
         public Resource resource;
         public GameObject playerPrefab;
-        List<GameObject> players = new List<GameObject>();
+        List<GameObject> players;
 
-        public int spreadAmount = 5;
+        public int spreadAmount = 1;
         public float spreadRate = 0.1f;
         float spreadTimer = 0.1f;
         
@@ -67,6 +68,7 @@ namespace GeometryBattles.BoardManager
 
         public void SetCap(int n)
         {
+            players = new List<GameObject>();
             grid = new List<List<TileState>>(n);
             buffer = new List<List<TileState>>(n);
             for (int i = 0; i < n; i++)
@@ -84,6 +86,7 @@ namespace GeometryBattles.BoardManager
 
         public void AddPlayer(GameObject player)
         {
+            Debug.Log("test");
             players.Add(player);
         }
 
@@ -248,6 +251,11 @@ namespace GeometryBattles.BoardManager
         public float GetTimer()
         {
             return spreadTimer;
+        }
+
+        public GameObject GetPlayer(int i)
+        {
+            return players[i];
         }
     }
 }
