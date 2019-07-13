@@ -106,6 +106,21 @@ namespace GeometryBattles.BoardManager
             return grid[q][r].GetInfluence();
         }
 
+        public void SetNode(int q, int r, GameObject owner, int target = 0)
+        {
+            List<List<TileState>> gridbuffer = target == 0 ? grid : buffer;
+            GameObject prevOwner = gridbuffer[q][r].GetOwner();
+            int prevInfluence = gridbuffer[q][r].GetInfluence();
+            if (resource.IsResourceTile(q, r))
+            {
+                if (prevOwner != owner && prevInfluence >= infThreshold)
+                    prevOwner.GetComponent<PlayerPrefab>().AddMiningAmount(-resource.resourceAmount);
+                if (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold))
+                    owner.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
+            }
+            gridbuffer[q][r].Set(owner, infThreshold);
+        }
+
         public void SetNode(int q, int r, GameObject owner, int influence, int target = 0)
         {
             List<List<TileState>> gridbuffer = target == 0 ? grid : buffer;
