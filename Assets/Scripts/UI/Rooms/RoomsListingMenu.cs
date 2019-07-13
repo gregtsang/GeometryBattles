@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -29,14 +28,15 @@ public class RoomsListingMenu : MonoBehaviourPunCallbacks
                _listings.RemoveAt(index);
             }
          }
-
-
-         RoomListing listing = Instantiate(_roomListing, _content);
-
-         if (listing != null)
+         else
          {
-            listing.SetRoomInfo(info);
-            _listings.Add(listing);
+            RoomListing listing = Instantiate(_roomListing, _content);
+
+            if (listing != null)
+            {
+               listing.SetRoomInfo(info);
+               _listings.Add(listing);
+            }
          }
       }
    }
