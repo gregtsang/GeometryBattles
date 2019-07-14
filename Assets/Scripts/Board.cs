@@ -74,7 +74,10 @@ namespace GeometryBattles.BoardManager
                     tile.GetComponent<TilePrefab>().SetCoords(q, r);
                     boardState.InitNode(tile, q, r);
                     if (resource.IsResourceTile(q, r))
+                    {
+                        tile.GetComponent<TilePrefab>().SetResourceTile();
                         tile.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                    }
                 }
             }
         }
