@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class CreateRoomMenu : MonoBehaviourPunCallbacks
 {
-   private RoomsGUI _roomsGUI;
+   private RoomsGUI _roomsGUI = null;
 
    public void FirstInitialize(RoomsGUI canvases)
    {
@@ -15,7 +15,7 @@ public class CreateRoomMenu : MonoBehaviourPunCallbacks
    }
 
 
-   [SerializeField] Text _roomName;
+   [SerializeField] Text _roomName = null;
 
    public void OnClick_CreateRoom()
    {
