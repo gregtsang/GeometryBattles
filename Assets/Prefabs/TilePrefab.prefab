@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5685224491980704016}
   - component: {fileID: 2150874432407057897}
   - component: {fileID: -6702984316035545656}
+  - component: {fileID: -111053626951984444}
   m_Layer: 0
   m_Name: TilePrefab
   m_TagString: Untagged
@@ -90,4 +91,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ddeabf22d4d848dfb7e740f23966d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeRate: 1
+  boardstate: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
+--- !u!64 &-111053626951984444
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424929264639770933}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 2534964839176971238, guid: 57a9ad4a71d9f4cb29c7ead05ac88398, type: 3}
