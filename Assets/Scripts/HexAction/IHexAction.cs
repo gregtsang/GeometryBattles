@@ -13,6 +13,8 @@ namespace GeometryBattles.HexAction
             get;
         }
 
+        string GetTipText(PlayerPrefab player, TilePrefab tile);
+
         void doAction(PlayerPrefab player, TilePrefab tile);
 
         bool canDoAction(PlayerPrefab player, TilePrefab tile);
