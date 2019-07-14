@@ -60,6 +60,8 @@ namespace GeometryBattles.BoardManager
 
         void CreateBoard()
         {
+            GameObject tiles = new GameObject();
+            tiles.name = "Tiles";
             for (int y = 0; y < 2 * boardWidth - 1; y++)
             {
                 int numTiles = boardWidth - Mathf.Abs(boardWidth - y - 1);
@@ -68,7 +70,7 @@ namespace GeometryBattles.BoardManager
                 {
                     Vector2Int boardPos = new Vector2Int(x, y);
                     Vector3 tilePos = CalcPos(boardPos, numTiles);
-                    GameObject tile = Instantiate(tilePrefab, tilePos, Quaternion.identity, this.transform) as GameObject;
+                    GameObject tile = Instantiate(tilePrefab, tilePos, Quaternion.identity, tiles.transform) as GameObject;
                     int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
                     tile.name = "Tile" + q + "." + r;
