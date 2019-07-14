@@ -45,7 +45,7 @@ namespace GeometryBattles.BoardManager
             this.Influence = influence;
             if (color && owner != null)
             {
-                this.Tile.GetComponent<TilePrefab>().SetColor(Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f));
+                this.Tile.GetComponent<TilePrefab>().SetColor(Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f), instant);
                 if (instant)
                     this.Tile.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f);
             }
