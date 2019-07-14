@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -6,12 +7,18 @@ using UnityEngine;
 public class RoomsListingMenu : MonoBehaviourPunCallbacks
 {
    [SerializeField]
-   private Transform _content;
+   private Transform _content = null;
 
    [SerializeField]
-   private RoomListing _roomListing;
+   private RoomListing _roomListing = null;
 
    private List<RoomListing> _listings = new List<RoomListing>();
+   private RoomsGUI _roomsGUI = null;
+
+   public void FirstInitialize(RoomsGUI canvases)
+   {
+      _roomsGUI = canvases;
+   }
 
    public override void OnRoomListUpdate(List<RoomInfo> roomList)
    {
@@ -40,4 +47,12 @@ public class RoomsListingMenu : MonoBehaviourPunCallbacks
          }
       }
    }
+
+   public override void OnJoinedRoom()
+   {
+      base.OnJoinedRoom();
+      _roomsGUI.CurrentRoomCanvas.Show();
+   }
+
+
 }

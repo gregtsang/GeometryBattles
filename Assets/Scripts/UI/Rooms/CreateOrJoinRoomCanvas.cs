@@ -5,13 +5,17 @@ using UnityEngine;
 public class CreateOrJoinRoomCanvas : MonoBehaviour
 {
    [SerializeField]
-   private CreateRoomMenu _createRoomMenu;
+   private CreateRoomMenu _createRoomMenu = null;
 
-   private RoomsGUI _roomsGUI;
+   [SerializeField]
+   private RoomsListingMenu _roomsListingMenu = null;
+
+   private RoomsGUI _roomsGUI = null;
 
    public void FirstInitialize(RoomsGUI canvases)
    {
       _roomsGUI = canvases;
       _createRoomMenu.FirstInitialize(canvases);
+      _roomsListingMenu.FirstInitialize(canvases);
    }
 }

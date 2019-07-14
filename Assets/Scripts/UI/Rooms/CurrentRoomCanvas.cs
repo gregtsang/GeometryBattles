@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CurrentRoomCanvas : MonoBehaviour
 {
-   private RoomsGUI _roomsGUI;
+   private RoomsGUI _roomsGUI = null;
 
    public void FirstInitialize(RoomsGUI canvases)
    {

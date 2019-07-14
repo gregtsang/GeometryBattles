@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: New Player
 --- !u!1 &8494288218918728509
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,10 +91,10 @@ GameObject:
   - component: {fileID: 8494288218918728505}
   - component: {fileID: 8494288218918728504}
   - component: {fileID: 8494288218918728511}
-  - component: {fileID: 3654158974570273290}
-  - component: {fileID: -1700082851592597374}
+  - component: {fileID: 927721740774787422}
+  - component: {fileID: 3784629482452039128}
   m_Layer: 0
-  m_Name: RoomListing
+  m_Name: PlayerListing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &3654158974570273290
+--- !u!114 &927721740774787422
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,11 +184,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8494288218918728509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e744e4688e18d4c6584c0ca22e83b2ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 201748c16b27c4a2eb822a66c3149728, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _text: {fileID: 8494288217417615678}
---- !u!114 &-1700082851592597374
+--- !u!114 &3784629482452039128
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -231,12 +231,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3654158974570273290}
-        m_MethodName: OnClick_Button
+      - m_Target: {fileID: 8494288218918728509}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
