@@ -51,6 +51,10 @@ namespace GeometryBattles.UI
             {            
                 GetComponentInChildren<TextMesh>().text = actions[0].GetTipText(uiManager.GetActivePlayer(), tilePrefab);
             }
+            else
+            {
+                GetComponentInChildren<TextMesh>().text = "";
+            }
         }
 
         private void OnMouseExit()
