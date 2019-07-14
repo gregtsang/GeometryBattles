@@ -24,12 +24,12 @@ namespace GeometryBattles.BoardManager
                     fadeTimer -= Time.deltaTime;
                     Color lerpedColor;
                     lerpedColor = Color.Lerp(prevColor, nextColor, 1.0f - Mathf.Max(0.0f, fadeTimer / fadeRate));
-                    this.GetComponent<MeshRenderer>().material.color = lerpedColor;
+                    this.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", lerpedColor);
                 }
                 else
                 {
                     prevColor = nextColor;
-                    this.GetComponent<MeshRenderer>().material.color = nextColor;
+                    this.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", nextColor);
                 }
             }
         }
@@ -50,7 +50,7 @@ namespace GeometryBattles.BoardManager
             if (instant)
                 this.prevColor = color;
             else
-                this.prevColor = this.GetComponent<MeshRenderer>().material.color;
+                this.prevColor = this.GetComponent<MeshRenderer>().material.GetColor("_BaseColor");
             this.nextColor = color;
             fadeTimer = fadeRate;
         }
