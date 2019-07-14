@@ -71,5 +71,10 @@ namespace GeometryBattles.Construction
             Debug.Log("Tile Cost Calculated: " + cost);
             return cost;
         }
+
+        public string GetTipText(PlayerPrefab player, TilePrefab tile)
+        {
+            return isViableAction(player, tile) ? GetTileCost(player, tile).ToString() : "";
+        }
     }
 }

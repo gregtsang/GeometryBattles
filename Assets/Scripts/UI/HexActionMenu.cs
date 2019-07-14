@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using GeometryBattles.HexAction;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
@@ -26,8 +27,7 @@ namespace GeometryBattles.UI
         private void OnMouseDown()
         {
             string errMsg = "";
-            var actions = new List<IHexAction>();
-            actions = HexActionManager.getViableActions(uiManager.GetActivePlayer(), tilePrefab);
+            var actions = HexActionManager.getViableActions(uiManager.GetActivePlayer(), tilePrefab);
             //DebugLogActions(actions);
 
             if (actions.Count == 1)
@@ -44,6 +44,24 @@ namespace GeometryBattles.UI
 
         }
         
+        private void OnMouseOver()
+        {
+            var actions = HexActionManager.getViableActions(uiManager.GetActivePlayer(), tilePrefab);
+            if (actions.Count == 1)
+            {            
+                GetComponentInChildren<TextMesh>().text = actions[0].GetTipText(uiManager.GetActivePlayer(), tilePrefab);
+            }
+            else
+            {
+                GetComponentInChildren<TextMesh>().text = "";
+            }
+        }
+
+        private void OnMouseExit()
+        {
+            GetComponentInChildren<TextMesh>().text = "";
+        }
+
         private void DebugLogActions(List<IHexAction> actions)
         {
             string errMsg = "";
