@@ -172,6 +172,11 @@ namespace GeometryBattles.BoardManager
             }
         }
 
+        public bool IsOwned(int q, int r)
+        {
+            return grid[q][r].GetInfluence() >= infThreshold;
+        }
+
         public int ClosestOwned(int q, int r, GameObject player)
         {
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
