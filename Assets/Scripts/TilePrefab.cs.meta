@@ -4,7 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - gameState: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
+  - boardstate: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
