@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace GeometryBattles.PlayerManager
 {
@@ -24,7 +25,7 @@ namespace GeometryBattles.PlayerManager
             miningTimer -= Time.deltaTime;
             if (miningTimer <= 0.0f)
             {
-                resource += miningAmount;
+                AddResource(miningAmount);
                 miningTimer = miningRate;
             }
         }
