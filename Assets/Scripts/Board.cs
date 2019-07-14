@@ -25,6 +25,7 @@ namespace GeometryBattles.BoardManager
             resource.InitResourceTiles(boardWidth, baseOffset);
             gameCam.orthographicSize = boardWidth;
             SetGaps(tileGap);
+            tilePrefab.GetComponent<TilePrefab>().SetFadeRate(boardState.spreadRate);
             CreateBoard();
             CreatePlayers(numPlayers);
             boardState.ResetTimer();
