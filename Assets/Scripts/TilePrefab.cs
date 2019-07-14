@@ -12,6 +12,9 @@ namespace GeometryBattles.BoardManager
 
         int q, r;
 
+        public int Q { get => q; }
+        public int R { get => r; }
+
         void Update()
         {
             if (!resourceTile && nextColor != prevColor)
