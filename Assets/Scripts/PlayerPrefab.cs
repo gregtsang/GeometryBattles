@@ -9,7 +9,7 @@ namespace GeometryBattles.PlayerManager
         float miningTimer = 1.0f;
         
         public int startResource = 0;
-        int resource;
+        [SerializeField] int resource = 0;
 
         float colorHue;
 
