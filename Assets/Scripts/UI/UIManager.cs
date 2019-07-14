@@ -11,7 +11,6 @@ namespace GeometryBattles.UI
         [SerializeField] private int activePlayer = 0;
         
         private Board board;
-        public Board Board { get => board; }
 
         // Start is called before the first frame update
         void Start()
@@ -21,7 +20,10 @@ namespace GeometryBattles.UI
 
         public PlayerPrefab GetActivePlayer()
         {
-            return Board.boardState.GetPlayer(activePlayer).GetComponent<PlayerPrefab>();
+            if (board == null) return null;
+            GameObject player = board.boardState.GetPlayer(activePlayer);
+            if (player == null) return null;
+            return player.GetComponent<PlayerPrefab>();
         }
 
         public Board GetBoard()
