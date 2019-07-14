@@ -39,12 +39,16 @@ namespace GeometryBattles.BoardManager
             return this.Influence;
         }
 
-        public void Set(GameObject owner, int influence)
+        public void Set(GameObject owner, int influence, bool instant = true, bool color = true)
         {
             this.Owner = owner;
             this.Influence = influence;
-            if (owner != null)
-                this.Tile.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f);
+            if (color && owner != null)
+            {
+                this.Tile.GetComponent<TilePrefab>().SetColor(Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f));
+                if (instant)
+                    this.Tile.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f);
+            }
         }
     }
 
@@ -86,7 +90,6 @@ namespace GeometryBattles.BoardManager
 
         public void AddPlayer(GameObject player)
         {
-            Debug.Log("test");
             players.Add(player);
         }
 
@@ -149,7 +152,7 @@ namespace GeometryBattles.BoardManager
                 if (resource.IsResourceTile(q, r))
                     if (influence < infThreshold && influence + value >= infThreshold)
                         player.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
-                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
+                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax), false);
             }
             else
             {
@@ -161,11 +164,11 @@ namespace GeometryBattles.BoardManager
                         player.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
                 }
                 if (influence < value)
-                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax), false);
                 else if (influence > value)
-                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
+                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax), false);
                 else
-                    gridbuffer[q][r].Set(null, 0);
+                    gridbuffer[q][r].Set(null, 0, false);
             }
         }
 
@@ -229,7 +232,7 @@ namespace GeometryBattles.BoardManager
             {
                 for (int j = 0; j < cap; j++)
                 {
-                    buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
+                    buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence(), false, false);
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)

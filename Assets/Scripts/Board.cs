@@ -74,7 +74,10 @@ namespace GeometryBattles.BoardManager
                     tile.GetComponent<TilePrefab>().SetCoords(q, r);
                     boardState.InitNode(tile, q, r);
                     if (resource.IsResourceTile(q, r))
+                    {
+                        tile.GetComponent<TilePrefab>().SetResourceTile();
                         tile.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                    }
                 }
             }
         }
@@ -87,7 +90,6 @@ namespace GeometryBattles.BoardManager
                 player.name = "Player" + (i + 1);
                 player.GetComponent<PlayerPrefab>().SetColor(1.0f * i / numPlayers);
                 boardState.AddPlayer(player);
-                Debug.Log(boardState.GetPlayer(i));
             }
         }
     }
