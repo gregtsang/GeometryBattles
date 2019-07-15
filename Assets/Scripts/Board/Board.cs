@@ -79,7 +79,7 @@ namespace GeometryBattles.BoardManager
                     if (resource.IsResourceTile(q, r))
                     {
                         tile.GetComponent<TilePrefab>().SetResourceTile();
-                        tile.GetComponent<MeshRenderer>().material.color = Color.yellow;
+                        tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.yellow);
                     }
                 }
             }

@@ -93,6 +93,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ddeabf22d4d848dfb7e740f23966d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardState: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
+  pyramid: {fileID: 6629078324857434495, guid: bf5d8251094d249a58c7d69a1e029041, type: 3}
 --- !u!114 &1369621756801389730
 MonoBehaviour:
   m_ObjectHideFlags: 0
