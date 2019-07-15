@@ -15,7 +15,7 @@ MonoBehaviour:
   resource: {fileID: 11400000, guid: f59236a548c64433385282b1f8945265, type: 2}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
-  spreadAmount: 1
-  spreadRate: 0.1
+  spreadAmount: 5
+  spreadRate: 0.5
   infMax: 200
   infThreshold: 100
