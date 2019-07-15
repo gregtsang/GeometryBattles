@@ -10,45 +10,56 @@ namespace GeometryBattles.BoardManager
 
         public TileState(GameObject tile, GameObject owner, int influence)
         {
-            this.Tile = tile;
-            this.Owner = owner;
-            this.Influence = influence;
+            this.tile = tile;
+            this.owner = owner;
+            this.influence = influence;
         }
 
-        GameObject Tile;
-        GameObject Owner;
-        int Influence;
+        GameObject tile;
+        GameObject owner;
+        int influence;
+        Dictionary<GameObject, int> buff = new Dictionary<GameObject, int>();
 
         public GameObject GetTile()
         {
-            return this.Tile;
+            return this.tile;
         }
 
         public void SetTile(GameObject tile)
         {
-            this.Tile = tile;
+            this.tile = tile;
         }
 
         public GameObject GetOwner()
         {
-            return this.Owner;
+            return this.owner;
         }
 
         public int GetInfluence()
         {
-            return this.Influence;
+            return this.influence;
         }
 
         public void Set(GameObject owner, int influence, bool instant = true, bool color = true)
         {
-            this.Owner = owner;
-            this.Influence = influence;
+            this.owner = owner;
+            this.influence = influence;
             if (color && owner != null)
             {
-                this.Tile.GetComponent<TilePrefab>().SetColor(Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f), instant);
+                this.tile.GetComponent<TilePrefab>().SetColor(Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f), instant);
                 if (instant)
-                    this.Tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f));
+                    this.tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f));
             }
+        }
+
+        public void SetBuff(GameObject player, int buff)
+        {
+            this.buff[player] = buff;
+        }
+
+        public int GetBuff(GameObject player)
+        {
+            return this.buff.ContainsKey(player) ? buff[player] : 0;
         }
     }
 
@@ -112,9 +123,9 @@ namespace GeometryBattles.BoardManager
             return grid[q][r].GetInfluence();
         }
 
-        public void SetNode(int q, int r, GameObject owner, int target = 0)
+        public void SetNode(int q, int r, GameObject owner, bool target = true)
         {
-            List<List<TileState>> gridbuffer = target == 0 ? grid : buffer;
+            List<List<TileState>> gridbuffer = target ? grid : buffer;
             GameObject prevOwner = gridbuffer[q][r].GetOwner();
             int prevInfluence = gridbuffer[q][r].GetInfluence();
             if (resource.IsResourceTile(q, r))
@@ -127,9 +138,9 @@ namespace GeometryBattles.BoardManager
             gridbuffer[q][r].Set(owner, infThreshold);
         }
 
-        public void SetNode(int q, int r, GameObject owner, int influence, int target = 0)
+        public void SetNode(int q, int r, GameObject owner, int influence, bool target = true)
         {
-            List<List<TileState>> gridbuffer = target == 0 ? grid : buffer;
+            List<List<TileState>> gridbuffer = target ? grid : buffer;
             GameObject prevOwner = gridbuffer[q][r].GetOwner();
             int prevInfluence = gridbuffer[q][r].GetInfluence();
             if (resource.IsResourceTile(q, r))
@@ -142,9 +153,9 @@ namespace GeometryBattles.BoardManager
             gridbuffer[q][r].Set(owner, influence);
         }
 
-        public void AddNode(int q, int r, GameObject player, int value, int target = 0)
+        public void AddNode(int q, int r, GameObject player, int value, bool target = true)
         {
-            List<List<TileState>> gridbuffer = target == 0 ? grid : buffer;
+            List<List<TileState>> gridbuffer = target ? grid : buffer;
             GameObject owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (owner == null || owner == player)
@@ -204,7 +215,7 @@ namespace GeometryBattles.BoardManager
             return -1;
         }
 
-        List<Vector2Int> GetNeighbors(int q, int r)
+        public List<Vector2Int> GetNeighbors(int q, int r)
         {
             List<Vector2Int> neighbors = new List<Vector2Int>();
             bool qMin = q == 0, qMax = q == cap - 1, rMin = r == 0, rMax = r == cap - 1;
@@ -241,9 +252,14 @@ namespace GeometryBattles.BoardManager
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
-                            AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount, 1);
+                            AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
                 }
             }
+        }
+
+        public void SetBuff(int q, int r, GameObject player, int buff)
+        {
+            grid[q][r].SetBuff(player, buff);
         }
 
         public void ResetTimer()
