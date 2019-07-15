@@ -15,10 +15,14 @@ public class TestConnect : MonoBehaviourPunCallbacks {
       print("Connected to server : )");
       print(PhotonNetwork.LocalPlayer.NickName);
 
-         // Room listings can only occur from within a lobby
-      PhotonNetwork.JoinLobby();
-      if (PhotonNetwork.InLobby) {
-         print("Joined lobby. Updating room listings...");
+         // Prevent joining the lobby multiple times
+      if (!PhotonNetwork.InLobby) {
+         
+            // Room listings can only occur from within a lobby
+         PhotonNetwork.JoinLobby();
+         if (PhotonNetwork.InLobby) {
+            print("Joined lobby. Updating room listings...");
+         }
       }
    }
 

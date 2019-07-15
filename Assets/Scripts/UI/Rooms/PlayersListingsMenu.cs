@@ -7,12 +7,18 @@ using UnityEngine;
 public class PlayersListingsMenu : MonoBehaviourPunCallbacks
 {
    [SerializeField]
-   private Transform _content = null;
+   private UnityEngine.Transform _content = null;
 
    [SerializeField]
    private PlayerListing _playerListing = null;
 
+   private RoomsGUI _roomsGUI = null;
    private List<PlayerListing> _listings = new List<PlayerListing>();
+
+   public void FirstInitialize(RoomsGUI canvases)
+   {
+      _roomsGUI = canvases;
+   }
 
    public override void OnPlayerEnteredRoom(Player newPlayer)
    {
@@ -23,13 +29,35 @@ public class PlayersListingsMenu : MonoBehaviourPunCallbacks
 
    private void AddPlayerListing(Player player)
    {
-      PlayerListing listing = Instantiate(_playerListing, _content);
+      int index = _listings.FindIndex(x => x.Player == player);
 
-      if (listing != null)
+         // If we already had that player listing, update it
+      if (index != -1)
       {
-         listing.SetPlayerInfo(player);
-         _listings.Add(listing);
+         _listings[index].SetPlayerInfo(player);
       }
+         // Otherwise, create a new listing
+      else
+      { 
+         PlayerListing listing = Instantiate(_playerListing, _content);
+
+         if (listing != null)
+         {
+            listing.SetPlayerInfo(player);
+            _listings.Add(listing);
+         }
+      }
+   }
+
+   public override void OnDisable()
+   {
+      base.OnDisable();
+      foreach (var listing in _listings)
+      {
+         Destroy(listing.gameObject);
+      }
+
+      _listings.Clear();
    }
 
    public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -44,9 +72,17 @@ public class PlayersListingsMenu : MonoBehaviourPunCallbacks
       }
    }
 
-   private void Awake()
+   public override void OnEnable()
    {
+      base.OnEnable();
+      //SetUpReady(false);
       GetCurrentRoomPlayers();
+   }
+
+   public override void OnLeftRoom()
+   {
+      base.OnLeftRoom();
+      _content.DestoryChildren();
    }
 
    private void GetCurrentRoomPlayers()

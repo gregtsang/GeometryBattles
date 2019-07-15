@@ -7,7 +7,7 @@ using UnityEngine;
 public class RoomsListingMenu : MonoBehaviourPunCallbacks
 {
    [SerializeField]
-   private Transform _content = null;
+   private UnityEngine.Transform _content = null;
 
    [SerializeField]
    private RoomListing _roomListing = null;
@@ -26,16 +26,20 @@ public class RoomsListingMenu : MonoBehaviourPunCallbacks
 
       foreach (RoomInfo info in roomList)
       {
+            // Consider updating the _listings to hashmap to save time here...
+         int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
+
+            // If the room has been flagged for removal and is _listings, remove
          if (info.RemovedFromList)
          {
-            int index = _listings.FindIndex(x => x.RoomInfo.Name == info.Name);
             if (index != -1)
-            {
+            { 
                Destroy(_listings[index].gameObject);
                _listings.RemoveAt(index);
             }
          }
-         else
+            // Otherwise, if the room doesn't exist yet, create it
+         else if (index == -1)
          {
             RoomListing listing = Instantiate(_roomListing, _content);
 
@@ -45,6 +49,11 @@ public class RoomsListingMenu : MonoBehaviourPunCallbacks
                _listings.Add(listing);
             }
          }
+            // Otherwise, the room already exists, so it's being updated
+         else
+         {
+            // Update room listing here...
+         }
       }
    }
 
@@ -52,6 +61,8 @@ public class RoomsListingMenu : MonoBehaviourPunCallbacks
    {
       base.OnJoinedRoom();
       _roomsGUI.CurrentRoomCanvas.Show();
+      _content.DestoryChildren();
+      _listings.Clear();
    }
 
 
