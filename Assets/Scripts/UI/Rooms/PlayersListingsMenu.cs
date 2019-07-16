@@ -103,6 +103,12 @@ public class PlayersListingsMenu : MonoBehaviourPunCallbacks
 
    public void OnClick_StartGame()
    {
-      PhotonNetwork.LoadLevel(sceneIndex);
+      if (PhotonNetwork.IsMasterClient)
+      {
+            // Prevent anyone from joining or seeing room and load next scene
+         PhotonNetwork.CurrentRoom.IsOpen = false;
+         PhotonNetwork.CurrentRoom.IsVisible = false;
+         PhotonNetwork.LoadLevel(sceneIndex);
+      }
    }
 }
