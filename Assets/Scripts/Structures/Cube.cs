@@ -5,9 +5,11 @@ namespace GeometryBattles.StructureManager
 {
     public class Cube : Structure
     {
+        public CubeScout cubeScout;
+
         public int cost = 20;
-        public float spawnRate = 1.0f;
-        float spawnTimer = 1.0f;
+        public float spawnRate = 10.0f;
+        float spawnTimer = 0.0f;
 
         void Update()
         {
@@ -21,7 +23,7 @@ namespace GeometryBattles.StructureManager
 
         public void SpawnScout()
         {
-            List<Vector2Int> neighbors = boardState.GetNeighbors(this.q, this.r);
+            Instantiate(cubeScout, this.transform.position, Quaternion.identity, this.transform);
         }
     }
 }
