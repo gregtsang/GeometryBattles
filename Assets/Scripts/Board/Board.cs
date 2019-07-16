@@ -19,35 +19,37 @@ namespace GeometryBattles.BoardManager
         float tileLength = 2.0f;
         public float tileGap = 0.15f;
         
-        void Start()
+        void Awake()
         {
+            gameCam.orthographicSize = boardWidth;
+            
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);
-            gameCam.orthographicSize = boardWidth;
-            SetGaps(tileGap);
             tilePrefab.GetComponent<TilePrefab>().SetFadeRate(boardState.spreadRate);
+
+            SetGaps(tileGap);
+
             CreateBoard();
             CreatePlayers(numPlayers);
-            boardState.ResetTimer();
+            
             boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
             boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
-        }
-
-        void Update()
-        {
-            boardState.SubTimer(Time.deltaTime);
-            if (boardState.GetTimer() <= 0.0f)
-            {
-                boardState.ResetTimer();
-                boardState.CalcBuffer();
-                boardState.SwapBuffer();
-            }
         }
 
         void SetGaps(float gap)
         {
             tileWidth += tileWidth * gap;
             tileLength += tileLength * gap;
+        }
+
+        public float GetTileLength()
+        {
+            return tileLength;
+        }
+
+        public float GetTileWidth()
+        {
+            return tileWidth;
         }
 
         Vector3 CalcPos(Vector2Int boardPos, int numTiles)
@@ -73,7 +75,7 @@ namespace GeometryBattles.BoardManager
                     GameObject tile = Instantiate(tilePrefab, tilePos, Quaternion.identity, tiles.transform) as GameObject;
                     int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
-                    tile.name = "Tile" + q + "." + r;
+                    tile.name = "Tile[" + q + "," + r + "]";
                     tile.GetComponent<TilePrefab>().SetCoords(q, r);
                     boardState.InitNode(tile, q, r);
                     if (resource.IsResourceTile(q, r))

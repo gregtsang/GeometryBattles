@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace GeometryBattles.BoardManager
 {
-    [CreateAssetMenu]
-    public class Resource : ScriptableObject
+    public class Resource : MonoBehaviour
     {
         public int resourceTilesPerSide = 5;
         public int minDistance = 3;

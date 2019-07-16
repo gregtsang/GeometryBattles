@@ -1,78 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.BoardManager
 {
-    public class TileState
-    {
-        public TileState() {}
-
-        public TileState(GameObject tile, GameObject owner, int influence)
-        {
-            this.tile = tile;
-            this.owner = owner;
-            this.influence = influence;
-        }
-
-        GameObject tile;
-        GameObject owner;
-        int influence;
-        Dictionary<GameObject, int> buff = new Dictionary<GameObject, int>();
-
-        public GameObject GetTile()
-        {
-            return this.tile;
-        }
-
-        public void SetTile(GameObject tile)
-        {
-            this.tile = tile;
-        }
-
-        public GameObject GetOwner()
-        {
-            return this.owner;
-        }
-
-        public int GetInfluence()
-        {
-            return this.influence;
-        }
-
-        public void Set(GameObject owner, int influence, bool instant = true, bool color = true)
-        {
-            this.owner = owner;
-            this.influence = influence;
-            if (color && owner != null)
-            {
-                this.tile.GetComponent<TilePrefab>().SetColor(Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f), instant);
-                if (instant)
-                    this.tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.HSVToRGB(owner.GetComponent<PlayerPrefab>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f));
-            }
-        }
-
-        public void SetBuff(GameObject player, int buff)
-        {
-            this.buff[player] = buff;
-        }
-
-        public int GetBuff(GameObject player)
-        {
-            return this.buff.ContainsKey(player) ? buff[player] : 0;
-        }
-    }
-
-    [CreateAssetMenu]
-    public class BoardState : ScriptableObject
+    public class BoardState : MonoBehaviour
     {
         public Resource resource;
-        public GameObject playerPrefab;
         List<GameObject> players;
 
-        public int spreadAmount = 1;
         public float spreadRate = 0.1f;
-        float spreadTimer = 0.1f;
+        public int spreadAmount = 1;
         
         public int infMax = 200;
         public int infThreshold = 100;
@@ -80,6 +19,11 @@ namespace GeometryBattles.BoardManager
         int cap = -1;
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
+
+        void Start()
+        {
+            StartCoroutine("CalcBuffer");
+        }
 
         public void SetCap(int n)
         {
@@ -102,6 +46,11 @@ namespace GeometryBattles.BoardManager
         public void AddPlayer(GameObject player)
         {
             players.Add(player);
+        }
+
+        public GameObject GetPlayer(int i)
+        {
+            return players[i];
         }
 
         public void InitNode(GameObject node, int q, int r)
@@ -242,44 +191,29 @@ namespace GeometryBattles.BoardManager
             buffer = temp;
         }
 
-        public void CalcBuffer()
+        IEnumerator CalcBuffer()
         {
-            for (int i = 0; i < cap; i++)
+            while (true)
             {
-                for (int j = 0; j < cap; j++)
+                for (int i = 0; i < cap; i++)
                 {
-                    buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence(), false, false);
-                    List<Vector2Int> neighbors = GetNeighbors(i, j);
-                    foreach (var n in neighbors)
-                        if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
-                            AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
+                    for (int j = 0; j < cap; j++)
+                    {
+                        buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence(), false, false);
+                        List<Vector2Int> neighbors = GetNeighbors(i, j);
+                        foreach (var n in neighbors)
+                            if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
+                                AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
+                    }
                 }
+                SwapBuffer();
+                yield return new WaitForSeconds(spreadRate);
             }
         }
 
         public void SetBuff(int q, int r, GameObject player, int buff)
         {
             grid[q][r].SetBuff(player, buff);
-        }
-
-        public void ResetTimer()
-        {
-            spreadTimer = spreadRate;
-        }
-
-        public void SubTimer(float time)
-        {
-            spreadTimer -= time;
-        }
-
-        public float GetTimer()
-        {
-            return spreadTimer;
-        }
-
-        public GameObject GetPlayer(int i)
-        {
-            return players[i];
         }
     }
 }

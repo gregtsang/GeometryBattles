@@ -178,6 +178,8 @@ GameObject:
   m_Component:
   - component: {fileID: 562494486}
   - component: {fileID: 562494485}
+  - component: {fileID: 562494487}
+  - component: {fileID: 562494488}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -198,12 +200,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameCam: {fileID: 963194227}
-  boardState: {fileID: 11400000, guid: 7fc5588aceb7f449292692d7bfacd117, type: 2}
+  boardState: {fileID: 562494487}
   tilePrefab: {fileID: 424929264639770933, guid: 98c5e67f03c1940c48aed1dcd8e0f05d,
     type: 3}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
-  resource: {fileID: 11400000, guid: f59236a548c64433385282b1f8945265, type: 2}
+  resource: {fileID: 562494488}
   boardWidth: 20
   baseOffset: 2
   numPlayers: 2
@@ -222,6 +224,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &562494487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562494484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48d4bc31382fd4111b804df0f0cbe2f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resource: {fileID: 562494488}
+  spreadRate: 0.1
+  spreadAmount: 1
+  infMax: 200
+  infThreshold: 100
+--- !u!114 &562494488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562494484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f42e8589f7f47aeb140909bbb300f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceTilesPerSide: 5
+  minDistance: 3
+  resourceAmount: 5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +329,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 1e-45, y: NaN, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

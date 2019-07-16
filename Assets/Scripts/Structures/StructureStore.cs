@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GeometryBattles.StructureManager
 {
-    public class StructureStore : ScriptableObject
+    public class StructureStore : MonoBehaviour
     {
         Dictionary<Vector2Int, GameObject> structures = new Dictionary<Vector2Int, GameObject>();
 
