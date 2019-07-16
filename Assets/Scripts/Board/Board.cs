@@ -30,9 +30,8 @@ namespace GeometryBattles.BoardManager
 
             CreateBoard();
             CreatePlayers(numPlayers);
-            
-            boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
-            boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+
+            SetBases(numPlayers);
         }
 
         void SetGaps(float gap)
@@ -91,6 +90,17 @@ namespace GeometryBattles.BoardManager
                 player.name = "Player" + (i + 1);
                 player.GetComponent<Player>().SetColor(1.0f * i / numPlayers);
                 boardState.AddPlayer(player.GetComponent<Player>());
+            }
+        }
+
+        void SetBases(int numPlayers)
+        {
+            if (numPlayers == 2)
+            {
+                boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+                boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+                boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+                boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
             }
         }
     }
