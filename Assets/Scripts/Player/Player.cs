@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace GeometryBattles.PlayerManager
@@ -17,17 +17,7 @@ namespace GeometryBattles.PlayerManager
         void Start()
         {
             resource = startResource;
-            miningTimer = miningRate;
-        }
-
-        void Update()
-        {
-            miningTimer -= Time.deltaTime;
-            if (miningTimer <= 0.0f)
-            {
-                AddResource(miningAmount);
-                miningTimer = miningRate;
-            }
+            StartCoroutine("MineResource");
         }
 
         public int GetResource()
@@ -43,6 +33,15 @@ namespace GeometryBattles.PlayerManager
         public void AddMiningAmount(int amount)
         {
             miningAmount += amount;
+        }
+
+        IEnumerator MineResource()
+        {
+            while (true)
+            {
+                resource += miningAmount;
+                yield return new WaitForSeconds(miningRate);
+            }
         }
 
         public float GetColor()

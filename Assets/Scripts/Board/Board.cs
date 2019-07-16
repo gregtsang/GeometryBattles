@@ -7,9 +7,9 @@ namespace GeometryBattles.BoardManager
     {
         public Camera gameCam;
         public BoardState boardState;
+        public Resource resource;
         public GameObject tilePrefab;
         public GameObject playerPrefab;
-        public Resource resource;
 
         public int boardWidth = 20;
         public int baseOffset = 2;
@@ -70,8 +70,8 @@ namespace GeometryBattles.BoardManager
                 for (int x = 0; x < numTiles; x++)
                 {
                     Vector2Int boardPos = new Vector2Int(x, y);
-                    Vector3 tilePos = CalcPos(boardPos, numTiles);
-                    GameObject tile = Instantiate(tilePrefab, tilePos, Quaternion.identity, tiles.transform) as GameObject;
+                    Vector3 scenePos = CalcPos(boardPos, numTiles);
+                    GameObject tile = Instantiate(tilePrefab, scenePos, Quaternion.identity, tiles.transform) as GameObject;
                     int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
                     tile.name = "Tile[" + q + "," + r + "]";

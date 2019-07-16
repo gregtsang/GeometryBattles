@@ -8,9 +8,10 @@ namespace GeometryBattles.BoardManager
     {
         public Resource resource;
         List<Player> players;
+        List<Vector2Int> bases;
 
-        public float spreadRate = 0.1f;
         public int spreadAmount = 1;
+        public float spreadRate = 0.1f;
         float spreadTimer = 0.0f;
         
         public int infMax = 200;
@@ -25,7 +26,7 @@ namespace GeometryBattles.BoardManager
             spreadTimer -= Time.deltaTime;
             if (spreadTimer <= 0.0f)
                 CalcBuffer();
-            updateColors();
+            UpdateColors();
             if (spreadTimer <= 0.0f)
                 spreadTimer = spreadRate;
         }
@@ -219,7 +220,7 @@ namespace GeometryBattles.BoardManager
             SwapBuffer();
         }
 
-        void updateColors()
+        void UpdateColors()
         {
             for (int i = 0; i < cap; i++)
             {

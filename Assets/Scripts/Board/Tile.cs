@@ -4,8 +4,8 @@ namespace GeometryBattles.BoardManager
 {
     public class Tile : MonoBehaviour
     {
-        public Color prevColor = Color.white;
-        public Color nextColor = Color.white;
+        Color prevColor = Color.white;
+        Color nextColor = Color.white;
 
         int q, r;
 
@@ -18,15 +18,6 @@ namespace GeometryBattles.BoardManager
             r = y;
         }
 
-        public void SetColor(Color color, bool instant)
-        {
-            if (instant)
-                this.prevColor = color;
-            else
-                this.prevColor = this.GetComponent<MeshRenderer>().material.GetColor("_BaseColor");
-            this.nextColor = color;
-        }
-
         public Color GetPrevColor()
         {
             return prevColor;
@@ -35,6 +26,16 @@ namespace GeometryBattles.BoardManager
         public Color GetNextColor()
         {
             return nextColor;
+        }
+
+        public void SetPrevColor(Color color)
+        {
+            prevColor = color;
+        }
+
+        public void SetNextColor(Color color)
+        {
+            nextColor = color;
         }
     }
 }

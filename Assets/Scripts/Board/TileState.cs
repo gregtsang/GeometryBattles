@@ -48,7 +48,12 @@ namespace GeometryBattles.BoardManager
 
         public void SetColor(Player owner, int influence, int threshold, bool instant = true)
         {
-            tile.SetColor(Color.HSVToRGB(owner ? owner.GetColor() : 0.0f, Mathf.Min((float)influence / (float)threshold, 1.0f), 1.0f), instant);
+            Color color = Color.HSVToRGB(owner ? owner.GetColor() : 0.0f, Mathf.Min((float)influence / (float)threshold, 1.0f), 1.0f);
+            if (instant)
+                tile.SetPrevColor(color);
+            else
+                tile.SetPrevColor(tile.GetComponent<MeshRenderer>().material.GetColor("_BaseColor"));
+            tile.SetNextColor(color);
         }
 
         public void SetBuff(Player player, int buff)
