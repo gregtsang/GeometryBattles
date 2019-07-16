@@ -52,7 +52,7 @@ namespace GeometryBattles.BoardManager
             if (instant)
                 tile.SetPrevColor(color);
             else
-                tile.SetPrevColor(tile.GetComponent<MeshRenderer>().material.GetColor("_BaseColor"));
+                tile.SetPrevColor(tile.GetMat().GetColor("_BaseColor"));
             tile.SetNextColor(color);
         }
 
