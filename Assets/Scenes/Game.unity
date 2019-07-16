@@ -539,6 +539,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _displayname: Buy Hex
   costPerDistance: 5
+  maxCost: 999
 --- !u!114 &988219390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayName: Sell Tile
-  valueFactor: 0.5
+  valueFactor: 0.05
 --- !u!1 &1055205363
 GameObject:
   m_ObjectHideFlags: 0
