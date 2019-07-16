@@ -24,17 +24,17 @@ namespace GeometryBattles.Construction
             board = FindObjectOfType<Board>();
         }
 
-        public bool canDoAction(PlayerPrefab player, TilePrefab tile)
+        public bool canDoAction(Player player, Tile tile)
         {
             return isViableAction(player, tile);
         }
 
-        public bool canDoAction(PlayerPrefab player, TilePrefab tile, ref string err)
+        public bool canDoAction(Player player, Tile tile, ref string err)
         {
             return isViableAction(player, tile, ref err);
         }
 
-        public void doAction(PlayerPrefab player, TilePrefab tile)
+        public void doAction(Player player, Tile tile)
         {
             if (canDoAction(player, tile))
             {
@@ -43,18 +43,18 @@ namespace GeometryBattles.Construction
             }
         }
 
-        public string GetTipText(PlayerPrefab player, TilePrefab tile)
+        public string GetTipText(Player player, Tile tile)
         {
             return GetTileValue(tile).ToString();
         }
 
-        public bool isViableAction(PlayerPrefab player, TilePrefab tile)
+        public bool isViableAction(Player player, Tile tile)
         {
             string err = "";
             return isViableAction(player, tile, ref err);
         }
 
-        public bool isViableAction(PlayerPrefab player, TilePrefab tile, ref string err)
+        public bool isViableAction(Player player, Tile tile, ref string err)
         {
             bool isViable = board.boardState.IsOwned(tile.Q, tile.R) && 
                 board.boardState.GetNodeOwner(tile.Q, tile.R) == player.gameObject;
@@ -66,7 +66,7 @@ namespace GeometryBattles.Construction
             return isViable;
         }
 
-        private int GetTileValue(TilePrefab tile)
+        private int GetTileValue(Tile tile)
         {
             return Mathf.RoundToInt(board.boardState.GetNodeInfluence(tile.Q, tile.R) * valueFactor);
         }

@@ -18,12 +18,12 @@ namespace GeometryBattles.UI
             board = FindObjectOfType<Board>();
         }
 
-        public PlayerPrefab GetActivePlayer()
+        public Player GetActivePlayer()
         {
             if (board == null) return null;
             GameObject player = board.boardState.GetPlayer(activePlayer);
             if (player == null) return null;
-            return player.GetComponent<PlayerPrefab>();
+            return player.GetComponent<Player>();
         }
 
         public Board GetBoard()
