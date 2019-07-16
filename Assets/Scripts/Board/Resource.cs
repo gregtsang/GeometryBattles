@@ -26,15 +26,20 @@ namespace GeometryBattles.BoardManager
                 resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
             }
         }
-        
+
+        int CalcDistance(int q1, int r1, int q2, int r2)
+        {
+            return (Mathf.Abs(q1 - q2) + Mathf.Abs(q1 + r1 - q2 - r2) + Mathf.Abs(r1 - r2)) / 2;
+        }
+
         public bool IsResourceTile(int q, int r)
         {
             return resourceTiles.Contains(new Vector2Int(q, r));
         }
 
-        int CalcDistance(int q1, int r1, int q2, int r2)
+        public HashSet<Vector2Int> GetResourceTiles()
         {
-            return (Mathf.Abs(q1 - q2) + Mathf.Abs(q1 + r1 - q2 - r2) + Mathf.Abs(r1 - r2)) / 2;
+            return resourceTiles;
         }
     }
 }

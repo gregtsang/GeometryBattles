@@ -7,10 +7,11 @@ namespace GeometryBattles.BoardManager
     public class BoardState : MonoBehaviour
     {
         public Resource resource;
-        List<Player> players;
+        List<Player> players = new List<Player>();
+        Dictionary<Player, Vector2Int> bases = new Dictionary<Player, Vector2Int>();
 
-        public float spreadRate = 0.1f;
         public int spreadAmount = 1;
+        public float spreadRate = 0.1f;
         float spreadTimer = 0.0f;
         
         public int infMax = 200;
@@ -22,17 +23,17 @@ namespace GeometryBattles.BoardManager
 
         void Update()
         {
+            CalcMining();
             spreadTimer -= Time.deltaTime;
             if (spreadTimer <= 0.0f)
                 CalcBuffer();
-            updateColors();
+            UpdateColors();
             if (spreadTimer <= 0.0f)
                 spreadTimer = spreadRate;
         }
 
         public void SetCap(int n)
         {
-            players = new List<Player>();
             grid = new List<List<TileState>>(n);
             buffer = new List<List<TileState>>(n);
             for (int i = 0; i < n; i++)
@@ -82,13 +83,7 @@ namespace GeometryBattles.BoardManager
             List<List<TileState>> gridbuffer = target ? grid : buffer;
             Player prevOwner = gridbuffer[q][r].GetOwner();
             int prevInfluence = gridbuffer[q][r].GetInfluence();
-            if (resource.IsResourceTile(q, r))
-            {
-                if (prevOwner != owner && prevInfluence >= infThreshold)
-                    prevOwner.AddMiningAmount(-resource.resourceAmount);
-                if (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold))
-                    owner.AddMiningAmount(resource.resourceAmount);
-            }
+            
             gridbuffer[q][r].Set(owner, infThreshold);
             gridbuffer[q][r].SetColor(owner, infThreshold, infThreshold);
         }
@@ -98,13 +93,7 @@ namespace GeometryBattles.BoardManager
             List<List<TileState>> gridbuffer = target ? grid : buffer;
             Player prevOwner = gridbuffer[q][r].GetOwner();
             int prevInfluence = gridbuffer[q][r].GetInfluence();
-            if (resource.IsResourceTile(q, r))
-            {
-                if (prevOwner != owner && prevInfluence >= infThreshold)
-                    prevOwner.AddMiningAmount(-resource.resourceAmount);
-                if (influence >= infThreshold && (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold)))
-                    owner.AddMiningAmount(resource.resourceAmount);
-            }
+            
             gridbuffer[q][r].Set(owner, influence);
             gridbuffer[q][r].SetColor(owner, influence, infThreshold);
         }
@@ -115,21 +104,9 @@ namespace GeometryBattles.BoardManager
             Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (owner == null || owner == player)
-            {
-                if (resource.IsResourceTile(q, r))
-                    if (influence < infThreshold && influence + value >= infThreshold)
-                        player.AddMiningAmount(resource.resourceAmount);
                 gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
-            }
             else
-            {
-                if (resource.IsResourceTile(q, r))
-                {
-                    if (influence >= infThreshold && influence - value < infThreshold)
-                        owner.AddMiningAmount(-resource.resourceAmount);
-                    if (influence < value && value - influence >= infThreshold)
-                        player.AddMiningAmount(resource.resourceAmount);
-                }
+            {   
                 if (influence < value)
                     gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
                 else if (influence > value)
@@ -137,6 +114,38 @@ namespace GeometryBattles.BoardManager
                 else
                     gridbuffer[q][r].Set(null, 0);
             }
+        }
+
+        public void AddBase(int q, int r, Player player)
+        {
+            bases[player] = new Vector2Int(q, r);
+        }
+
+        public bool IsConnectedToBase(int q, int r, Player player)
+        {
+            HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+            visited.Add(new Vector2Int(q, r));
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+            queue.Enqueue(new Vector2Int(q, r));
+            while (queue.Count > 0)
+            {
+                Vector2Int curr = queue.Dequeue();
+                if (curr[0] == bases[player][0] && curr[1] == bases[player][1])
+                    return true;
+                else
+                {
+                    List<Vector2Int> neighbors = GetNeighbors(curr[0], curr[1]);
+                    foreach (var n in neighbors)
+                    {
+                        if (!visited.Contains(n))
+                        {
+                            visited.Add(n);
+                            queue.Enqueue(new Vector2Int(n[0], n[1]));
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         public bool IsOwned(int q, int r)
@@ -219,7 +228,21 @@ namespace GeometryBattles.BoardManager
             SwapBuffer();
         }
 
-        void updateColors()
+        void CalcMining()
+        {
+            foreach (var p in players)
+                p.SetMiningAmount(p.startMiningAmount);
+            HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
+            foreach (var r in resourceTiles)
+            {
+                Player owner = grid[r[0]][r[1]].GetOwner();
+                int influence = grid[r[0]][r[1]].GetInfluence();
+                if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
+                    owner.AddMiningAmount(resource.resourceAmount);
+            }
+        }
+
+        void UpdateColors()
         {
             for (int i = 0; i < cap; i++)
             {
