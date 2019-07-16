@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 
@@ -8,10 +7,11 @@ namespace GeometryBattles.BoardManager
     public class BoardState : MonoBehaviour
     {
         public Resource resource;
-        List<GameObject> players;
+        List<Player> players;
 
         public float spreadRate = 0.1f;
         public int spreadAmount = 1;
+        float spreadTimer = 0.0f;
         
         public int infMax = 200;
         public int infThreshold = 100;
@@ -20,14 +20,19 @@ namespace GeometryBattles.BoardManager
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
 
-        void Start()
+        void Update()
         {
-            StartCoroutine("CalcBuffer");
+            spreadTimer -= Time.deltaTime;
+            if (spreadTimer <= 0.0f)
+                CalcBuffer();
+            updateColors();
+            if (spreadTimer <= 0.0f)
+                spreadTimer = spreadRate;
         }
 
         public void SetCap(int n)
         {
-            players = new List<GameObject>();
+            players = new List<Player>();
             grid = new List<List<TileState>>(n);
             buffer = new List<List<TileState>>(n);
             for (int i = 0; i < n; i++)
@@ -43,17 +48,17 @@ namespace GeometryBattles.BoardManager
             cap = n;
         }
 
-        public void AddPlayer(GameObject player)
+        public void AddPlayer(Player player)
         {
             players.Add(player);
         }
 
-        public GameObject GetPlayer(int i)
+        public Player GetPlayer(int i)
         {
             return players[i];
         }
 
-        public void InitNode(GameObject node, int q, int r)
+        public void InitNode(Tile node, int q, int r)
         {
             if (cap > 0 && q < cap && r < cap)
             {
@@ -62,7 +67,7 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        public GameObject GetNodeOwner(int q, int r)
+        public Player GetNodeOwner(int q, int r)
         {
             return grid[q][r].GetOwner();
         }
@@ -72,63 +77,65 @@ namespace GeometryBattles.BoardManager
             return grid[q][r].GetInfluence();
         }
 
-        public void SetNode(int q, int r, GameObject owner, bool target = true)
+        public void SetNode(int q, int r, Player owner, bool target = true)
         {
             List<List<TileState>> gridbuffer = target ? grid : buffer;
-            GameObject prevOwner = gridbuffer[q][r].GetOwner();
+            Player prevOwner = gridbuffer[q][r].GetOwner();
             int prevInfluence = gridbuffer[q][r].GetInfluence();
             if (resource.IsResourceTile(q, r))
             {
                 if (prevOwner != owner && prevInfluence >= infThreshold)
-                    prevOwner.GetComponent<Player>().AddMiningAmount(-resource.resourceAmount);
+                    prevOwner.AddMiningAmount(-resource.resourceAmount);
                 if (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold))
-                    owner.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
+                    owner.AddMiningAmount(resource.resourceAmount);
             }
             gridbuffer[q][r].Set(owner, infThreshold);
+            gridbuffer[q][r].SetColor(owner, infThreshold, infThreshold);
         }
 
-        public void SetNode(int q, int r, GameObject owner, int influence, bool target = true)
+        public void SetNode(int q, int r, Player owner, int influence, bool target = true)
         {
             List<List<TileState>> gridbuffer = target ? grid : buffer;
-            GameObject prevOwner = gridbuffer[q][r].GetOwner();
+            Player prevOwner = gridbuffer[q][r].GetOwner();
             int prevInfluence = gridbuffer[q][r].GetInfluence();
             if (resource.IsResourceTile(q, r))
             {
                 if (prevOwner != owner && prevInfluence >= infThreshold)
-                    prevOwner.GetComponent<Player>().AddMiningAmount(-resource.resourceAmount);
+                    prevOwner.AddMiningAmount(-resource.resourceAmount);
                 if (influence >= infThreshold && (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold)))
-                    owner.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
+                    owner.AddMiningAmount(resource.resourceAmount);
             }
             gridbuffer[q][r].Set(owner, influence);
+            gridbuffer[q][r].SetColor(owner, influence, infThreshold);
         }
 
-        public void AddNode(int q, int r, GameObject player, int value, bool target = true)
+        public void AddNode(int q, int r, Player player, int value, bool target = true)
         {
             List<List<TileState>> gridbuffer = target ? grid : buffer;
-            GameObject owner = gridbuffer[q][r].GetOwner();
+            Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (owner == null || owner == player)
             {
                 if (resource.IsResourceTile(q, r))
                     if (influence < infThreshold && influence + value >= infThreshold)
-                        player.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
-                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax), false);
+                        player.AddMiningAmount(resource.resourceAmount);
+                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
             }
             else
             {
                 if (resource.IsResourceTile(q, r))
                 {
                     if (influence >= infThreshold && influence - value < infThreshold)
-                        owner.GetComponent<Player>().AddMiningAmount(-resource.resourceAmount);
+                        owner.AddMiningAmount(-resource.resourceAmount);
                     if (influence < value && value - influence >= infThreshold)
-                        player.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
+                        player.AddMiningAmount(resource.resourceAmount);
                 }
                 if (influence < value)
-                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax), false);
+                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
                 else if (influence > value)
-                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax), false);
+                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
                 else
-                    gridbuffer[q][r].Set(null, 0, false);
+                    gridbuffer[q][r].Set(null, 0);
             }
         }
 
@@ -137,7 +144,7 @@ namespace GeometryBattles.BoardManager
             return grid[q][r].GetInfluence() >= infThreshold;
         }
 
-        public int ClosestOwned(int q, int r, GameObject player)
+        public int ClosestOwned(int q, int r, Player player)
         {
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
             visited.Add(new Vector2Int(q, r));
@@ -183,7 +190,7 @@ namespace GeometryBattles.BoardManager
             return neighbors;
         }
 
-        public void SwapBuffer()
+        void SwapBuffer()
         {
             List<List<TileState>> temp;
             temp = grid;
@@ -191,27 +198,48 @@ namespace GeometryBattles.BoardManager
             buffer = temp;
         }
 
-        IEnumerator CalcBuffer()
-        {
-            while (true)
+        void CalcBuffer()
+        {            
+            for (int i = 0; i < cap; i++)
             {
-                for (int i = 0; i < cap; i++)
+                for (int j = 0; j < cap; j++)
                 {
-                    for (int j = 0; j < cap; j++)
+                    buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
+                    List<Vector2Int> neighbors = GetNeighbors(i, j);
+                    foreach (var n in neighbors)
                     {
-                        buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence(), false, false);
-                        List<Vector2Int> neighbors = GetNeighbors(i, j);
-                        foreach (var n in neighbors)
-                            if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
-                                AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
+                        if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
+                        {
+                            AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
+                            grid[i][j].SetColor(buffer[i][j].GetOwner(), buffer[i][j].GetInfluence(), infThreshold, false);
+                        }               
                     }
                 }
-                SwapBuffer();
-                yield return new WaitForSeconds(spreadRate);
+            }
+            SwapBuffer();
+        }
+
+        void updateColors()
+        {
+            for (int i = 0; i < cap; i++)
+            {
+                for (int j = 0; j < cap; j++)
+                {
+                    Tile currTile = grid[i][j].GetTile();
+                    Color nextColor = currTile.GetNextColor();
+                    Color prevColor = currTile.GetPrevColor();
+                    Color currColor = currTile.GetComponent<MeshRenderer>().material.GetColor("_BaseColor");
+                    if (!resource.IsResourceTile(i, j) && nextColor != currColor)
+                    {
+                        Color lerpedColor;
+                        lerpedColor = Color.Lerp(prevColor, nextColor, 1.0f - Mathf.Max(0.0f, spreadTimer / spreadRate));
+                        currTile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", lerpedColor);
+                    }
+                }
             }
         }
 
-        public void SetBuff(int q, int r, GameObject player, int buff)
+        public void SetBuff(int q, int r, Player player, int buff)
         {
             grid[q][r].SetBuff(player, buff);
         }

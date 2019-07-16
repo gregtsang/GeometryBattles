@@ -28,7 +28,7 @@ namespace GeometryBattles.Construction
             if (canDoAction(player, tile))
             {
                 player.AddResource(-1 * GetTileCost(player, tile));                
-                board.boardState.SetNode(tile.Q, tile.R, player.gameObject);
+                board.boardState.SetNode(tile.Q, tile.R, player);
             }
         }
 
@@ -67,7 +67,7 @@ namespace GeometryBattles.Construction
 
         private int GetTileCost(Player player, Tile tile)
         {
-            int cost = board.boardState.ClosestOwned(tile.Q, tile.R, player.gameObject) * costPerDistance;
+            int cost = board.boardState.ClosestOwned(tile.Q, tile.R, player) * costPerDistance;
             Debug.Log("Tile Cost Calculated: " + cost);
             return cost;
         }

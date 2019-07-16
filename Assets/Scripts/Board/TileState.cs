@@ -8,58 +8,57 @@ namespace GeometryBattles.BoardManager
     {
         public TileState() {}
 
-        public TileState(GameObject tile, GameObject owner, int influence)
+        public TileState(Tile tile, Player owner, int influence)
         {
             this.tile = tile;
             this.owner = owner;
             this.influence = influence;
         }
 
-        GameObject tile;
-        GameObject owner;
+        Tile tile;
+        Player owner;
         int influence;
-        Dictionary<GameObject, int> buff = new Dictionary<GameObject, int>();
+        Dictionary<Player, int> buff = new Dictionary<Player, int>();
 
-        public GameObject GetTile()
+        public Tile GetTile()
         {
-            return this.tile;
+            return tile;
         }
 
-        public void SetTile(GameObject tile)
+        public void SetTile(Tile tile)
         {
             this.tile = tile;
         }
 
-        public GameObject GetOwner()
+        public Player GetOwner()
         {
-            return this.owner;
+            return owner;
         }
 
         public int GetInfluence()
         {
-            return this.influence;
+            return influence;
         }
 
-        public void Set(GameObject owner, int influence, bool instant = true, bool color = true)
+        public void Set(Player owner, int influence)
         {
             this.owner = owner;
             this.influence = influence;
-            if (color && owner != null)
-            {
-                this.tile.GetComponent<Tile>().SetColor(Color.HSVToRGB(owner.GetComponent<Player>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f), instant);
-                if (instant)
-                    this.tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.HSVToRGB(owner.GetComponent<Player>().GetColor(), Mathf.Min(influence / 100.0f, 1.0f), 1.0f));
-            }
         }
 
-        public void SetBuff(GameObject player, int buff)
+        public void SetColor(Player owner, int influence, int threshold, bool instant = true)
+        {
+            tile.SetColor(Color.HSVToRGB(owner ? owner.GetColor() : 0.0f, Mathf.Min((float)influence / (float)threshold, 1.0f), 1.0f), instant);
+        }
+
+        public void SetBuff(Player player, int buff)
         {
             this.buff[player] = buff;
         }
 
-        public int GetBuff(GameObject player)
+        public int GetBuff(Player player)
         {
-            return this.buff.ContainsKey(player) ? buff[player] : 0;
+            return buff.ContainsKey(player) ? buff[player] : 0;
         }
     }
 }
