@@ -15,11 +15,11 @@ namespace GeometryBattles.BoardManager
         public int baseOffset = 2;
         public int numPlayers = 2;
 
-        float tileWidth = 1.73205f;
-        float tileLength = 2.0f;
+        public float tileWidth = 1.73205f;
+        public float tileLength = 2.0f;
         public float tileGap = 0.15f;
         
-        void Start()
+        void Awake()
         {
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);

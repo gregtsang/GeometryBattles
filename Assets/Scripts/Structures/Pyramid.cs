@@ -9,22 +9,6 @@ namespace GeometryBattles.StructureManager
         private int range = 5;
         private int strength = 50;
 
-        public void Upgrade()
-        {
-            if (this.level == 1)
-            {
-                this.level++;
-                this.strength = 5;
-                Buff();
-            }
-            if (this.level == 2)
-            {
-                this.level++;
-                this.range = 10;
-                Buff();
-            }
-        }
-
         public void Buff()
         {
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
