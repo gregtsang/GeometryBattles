@@ -201,11 +201,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameCam: {fileID: 963194227}
   boardState: {fileID: 562494487}
+  resource: {fileID: 562494488}
   tilePrefab: {fileID: 424929264639770933, guid: 98c5e67f03c1940c48aed1dcd8e0f05d,
     type: 3}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
-  resource: {fileID: 562494488}
   boardWidth: 20
   baseOffset: 2
   numPlayers: 2
@@ -237,8 +237,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
-  spreadRate: 0.1
   spreadAmount: 1
+  spreadRate: 0.1
   infMax: 200
   infThreshold: 100
 --- !u!114 &562494488
@@ -255,7 +255,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceTilesPerSide: 5
   minDistance: 3
-  resourceAmount: 5
+  startResource: 0
+  startMiningAmount: 1
+  resourceTileAmount: 5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
