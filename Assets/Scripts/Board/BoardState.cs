@@ -137,7 +137,7 @@ namespace GeometryBattles.BoardManager
                     List<Vector2Int> neighbors = GetNeighbors(curr[0], curr[1]);
                     foreach (var n in neighbors)
                     {
-                        if (!visited.Contains(n))
+                        if (!visited.Contains(n) && grid[n[0]][n[1]].GetOwner() == player && grid[n[0]][n[1]].GetInfluence() >= infThreshold)
                         {
                             visited.Add(n);
                             queue.Enqueue(new Vector2Int(n[0], n[1]));
@@ -231,14 +231,14 @@ namespace GeometryBattles.BoardManager
         void CalcMining()
         {
             foreach (var p in players)
-                p.SetMiningAmount(p.startMiningAmount);
+                p.SetMiningAmount(resource.startMiningAmount);
             HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
             foreach (var r in resourceTiles)
             {
                 Player owner = grid[r[0]][r[1]].GetOwner();
                 int influence = grid[r[0]][r[1]].GetInfluence();
                 if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
-                    owner.AddMiningAmount(resource.resourceAmount);
+                    owner.AddMiningAmount(resource.resourceTileAmount);
             }
         }
 

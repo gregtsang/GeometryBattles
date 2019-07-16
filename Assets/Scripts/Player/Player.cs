@@ -5,24 +5,26 @@ namespace GeometryBattles.PlayerManager
 {
     public class Player : MonoBehaviour
     {
-        public int startMiningAmount = 1;
-        int miningAmount = 1;
+        public int miningAmount = 1;
         public float miningRate = 1.0f;
         
-        public int startResource = 0;
         [SerializeField] int resource = 0;
 
         float colorHue;
 
         void Start()
         {
-            resource = startResource;
             StartCoroutine("MineResource");
         }
 
         public int GetResource()
         {
             return resource;
+        }
+
+        public void SetResource(int amount)
+        {
+            resource = amount;
         }
 
         public void AddResource(int amount)

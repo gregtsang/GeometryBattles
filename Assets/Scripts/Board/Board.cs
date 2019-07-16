@@ -88,7 +88,10 @@ namespace GeometryBattles.BoardManager
             {
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
-                player.GetComponent<Player>().SetColor(1.0f * i / numPlayers);
+                Player currPlayer = player.GetComponent<Player>();
+                currPlayer.SetColor(1.0f * i / numPlayers);
+                currPlayer.SetResource(resource.startResource);
+                currPlayer.SetMiningAmount(resource.startMiningAmount);
                 boardState.AddPlayer(player.GetComponent<Player>());
             }
         }
