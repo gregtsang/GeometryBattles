@@ -7,9 +7,9 @@ namespace GeometryBattles.BoardManager
     {
         public Camera gameCam;
         public BoardState boardState;
+        public Resource resource;
         public GameObject tilePrefab;
         public GameObject playerPrefab;
-        public Resource resource;
 
         public int boardWidth = 20;
         public int baseOffset = 2;
@@ -19,35 +19,35 @@ namespace GeometryBattles.BoardManager
         float tileLength = 2.0f;
         public float tileGap = 0.15f;
         
-        void Start()
+        void Awake()
         {
+            gameCam.orthographicSize = boardWidth;
+            
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);
-            gameCam.orthographicSize = boardWidth;
+
             SetGaps(tileGap);
-            tilePrefab.GetComponent<TilePrefab>().SetFadeRate(boardState.spreadRate);
+
             CreateBoard();
             CreatePlayers(numPlayers);
-            boardState.ResetTimer();
-            boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
-            boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
-        }
 
-        void Update()
-        {
-            boardState.SubTimer(Time.deltaTime);
-            if (boardState.GetTimer() <= 0.0f)
-            {
-                boardState.ResetTimer();
-                boardState.CalcBuffer();
-                boardState.SwapBuffer();
-            }
+            SetBases(numPlayers);
         }
 
         void SetGaps(float gap)
         {
             tileWidth += tileWidth * gap;
             tileLength += tileLength * gap;
+        }
+
+        public float GetTileLength()
+        {
+            return tileLength;
+        }
+
+        public float GetTileWidth()
+        {
+            return tileWidth;
         }
 
         Vector3 CalcPos(Vector2Int boardPos, int numTiles)
@@ -69,18 +69,15 @@ namespace GeometryBattles.BoardManager
                 for (int x = 0; x < numTiles; x++)
                 {
                     Vector2Int boardPos = new Vector2Int(x, y);
-                    Vector3 tilePos = CalcPos(boardPos, numTiles);
-                    GameObject tile = Instantiate(tilePrefab, tilePos, Quaternion.identity, tiles.transform) as GameObject;
+                    Vector3 scenePos = CalcPos(boardPos, numTiles);
+                    GameObject tile = Instantiate(tilePrefab, scenePos, Quaternion.identity, tiles.transform) as GameObject;
                     int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
-                    tile.name = "Tile" + q + "." + r;
-                    tile.GetComponent<TilePrefab>().SetCoords(q, r);
-                    boardState.InitNode(tile, q, r);
+                    tile.name = "Tile[" + q + "," + r + "]";
+                    tile.GetComponent<Tile>().SetCoords(q, r);
+                    boardState.InitNode(tile.GetComponent<Tile>(), q, r);
                     if (resource.IsResourceTile(q, r))
-                    {
-                        tile.GetComponent<TilePrefab>().SetResourceTile();
                         tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.yellow);
-                    }
                 }
             }
         }
@@ -91,8 +88,22 @@ namespace GeometryBattles.BoardManager
             {
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
-                player.GetComponent<PlayerPrefab>().SetColor(1.0f * i / numPlayers);
-                boardState.AddPlayer(player);
+                Player currPlayer = player.GetComponent<Player>();
+                currPlayer.SetColor(1.0f * i / numPlayers);
+                currPlayer.SetResource(resource.startResource);
+                currPlayer.SetMiningAmount(resource.startMiningAmount);
+                boardState.AddPlayer(player.GetComponent<Player>());
+            }
+        }
+
+        void SetBases(int numPlayers)
+        {
+            if (numPlayers == 2)
+            {
+                boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+                boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+                boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+                boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
             }
         }
     }

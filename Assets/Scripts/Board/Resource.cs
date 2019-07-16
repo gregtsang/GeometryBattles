@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace GeometryBattles.BoardManager
 {
-    [CreateAssetMenu]
-    public class Resource : ScriptableObject
+    public class Resource : MonoBehaviour
     {
         public int resourceTilesPerSide = 5;
         public int minDistance = 3;
-        public int resourceAmount = 5;
+        public int startResource = 0;
+        public int startMiningAmount = 1;
+        public int resourceTileAmount = 5;
         HashSet<Vector2Int> resourceTiles = new HashSet<Vector2Int>();
 
         public void InitResourceTiles(int boardWidth, int baseOffset)
@@ -27,15 +28,20 @@ namespace GeometryBattles.BoardManager
                 resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
             }
         }
-        
+
+        int CalcDistance(int q1, int r1, int q2, int r2)
+        {
+            return (Mathf.Abs(q1 - q2) + Mathf.Abs(q1 + r1 - q2 - r2) + Mathf.Abs(r1 - r2)) / 2;
+        }
+
         public bool IsResourceTile(int q, int r)
         {
             return resourceTiles.Contains(new Vector2Int(q, r));
         }
 
-        int CalcDistance(int q1, int r1, int q2, int r2)
+        public HashSet<Vector2Int> GetResourceTiles()
         {
-            return (Mathf.Abs(q1 - q2) + Mathf.Abs(q1 + r1 - q2 - r2) + Mathf.Abs(r1 - r2)) / 2;
+            return resourceTiles;
         }
     }
 }

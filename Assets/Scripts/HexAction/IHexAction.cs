@@ -13,14 +13,14 @@ namespace GeometryBattles.HexAction
             get;
         }
 
-        string GetTipText(PlayerPrefab player, TilePrefab tile);
+        string GetTipText(Player player, Tile tile);
 
-        void doAction(PlayerPrefab player, TilePrefab tile);
+        void doAction(Player player, Tile tile);
 
-        bool canDoAction(PlayerPrefab player, TilePrefab tile);
-        bool canDoAction(PlayerPrefab player, TilePrefab tile, ref string err);
+        bool canDoAction(Player player, Tile tile);
+        bool canDoAction(Player player, Tile tile, ref string err);
 
-        bool isViableAction(PlayerPrefab player, TilePrefab tile);
-        bool isViableAction(PlayerPrefab player, TilePrefab tile, ref string err);
+        bool isViableAction(Player player, Tile tile);
+        bool isViableAction(Player player, Tile tile, ref string err);
     }
 }

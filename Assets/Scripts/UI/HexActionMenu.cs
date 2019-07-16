@@ -8,20 +8,20 @@ using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.UI
 {
-    [RequireComponent(typeof(TilePrefab))]
+    [RequireComponent(typeof(Tile))]
     public class HexActionMenu : MonoBehaviour
     {
         
         //Cached References
         UIManager uiManager;
 
-        TilePrefab tilePrefab;
+        Tile tilePrefab;
         
         // Start is called before the first frame update
         void Start()
         {
             uiManager = FindObjectOfType<UIManager>();
-            tilePrefab = GetComponent<TilePrefab>();
+            tilePrefab = GetComponent<Tile>();
         }
         
         private void OnMouseDown()

@@ -23,22 +23,22 @@ namespace GeometryBattles.Construction
             board = FindObjectOfType<Board>();
         }
 
-        public void doAction(PlayerPrefab player, TilePrefab tile)
+        public void doAction(Player player, Tile tile)
         {
             if (canDoAction(player, tile))
             {
                 player.AddResource(-1 * GetTileCost(player, tile));                
-                board.boardState.SetNode(tile.Q, tile.R, player.gameObject);
+                board.boardState.SetNode(tile.Q, tile.R, player);
             }
         }
 
-        public bool canDoAction(PlayerPrefab player, TilePrefab tile)
+        public bool canDoAction(Player player, Tile tile)
         {
             string errRef = "";
             return canDoAction(player, tile, ref errRef);
         }
 
-        public bool canDoAction(PlayerPrefab player, TilePrefab tile, ref string err)
+        public bool canDoAction(Player player, Tile tile, ref string err)
         {
             bool canDo = isViableAction(player, tile, ref err);
             if (canDo)
@@ -49,13 +49,13 @@ namespace GeometryBattles.Construction
             return canDo;
         }
 
-        public bool isViableAction(PlayerPrefab player, TilePrefab tile)
+        public bool isViableAction(Player player, Tile tile)
         {
             string errRef = "";
             return isViableAction(player, tile, ref errRef);
         }
 
-        public bool isViableAction(PlayerPrefab player, TilePrefab tile, ref string err)
+        public bool isViableAction(Player player, Tile tile, ref string err)
         {   
             bool isViable = !board.boardState.IsOwned(tile.Q, tile.R);
             if (!isViable)
@@ -65,14 +65,14 @@ namespace GeometryBattles.Construction
             return isViable;
         }
 
-        private int GetTileCost(PlayerPrefab player, TilePrefab tile)
+        private int GetTileCost(Player player, Tile tile)
         {
-            int cost = board.boardState.ClosestOwned(tile.Q, tile.R, player.gameObject) * costPerDistance;
+            int cost = board.boardState.ClosestOwned(tile.Q, tile.R, player) * costPerDistance;
             Debug.Log("Tile Cost Calculated: " + cost);
             return cost;
         }
 
-        public string GetTipText(PlayerPrefab player, TilePrefab tile)
+        public string GetTipText(Player player, Tile tile)
         {
             return isViableAction(player, tile) ? GetTileCost(player, tile).ToString() : "";
         }

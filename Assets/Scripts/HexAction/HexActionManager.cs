@@ -15,7 +15,7 @@ namespace GeometryBattles.HexAction
             hexActions.Add(action);
         }
 
-        static public List<IHexAction> getViableActions(PlayerPrefab player, TilePrefab tile)
+        static public List<IHexAction> getViableActions(Player player, Tile tile)
         {
             List<IHexAction> viableActions = new List<IHexAction>();
             string errMsg = "";
