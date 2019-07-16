@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GeometryBattles.PlayerManager
 {
-    public class PlayerPrefab : MonoBehaviour
+    public class Player : MonoBehaviour
     {
         public int miningAmount = 1;
         public float miningRate = 1.0f;

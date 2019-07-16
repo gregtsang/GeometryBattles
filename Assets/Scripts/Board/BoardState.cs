@@ -80,9 +80,9 @@ namespace GeometryBattles.BoardManager
             if (resource.IsResourceTile(q, r))
             {
                 if (prevOwner != owner && prevInfluence >= infThreshold)
-                    prevOwner.GetComponent<PlayerPrefab>().AddMiningAmount(-resource.resourceAmount);
+                    prevOwner.GetComponent<Player>().AddMiningAmount(-resource.resourceAmount);
                 if (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold))
-                    owner.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
+                    owner.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
             }
             gridbuffer[q][r].Set(owner, infThreshold);
         }
@@ -95,9 +95,9 @@ namespace GeometryBattles.BoardManager
             if (resource.IsResourceTile(q, r))
             {
                 if (prevOwner != owner && prevInfluence >= infThreshold)
-                    prevOwner.GetComponent<PlayerPrefab>().AddMiningAmount(-resource.resourceAmount);
+                    prevOwner.GetComponent<Player>().AddMiningAmount(-resource.resourceAmount);
                 if (influence >= infThreshold && (prevOwner != owner || (prevOwner == owner && prevInfluence < infThreshold)))
-                    owner.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
+                    owner.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
             }
             gridbuffer[q][r].Set(owner, influence);
         }
@@ -111,7 +111,7 @@ namespace GeometryBattles.BoardManager
             {
                 if (resource.IsResourceTile(q, r))
                     if (influence < infThreshold && influence + value >= infThreshold)
-                        player.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
+                        player.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
                 gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax), false);
             }
             else
@@ -119,9 +119,9 @@ namespace GeometryBattles.BoardManager
                 if (resource.IsResourceTile(q, r))
                 {
                     if (influence >= infThreshold && influence - value < infThreshold)
-                        owner.GetComponent<PlayerPrefab>().AddMiningAmount(-resource.resourceAmount);
+                        owner.GetComponent<Player>().AddMiningAmount(-resource.resourceAmount);
                     if (influence < value && value - influence >= infThreshold)
-                        player.GetComponent<PlayerPrefab>().AddMiningAmount(resource.resourceAmount);
+                        player.GetComponent<Player>().AddMiningAmount(resource.resourceAmount);
                 }
                 if (influence < value)
                     gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax), false);
