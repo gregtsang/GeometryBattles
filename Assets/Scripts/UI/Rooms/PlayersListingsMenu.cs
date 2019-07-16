@@ -126,9 +126,9 @@ public class PlayersListingsMenu : MonoBehaviourPunCallbacks
       if (PhotonNetwork.IsMasterClient)
       {
             // If a player isn't ready, don't start the game (ignore the master client)
-         foreach (var player in _listings)
-            if (!player.Ready && PhotonNetwork.LocalPlayer != player.Player)
-               return;
+         //foreach (var player in _listings)
+         //   if (!player.Ready && PhotonNetwork.LocalPlayer != player.Player)
+         //      return;
 
             // Prevent anyone from joining or seeing room and load next scene
          PhotonNetwork.CurrentRoom.IsOpen = false;
