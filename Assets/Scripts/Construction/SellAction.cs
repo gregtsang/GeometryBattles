@@ -57,7 +57,7 @@ namespace GeometryBattles.Construction
         public bool isViableAction(Player player, Tile tile, ref string err)
         {
             bool isViable = board.boardState.IsOwned(tile.Q, tile.R) && 
-                board.boardState.GetNodeOwner(tile.Q, tile.R) == player.gameObject;
+                board.boardState.GetNodeOwner(tile.Q, tile.R) == player;
             
             if (!isViable)
             {

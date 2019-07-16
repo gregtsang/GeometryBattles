@@ -11,6 +11,7 @@ namespace GeometryBattles.Construction
     {
         [SerializeField] private string _displayname = "Buy Hex";
         [SerializeField] private int costPerDistance = 10;
+        [SerializeField] private int maxCost = 999;
 
         //Cached References
         Board board;
@@ -67,9 +68,8 @@ namespace GeometryBattles.Construction
 
         private int GetTileCost(Player player, Tile tile)
         {
-            int cost = board.boardState.ClosestOwned(tile.Q, tile.R, player) * costPerDistance;
-            Debug.Log("Tile Cost Calculated: " + cost);
-            return cost;
+            int closest = board.boardState.ClosestOwned(tile.Q, tile.R, player);
+            return closest != -1 ? Mathf.Min(maxCost, closest * costPerDistance) : maxCost;
         }
 
         public string GetTipText(Player player, Tile tile)
