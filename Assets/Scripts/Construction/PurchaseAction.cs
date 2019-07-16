@@ -57,7 +57,7 @@ namespace GeometryBattles.Construction
 
         public bool isViableAction(PlayerPrefab player, TilePrefab tile, ref string err)
         {   
-            bool isViable = board.boardState.GetNodeOwner(tile.Q,tile.R) == null;
+            bool isViable = !board.boardState.IsOwned(tile.Q, tile.R);
             if (!isViable)
             {
                 err = "Cannot buy a tile that is currently owned.";
