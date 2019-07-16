@@ -21,9 +21,9 @@ namespace GeometryBattles.UI
         public Player GetActivePlayer()
         {
             if (board == null) return null;
-            GameObject player = board.boardState.GetPlayer(activePlayer);
+            Player player = board.boardState.GetPlayer(activePlayer);
             if (player == null) return null;
-            return player.GetComponent<Player>();
+            return player;
         }
 
         public Board GetBoard()

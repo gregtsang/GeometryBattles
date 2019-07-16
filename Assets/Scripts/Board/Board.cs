@@ -25,7 +25,6 @@ namespace GeometryBattles.BoardManager
             
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);
-            tilePrefab.GetComponent<Tile>().SetFadeRate(boardState.spreadRate);
 
             SetGaps(tileGap);
 
@@ -77,12 +76,9 @@ namespace GeometryBattles.BoardManager
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
                     tile.name = "Tile[" + q + "," + r + "]";
                     tile.GetComponent<Tile>().SetCoords(q, r);
-                    boardState.InitNode(tile, q, r);
+                    boardState.InitNode(tile.GetComponent<Tile>(), q, r);
                     if (resource.IsResourceTile(q, r))
-                    {
-                        tile.GetComponent<Tile>().SetResourceTile();
                         tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.yellow);
-                    }
                 }
             }
         }
@@ -94,7 +90,7 @@ namespace GeometryBattles.BoardManager
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
                 player.GetComponent<Player>().SetColor(1.0f * i / numPlayers);
-                boardState.AddPlayer(player);
+                boardState.AddPlayer(player.GetComponent<Player>());
             }
         }
     }
