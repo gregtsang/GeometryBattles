@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayersListingsMenu : MonoBehaviourPunCallbacks
 {
+      // Set to multiplayer game scene
+   private int sceneIndex = 1;
+
    [SerializeField]
    private UnityEngine.Transform _content = null;
 
@@ -87,15 +91,18 @@ public class PlayersListingsMenu : MonoBehaviourPunCallbacks
 
    private void GetCurrentRoomPlayers()
    {
-         // Don't get players if not in a room
-      if (!PhotonNetwork.InRoom)
-      {
+         // Only get the players in the room if we actually have a connection and are in a room with players
+      if (!PhotonNetwork.IsConnected || PhotonNetwork.CurrentRoom is null || PhotonNetwork.CurrentRoom.Players is null)
          return;
-      }
 
       foreach (KeyValuePair<int, Player> playerInfo in PhotonNetwork.CurrentRoom.Players)
       {
          AddPlayerListing(playerInfo.Value);
       }
+   }
+
+   public void OnClick_StartGame()
+   {
+      PhotonNetwork.LoadLevel(sceneIndex);
    }
 }
