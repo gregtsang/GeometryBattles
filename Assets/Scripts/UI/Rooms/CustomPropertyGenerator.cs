@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CustomPropertyGenerator : MonoBehaviour
 {
    [SerializeField]
-   private Text _text;
+   private Text _text = null;
 
    private ExitGames.Client.Photon.Hashtable _customProperties = new ExitGames.Client.Photon.Hashtable();
 

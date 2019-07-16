@@ -9,6 +9,7 @@ public class CurrentRoomCanvas : MonoBehaviour
 
    [SerializeField]
    private LeaveRoomMenu _leaveRoomMenu = null;
+   public LeaveRoomMenu LeaveRoomMenu { get {  return _leaveRoomMenu; } }
 
    private RoomsGUI _roomsGUI = null;
 
