@@ -251,12 +251,12 @@ namespace GeometryBattles.BoardManager
                     Tile currTile = grid[i][j].GetTile();
                     Color nextColor = currTile.GetNextColor();
                     Color prevColor = currTile.GetPrevColor();
-                    Color currColor = currTile.GetComponent<MeshRenderer>().material.GetColor("_BaseColor");
+                    Color currColor = currTile.GetMat().GetColor("_BaseColor");
                     if (!resource.IsResourceTile(i, j) && nextColor != currColor)
                     {
                         Color lerpedColor;
                         lerpedColor = Color.Lerp(prevColor, nextColor, 1.0f - Mathf.Max(0.0f, spreadTimer / spreadRate));
-                        currTile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", lerpedColor);
+                        currTile.GetMat().SetColor("_BaseColor", lerpedColor);
                     }
                 }
             }

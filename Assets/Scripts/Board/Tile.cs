@@ -6,16 +6,27 @@ namespace GeometryBattles.BoardManager
     {
         Color prevColor = Color.white;
         Color nextColor = Color.white;
+        Material mat;
 
         int q, r;
 
         public int Q { get => q; }
         public int R { get => r; }
 
+        void Start()
+        {
+            mat = this.GetComponent<MeshRenderer>().material;
+        }
+
         public void SetCoords(int x, int y)
         {
             q = x;
             r = y;
+        }
+
+        public Material GetMat()
+        {
+            return mat;
         }
 
         public Color GetPrevColor()
