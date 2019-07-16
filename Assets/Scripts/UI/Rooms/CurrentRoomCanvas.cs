@@ -5,10 +5,10 @@ using UnityEngine;
 public class CurrentRoomCanvas : MonoBehaviour
 {
    [SerializeField]
-   private PlayersListingsMenu _playersListingsMenu;
+   private PlayersListingsMenu _playersListingsMenu = null;
 
    [SerializeField]
-   private LeaveRoomMenu _leaveRoomMenu;
+   private LeaveRoomMenu _leaveRoomMenu = null;
 
    private RoomsGUI _roomsGUI = null;
 
