@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using GeometryBattles.BoardManager;
+using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.StructureManager
 {
@@ -7,10 +8,10 @@ namespace GeometryBattles.StructureManager
     {
         public BoardState boardState;
         protected int q, r;
-        protected GameObject player;
+        protected Player player;
         public int hp = 100;
-        protected int level;
-
+        protected int level = 1;
+        
         public void Sell()
         {
             Destroy(this);
