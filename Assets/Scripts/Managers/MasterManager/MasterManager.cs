@@ -46,15 +46,12 @@ public class MasterManager : SingletonScriptableObject<MasterManager>
 
          // Clear out serialized prefabs we no longer need
       Instance._networkPrefabs.Clear();
-
-      GameObject[] res = Resources.LoadAll<GameObject>("");
-      foreach (var obj in res)
+      
+      PhotonView[] res = Resources.LoadAll<PhotonView>("");
+      foreach (var pv in res)
       {
-         if (!(obj is null))
-         {
-            string path = AssetDatabase.GetAssetPath(obj);
-            Instance._networkPrefabs.Add(new NetworkedPrefab(obj, path));
-         }
+         string path = AssetDatabase.GetAssetPath(pv.gameObject);
+         Instance._networkPrefabs.Add(new NetworkedPrefab(pv.gameObject, path));
       }
 #endif
    }
