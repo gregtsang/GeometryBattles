@@ -23,13 +23,14 @@ namespace GeometryBattles.BoardManager
 
         void Update()
         {
-            CalcMining();
             spreadTimer -= Time.deltaTime;
-            if (spreadTimer <= 0.0f)
-                CalcBuffer();
+            CalcMining();
             UpdateColors();
             if (spreadTimer <= 0.0f)
+            {
+                CalcBuffer();
                 spreadTimer = spreadRate;
+            }
         }
 
         public void SetCap(int n)
@@ -66,6 +67,11 @@ namespace GeometryBattles.BoardManager
                 grid[q][r].SetTile(node);
                 buffer[q][r].SetTile(node);
             }
+        }
+
+        public Tile GetNodeTile(int q, int r)
+        {
+            return grid[q][r].GetTile();
         }
 
         public Player GetNodeOwner(int q, int r)

@@ -62,6 +62,7 @@ namespace GeometryBattles.BoardManager
         {
             GameObject tiles = new GameObject();
             tiles.name = "Tiles";
+            tiles.transform.parent = this.transform;
             for (int y = 0; y < 2 * boardWidth - 1; y++)
             {
                 int numTiles = boardWidth - Mathf.Abs(boardWidth - y - 1);
