@@ -1,29 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace GeometryBattles.StructureManager
 {
     public class Cube : Structure
     {
-        public CubeScout cubeScout;
+        public GameObject cubeScoutPrefab;
 
         public int cost = 20;
         public float spawnRate = 10.0f;
-        float spawnTimer = 0.0f;
 
-        void Update()
+        void Start()
         {
-            spawnTimer -= Time.deltaTime;
-            if (spawnTimer <= 0.0f)
-            {
-                SpawnScout();
-                spawnTimer = spawnRate;
-            }
+            StartCoroutine("SpawnScout");
         }
 
-        public void SpawnScout()
+        IEnumerator SpawnScout()
         {
-            Instantiate(cubeScout, this.transform.position, Quaternion.identity, this.transform);
+            while (this.hp > 0)
+            {
+                Instantiate(cubeScoutPrefab, this.transform.position, Quaternion.identity, this.transform);
+                yield return new WaitForSeconds(spawnRate);
+            }
         }
     }
 }
