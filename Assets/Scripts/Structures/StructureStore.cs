@@ -12,7 +12,7 @@ namespace GeometryBattles.StructureManager
         public void AddStructure(int q, int r, GameObject structurePrefab)
         {
             Tile currTile = boardState.GetNodeTile(q, r);
-            Vector3 pos = currTile.transform.position;
+            Vector3 pos = currTile.transform.position + new Vector3(0.0f, structurePrefab.GetComponent<MeshRenderer>().bounds.size.y / 2.0f, 0.0f);
             GameObject structure = Instantiate(structurePrefab, pos, structurePrefab.transform.rotation) as GameObject;
             Structure currStructure = structure.GetComponent<Structure>();
             currStructure.SetColor(boardState.GetNodeOwner(q, r).GetColor());

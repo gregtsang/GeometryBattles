@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.17412806, g: 0.21774782, b: 0.2999444, a: 1}
+  m_IndirectSpecularColor: {r: 0.17412789, g: 0.21774751, b: 0.2999438, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
-  baseTileColor: {r: 0, g: 0, b: 0, a: 0}
+  baseTileColor: {r: 1, g: 1, b: 1, a: 0}
   spreadAmount: 5
   spreadRate: 0.5
   infMax: 200
@@ -364,7 +364,6 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
-  - component: {fileID: 963194232}
   m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
