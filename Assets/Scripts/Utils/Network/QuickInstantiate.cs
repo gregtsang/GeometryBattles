@@ -5,7 +5,7 @@ using UnityEngine;
 public class QuickInstantiate : MonoBehaviour
 {
    [SerializeField]
-   private GameObject _prefab;
+   private GameObject _prefab = null;
 
    private void Awake()
    {
