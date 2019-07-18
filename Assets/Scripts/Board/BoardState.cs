@@ -223,12 +223,8 @@ namespace GeometryBattles.BoardManager
                     buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
-                    {
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
-                        {
                             AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
-                        }
-                    }
                     grid[i][j].SetColor(buffer[i][j].GetOwner(), buffer[i][j].GetInfluence(), infThreshold, baseTileColor, false);
                 }
             }
@@ -272,6 +268,7 @@ namespace GeometryBattles.BoardManager
         public void SetBuff(int q, int r, Player player, int buff)
         {
             grid[q][r].SetBuff(player, buff);
+            buffer[q][r].SetBuff(player, buff);
         }
     }
 }
