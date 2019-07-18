@@ -7,7 +7,12 @@ namespace GeometryBattles.StructureManager
     {
         public int cost = 10;
         private int range = 5;
-        private int strength = 50;
+        private int strength = 10;
+
+        void Start()
+        {
+            Buff();
+        }
 
         public void Buff()
         {
@@ -19,7 +24,7 @@ namespace GeometryBattles.StructureManager
             {
                 Vector3Int curr = queue.Dequeue();
                 boardState.SetBuff(curr[0], curr[1], boardState.GetNodeOwner(this.q, this.r), this.strength);
-                if (curr[2] < range)
+                if (curr[2] + 1 < range)
                 {
                     List<Vector2Int> neighbors = boardState.GetNeighbors(curr[0], curr[1]);
                     foreach (var n in neighbors)

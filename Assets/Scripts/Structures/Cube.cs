@@ -19,7 +19,10 @@ namespace GeometryBattles.StructureManager
         {
             while (this.hp > 0)
             {
-                Instantiate(cubeScoutPrefab, this.transform.position, Quaternion.identity, this.transform);
+                GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
+                CubeScout currScout = scout.GetComponent<CubeScout>();
+                currScout.SetCoords(this.q, this.r);
+                currScout.SetPlayer(this.player);
                 yield return new WaitForSeconds(spawnRate);
             }
         }
