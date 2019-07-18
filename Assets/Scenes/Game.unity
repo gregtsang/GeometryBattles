@@ -206,7 +206,7 @@ MonoBehaviour:
     type: 3}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
-  boardWidth: 25
+  boardWidth: 35
   baseOffset: 2
   numPlayers: 2
   player1: {r: 0.37254903, g: 0.13725491, b: 0.43137255, a: 0}
@@ -240,7 +240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
   baseTileColor: {r: 0.83183515, g: 0.86573374, b: 0.8773585, a: 0}
-  spreadAmount: 5
+  spreadAmount: 1
   spreadRate: 0.5
   infMax: 200
   infThreshold: 100
