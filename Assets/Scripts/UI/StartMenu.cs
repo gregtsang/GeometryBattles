@@ -44,7 +44,7 @@ namespace GeometryBattles.UI
         // Start is called before the first frame update
         void Start()
         {
-            
+            ShowStartMenuCanvas();
         }
 
         // Update is called once per frame
