@@ -14,6 +14,8 @@ namespace GeometryBattles.BoardManager
         public int boardWidth = 20;
         public int baseOffset = 2;
         public int numPlayers = 2;
+        public Color player1;
+        public Color player2;
 
         float tileWidth = 1.73205f;
         float tileLength = 2.0f;
@@ -81,7 +83,7 @@ namespace GeometryBattles.BoardManager
                     currTile.SetNextColor(boardState.baseTileColor);
                     boardState.InitNode(currTile, q, r);
                     if (resource.IsResourceTile(q, r))
-                        tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.yellow);
+                        tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.white * 2);
                 }
             }
         }
@@ -93,7 +95,7 @@ namespace GeometryBattles.BoardManager
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
                 Player currPlayer = player.GetComponent<Player>();
-                currPlayer.SetColor(i == 0 ? Color.blue : Color.red);
+                currPlayer.SetColor(i == 0 ? player1 : player2);
                 currPlayer.SetResource(resource.startResource);
                 currPlayer.SetMiningAmount(resource.startMiningAmount);
                 boardState.AddPlayer(player.GetComponent<Player>());
