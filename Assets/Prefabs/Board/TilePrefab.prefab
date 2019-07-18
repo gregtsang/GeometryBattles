@@ -93,6 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d4cac3e54274b00b311d9ab098660b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structureStore: {fileID: 0}
+  cubePrefab: {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4,
+    type: 3}
+  pyrPrefab: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
+    type: 3}
 --- !u!114 &1369621756801389730
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ namespace GeometryBattles.PlayerManager
         
         [SerializeField] int resource = 0;
 
-        float colorHue;
+        Color color;
 
         void Start()
         {
@@ -51,14 +51,14 @@ namespace GeometryBattles.PlayerManager
             }
         }
 
-        public float GetColor()
+        public Color GetColor()
         {
-            return colorHue;
+            return color;
         }
 
-        public void SetColor(float hue)
+        public void SetColor(Color color)
         {
-            colorHue = hue;
+            this.color = color;
         }
     }
 }

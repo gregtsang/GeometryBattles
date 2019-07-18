@@ -75,8 +75,11 @@ namespace GeometryBattles.BoardManager
                     int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
                     tile.name = "Tile[" + q + "," + r + "]";
-                    tile.GetComponent<Tile>().SetCoords(q, r);
-                    boardState.InitNode(tile.GetComponent<Tile>(), q, r);
+                    Tile currTile = tile.GetComponent<Tile>();
+                    currTile.SetCoords(q, r);
+                    currTile.SetPrevColor(boardState.baseTileColor);
+                    currTile.SetNextColor(boardState.baseTileColor);
+                    boardState.InitNode(currTile, q, r);
                     if (resource.IsResourceTile(q, r))
                         tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.yellow);
                 }
@@ -90,7 +93,7 @@ namespace GeometryBattles.BoardManager
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
                 Player currPlayer = player.GetComponent<Player>();
-                currPlayer.SetColor(1.0f * i / numPlayers);
+                currPlayer.SetColor(i == 0 ? Color.blue : Color.red);
                 currPlayer.SetResource(resource.startResource);
                 currPlayer.SetMiningAmount(resource.startMiningAmount);
                 boardState.AddPlayer(player.GetComponent<Player>());

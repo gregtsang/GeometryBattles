@@ -46,9 +46,9 @@ namespace GeometryBattles.BoardManager
             this.influence = influence;
         }
 
-        public void SetColor(Player owner, int influence, int threshold, bool instant = true)
+        public void SetColor(Player owner, int influence, int threshold, Color baseColor, bool instant = true)
         {
-            Color color = Color.HSVToRGB(owner ? owner.GetColor() : 0.0f, Mathf.Min((float)influence / (float)threshold, 1.0f), 1.0f);
+            Color color = Color.Lerp(baseColor, owner ? owner.GetColor() : baseColor, Mathf.Min((float)influence / (float)threshold, 1.0f));
             if (instant)
                 tile.SetPrevColor(color);
             else

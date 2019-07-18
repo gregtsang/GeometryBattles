@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.BoardManager;
+using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.StructureManager
 {
@@ -8,11 +9,12 @@ namespace GeometryBattles.StructureManager
     {
         public Board board;
         public BoardState boardState;
+        public Player player;
 
         public float moveRate = 5.0f;
-        float moveTimer = 2.0f;
+        float moveTimer = 0.0f;
         public int numMoves = 10;
-        int q = 10, r = 10;
+        int q, r;
 
         void Start()
         {
@@ -29,11 +31,23 @@ namespace GeometryBattles.StructureManager
                 Move(next[0], next[1]);
                 q = next[0];
                 r = next[1];
+                boardState.SetNode(q, r, player);
                 moveTimer = moveRate;
                 numMoves--;
             }
             if (numMoves == 0)
                 Destroy(gameObject);
+        }
+
+        public void SetCoords(int q, int r)
+        {
+            this.q = q;
+            this.r = r;
+        }
+
+        public void SetPlayer(Player player)
+        {
+            this.player = player;
         }
 
         void Move(int q, int r)
