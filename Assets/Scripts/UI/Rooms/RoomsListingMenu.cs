@@ -52,7 +52,8 @@ public class RoomsListingMenu : MonoBehaviourPunCallbacks
             // Otherwise, the room already exists, so it's being updated
          else
          {
-            // Update room listing here...
+               // Update room listing here...
+            _listings[index].SetRoomInfo(info);
          }
       }
    }

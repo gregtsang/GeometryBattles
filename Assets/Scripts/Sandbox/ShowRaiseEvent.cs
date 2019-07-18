@@ -17,7 +17,7 @@ public class ShowRaiseEvent : MonoBehaviourPun
 
    private void Update()
    {
-         // Only change color if client is the owner of the object
+         // Only change color if client is the owner of the object (master client owns scene objects)
       if (photonView.IsMine && Input.GetKeyDown(KeyCode.Space))
       {
          ChangeColor();
