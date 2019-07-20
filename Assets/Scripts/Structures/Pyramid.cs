@@ -5,7 +5,6 @@ namespace GeometryBattles.StructureManager
 {
     public class Pyramid : Structure
     {
-        public int cost = 10;
         private int range = 5;
         private int strength = 10;
 

@@ -7,7 +7,6 @@ namespace GeometryBattles.StructureManager
     {
         public GameObject cubeScoutPrefab;
 
-        public int cost = 20;
         public float spawnRate = 10.0f;
 
         void Start()
@@ -21,8 +20,11 @@ namespace GeometryBattles.StructureManager
             {
                 GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position, cubeScoutPrefab.transform.rotation, this.transform) as GameObject;
                 CubeScout currScout = scout.GetComponent<CubeScout>();
+                currScout.SetHome(this.q, this.r);
                 currScout.SetCoords(this.q, this.r);
                 currScout.SetPlayer(this.player);
+                currScout.AddVisited(this.q, this.r);
+                ScoutEventManager.RaiseOnCreate(currScout);
                 yield return new WaitForSeconds(spawnRate);
             }
         }

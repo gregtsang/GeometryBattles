@@ -11,6 +11,9 @@ namespace GeometryBattles.BoardManager
         Dictionary<Player, Vector2Int> bases = new Dictionary<Player, Vector2Int>();
 
         public Color baseTileColor = Color.white;
+        public float tileWidth = 1.73205f;
+        public float tileLength = 2.0f;
+        public float tileGap = 0.15f;
         public int spreadAmount = 1;
         public float spreadRate = 0.1f;
         float spreadTimer = 0.0f;
@@ -32,6 +35,12 @@ namespace GeometryBattles.BoardManager
                 CalcBuffer();
                 spreadTimer = spreadRate;
             }
+        }
+
+        public void SetGaps()
+        {
+            tileWidth += tileWidth * tileGap;
+            tileLength += tileLength * tileGap;
         }
 
         public void SetCap(int n)
@@ -111,15 +120,31 @@ namespace GeometryBattles.BoardManager
             Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (owner == null || owner == player)
+            {
                 gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
+                if (target)
+                    gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
+            }
             else
             {   
                 if (influence < value)
+                {
                     gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                    if (target)
+                        gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
+                }
                 else if (influence > value)
+                {
                     gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
+                    if (target)
+                        gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                }
                 else
+                {
                     gridbuffer[q][r].Set(null, 0);
+                    if (target)
+                        gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                }
             }
         }
 

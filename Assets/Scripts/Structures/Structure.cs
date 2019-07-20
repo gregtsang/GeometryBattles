@@ -28,6 +28,11 @@ namespace GeometryBattles.StructureManager
             this.player = player;
         }
 
+        public Player GetPlayer()
+        {
+            return player;
+        }
+
         public void SetColor(Color color)
         {
             this.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color);
