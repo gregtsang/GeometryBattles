@@ -8,12 +8,11 @@ namespace GeometryBattles.StructureManager
     {
         public float bombRate = 2.0f;
         public int bombStrength = 20;
-        public int bombSplashDivisor = 2;
         public int bombRadius = 1;
         int targetQ, targetR;
         bool bombard = false;
 
-        public void setTarget(int q, int r)
+        public void SetTarget(int q, int r)
         {
             targetQ = q;
             targetR = r;
@@ -33,7 +32,7 @@ namespace GeometryBattles.StructureManager
                 while (queue.Count > 0)
                 {
                     Vector3Int curr = queue.Dequeue();
-                    boardState.AddNode(curr[0], curr[1], this.player, bombStrength / (curr[2] * bombSplashDivisor));
+                    boardState.AddNode(curr[0], curr[1], this.player, bombStrength / (1 + curr[2]));
                     if (curr[2] < bombRadius)
                     {
                         List<Vector2Int> neighbors = boardState.GetNeighbors(curr[0], curr[1]);
@@ -42,7 +41,7 @@ namespace GeometryBattles.StructureManager
                             if (!visited.Contains(n))
                             {
                                 visited.Add(n);
-                                queue.Enqueue(new Vector3Int(curr[0], curr[1], curr[2] + 1));
+                                queue.Enqueue(new Vector3Int(n[0], n[1], curr[2] + 1));
                             }
                         }
                     }

@@ -103,6 +103,7 @@ namespace GeometryBattles.BoardManager
         public void AddNodeHP(int q, int r, int amount, int max)
         {
             grid[q][r].AddStructureHP(amount, max);
+            buffer[q][r].AddStructureHP(amount, max);
         }
 
         public void SetNode(int q, int r, Player owner, bool target = true)
@@ -131,8 +132,10 @@ namespace GeometryBattles.BoardManager
             Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (gridbuffer[q][r].GetStructureHP() > 0)
+            {
                 if (owner != player)
                     gridbuffer[q][r].DecStructureHP(value);
+            }
             else
             {
                 if (owner == null || owner == player)
