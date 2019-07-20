@@ -4,8 +4,8 @@ namespace GeometryBattles.BoardManager
 {
     public class Tile : MonoBehaviour
     {
-        Color prevColor = Color.white;
-        Color nextColor = Color.white;
+        Color prevColor;
+        Color nextColor;
         Material mat;
 
         int q, r;
@@ -14,7 +14,7 @@ namespace GeometryBattles.BoardManager
         public int R { get => r; }
 
         void Start()
-        {
+        {   
             mat = this.GetComponent<MeshRenderer>().material;
         }
 
