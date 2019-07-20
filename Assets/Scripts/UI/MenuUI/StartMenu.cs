@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace GeometryBattles.UI
+namespace GeometryBattles.MenuUI
 { 
     public class StartMenu : MonoBehaviour
     {
         [SerializeField] GameObject startCanvas = null;
         [SerializeField] GameObject creditsCanvas = null;
+        [SerializeField] GameObject gameLobbyCanvas = null;
+        [SerializeField] GameObject createGameCanvas = null;
         
         public void QuitGame()
         {
@@ -25,6 +27,18 @@ namespace GeometryBattles.UI
         {
             DisableAllCanvases();
             creditsCanvas.SetActive(true);
+        }
+
+        public void ShowGameLobbyCanvas()
+        {
+            DisableAllCanvases();
+            gameLobbyCanvas.SetActive(true);
+        }
+
+        public void ShowCreateGameCanvas()
+        {
+            DisableAllCanvases();
+            createGameCanvas.SetActive(true);
         }
 
         public void LoadGameScene()
@@ -45,12 +59,6 @@ namespace GeometryBattles.UI
         void Start()
         {
             ShowStartMenuCanvas();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            
         }
     }
 }
