@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.StructureManager
