@@ -5,6 +5,21 @@ using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// This class provides a .photonView and all callbacks/events that PUN can call. Override the events/methods you want to use.
+/// </summary>
+/// <remarks>
+/// By extending this class, you can implement individual methods as override.
+/// 
+/// Do not add <b>new</b> <code>MonoBehaviour.OnEnable</code> or <code>MonoBehaviour.OnDisable</code>
+/// Instead, you should override those and call <code>base.OnEnable</code> and <code>base.OnDisable</code>.
+/// 
+/// Visual Studio and MonoDevelop should provide the list of methods when you begin typing "override".
+/// <b>Your implementation does not have to call "base.method()".</b>
+/// 
+/// This class implements all callback interfaces and extends <see cref="T:Photon.Pun.MonoBehaviourPun"/>.
+/// </remarks>
+/// \ingroup callbacks
 public class CreateRoomMenu : MonoBehaviourPunCallbacks
 {
    private RoomsGUI _roomsGUI = null;

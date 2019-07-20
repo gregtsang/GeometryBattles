@@ -5,6 +5,12 @@ public class TestConnect : MonoBehaviourPunCallbacks {
 
    private void Start() {
       print("Connecting to server...");
+
+         // Test SendRate and SerializationRate
+      //PhotonNetwork.SendRate = 20;
+      //PhotonNetwork.SerializationRate = 5;
+
+      PhotonNetwork.AutomaticallySyncScene = true;
       PhotonNetwork.NickName = MasterManager.GameSettings.NickName;
       PhotonNetwork.GameVersion = MasterManager.GameSettings.GameVersion;
       PhotonNetwork.ConnectUsingSettings();
@@ -15,10 +21,14 @@ public class TestConnect : MonoBehaviourPunCallbacks {
       print("Connected to server : )");
       print(PhotonNetwork.LocalPlayer.NickName);
 
-         // Room listings can only occur from within a lobby
-      PhotonNetwork.JoinLobby();
-      if (PhotonNetwork.InLobby) {
-         print("Joined lobby. Updating room listings...");
+         // Prevent joining the lobby multiple times
+      if (!PhotonNetwork.InLobby) {
+         
+            // Room listings can only occur from within a lobby
+         PhotonNetwork.JoinLobby();
+         if (PhotonNetwork.InLobby) {
+            print("Joined lobby. Updating room listings...");
+         }
       }
    }
 

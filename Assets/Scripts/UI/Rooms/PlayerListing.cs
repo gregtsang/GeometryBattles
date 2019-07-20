@@ -10,10 +10,18 @@ public class PlayerListing : MonoBehaviour
    private Text _text = null;
 
    public Player Player { get; private set; }
+   public bool Ready = false;
 
    public void SetPlayerInfo(Player player)
    {
       Player = player;
-      _text.text = player.NickName;
+
+      int result = -1;
+      if (player.CustomProperties.ContainsKey("RandNum"))
+      { 
+         result = (int) player.CustomProperties["RandNum"];
+      }
+
+      _text.text = result.ToString() + ", " + player.NickName;
    }
 }
