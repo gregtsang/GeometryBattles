@@ -9,10 +9,15 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         protected int q, r;
         protected Player player;
-        public int hp;
+        public int maxHP;
+        public int regenHP;
+        protected int hp;
         protected int level = 1;
-        
-        public void Sell()
+
+        public int Q { get => q; }
+        public int R { get => r; }
+
+        public void Destroy()
         {
             Destroy(gameObject);
         }
@@ -36,6 +41,26 @@ namespace GeometryBattles.StructureManager
         public void SetColor(Color color)
         {
             this.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color);
+        }
+
+        public void SetHP(int hp)
+        {
+            this.hp = hp;
+        }
+
+        public int GetHP()
+        {
+            return hp;
+        }
+
+        public int GetMaxHP()
+        {
+            return maxHP;
+        }
+
+        public int GetHPRegen()
+        {
+            return regenHP;
         }
     }
 }

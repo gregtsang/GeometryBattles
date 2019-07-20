@@ -33,6 +33,7 @@ namespace GeometryBattles.BoardManager
             if (spreadTimer <= 0.0f)
             {
                 CalcBuffer();
+                BoardEventManager.RaiseOnBoardUpdate();
                 spreadTimer = spreadRate;
             }
         }
@@ -94,6 +95,16 @@ namespace GeometryBattles.BoardManager
             return grid[q][r].GetInfluence();
         }
 
+        public int GetNodeHP(int q, int r)
+        {
+            return grid[q][r].GetStructureHP();
+        }
+
+        public void AddNodeHP(int q, int r, int amount, int max)
+        {
+            grid[q][r].AddStructureHP(amount, max);
+        }
+
         public void SetNode(int q, int r, Player owner, bool target = true)
         {
             List<List<TileState>> gridbuffer = target ? grid : buffer;
@@ -119,31 +130,37 @@ namespace GeometryBattles.BoardManager
             List<List<TileState>> gridbuffer = target ? grid : buffer;
             Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
-            if (owner == null || owner == player)
-            {
-                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
-                if (target)
-                    gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
-            }
+            if (gridbuffer[q][r].GetStructureHP() > 0)
+                if (owner != player)
+                    gridbuffer[q][r].DecStructureHP(value);
             else
-            {   
-                if (influence < value)
+            {
+                if (owner == null || owner == player)
                 {
-                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                    gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
                     if (target)
-                        gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
-                }
-                else if (influence > value)
-                {
-                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
-                    if (target)
-                        gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                        gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
                 }
                 else
-                {
-                    gridbuffer[q][r].Set(null, 0);
-                    if (target)
-                        gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                {   
+                    if (influence < value)
+                    {
+                        gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                        if (target)
+                            gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
+                    }
+                    else if (influence > value)
+                    {
+                        gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
+                        if (target)
+                            gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                    }
+                    else
+                    {
+                        gridbuffer[q][r].Set(null, 0);
+                        if (target)
+                            gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                    }
                 }
             }
         }

@@ -24,7 +24,7 @@ namespace GeometryBattles.StructureManager
                 currScout.SetCoords(this.q, this.r);
                 currScout.SetPlayer(this.player);
                 currScout.AddVisited(this.q, this.r);
-                ScoutEventManager.RaiseOnCreate(currScout);
+                BoardEventManager.RaiseOnCreateScout(currScout);
                 yield return new WaitForSeconds(spawnRate);
             }
         }
