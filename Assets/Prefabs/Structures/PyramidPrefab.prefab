@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3459566114457201069}
   - component: {fileID: 3776065890033186980}
   - component: {fileID: 74828243783383081}
-  - component: {fileID: 6112294284945291178}
+  - component: {fileID: 219168125575198432}
   m_Layer: 0
   m_Name: PyramidPrefab
   m_TagString: Untagged
@@ -92,7 +92,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6112294284945291178
+--- !u!114 &219168125575198432
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,5 +105,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
-  hp: 100
-  cost: 10
+  maxHP: 0
+  regenHP: 0

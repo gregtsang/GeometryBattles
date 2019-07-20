@@ -9,9 +9,9 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         protected int q, r;
         protected Player player;
-        public int maxHP;
-        public int regenHP;
-        protected int hp;
+        public int maxHP = 100;
+        public int regenHP = 0;
+        protected int hp = 100;
         protected int level = 1;
 
         public int Q { get => q; }

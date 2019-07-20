@@ -211,10 +211,9 @@ MonoBehaviour:
   numPlayers: 2
   player1: {r: 0.37254903, g: 0.13725491, b: 0.43137255, a: 0}
   player2: {r: 0.37254903, g: 0.8156863, b: 0.7176471, a: 0}
-  tileGap: 0.15
-  store: {fileID: 1315784110}
-  cubePrefab: {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4,
+  PentagonPrefab: {fileID: 3714227975952305212, guid: 9bba42a490e3f4c7e924b626f78f24af,
     type: 3}
+  structureStore: {fileID: 1315784110}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -245,6 +244,7 @@ MonoBehaviour:
   baseTileColor: {r: 0.83183515, g: 0.86573374, b: 0.8773585, a: 0}
   tileWidth: 1.73205
   tileLength: 2
+  tileGap: 0.15
   spreadAmount: 1
   spreadRate: 0.5
   infMax: 200
@@ -814,6 +814,9 @@ MonoBehaviour:
   structureStore: {fileID: 1315784110}
   moveRate: 2
   numMoves: 10
+  moveUnownedWeight: 3
+  moveUnvisitedWeight: 5
+  moveAwayWeight: 10
 --- !u!4 &1320711754
 Transform:
   m_ObjectHideFlags: 0
