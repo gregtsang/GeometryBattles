@@ -20,7 +20,7 @@ namespace GeometryBattles.UI
 
         private void Update()
         {
-            text.text = "Resources: " + uiManager.GetActivePlayer().GetResource().ToString();
+            text.text = "Resources: " + uiManager.GetActivePlayer()?.GetResource().ToString() ?? "0";
         }
     }
 }
