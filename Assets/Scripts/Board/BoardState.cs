@@ -10,6 +10,10 @@ namespace GeometryBattles.BoardManager
         List<Player> players = new List<Player>();
         Dictionary<Player, Vector2Int> bases = new Dictionary<Player, Vector2Int>();
 
+        public Color baseTileColor = Color.white;
+        public float tileWidth = 1.73205f;
+        public float tileLength = 2.0f;
+        public float tileGap = 0.15f;
         public int spreadAmount = 1;
         public float spreadRate = 0.1f;
         float spreadTimer = 0.0f;
@@ -31,6 +35,12 @@ namespace GeometryBattles.BoardManager
                 CalcBuffer();
                 spreadTimer = spreadRate;
             }
+        }
+
+        public void SetGaps()
+        {
+            tileWidth += tileWidth * tileGap;
+            tileLength += tileLength * tileGap;
         }
 
         public void SetCap(int n)
@@ -91,7 +101,7 @@ namespace GeometryBattles.BoardManager
             int prevInfluence = gridbuffer[q][r].GetInfluence();
             
             gridbuffer[q][r].Set(owner, infThreshold);
-            gridbuffer[q][r].SetColor(owner, infThreshold, infThreshold);
+            gridbuffer[q][r].SetColor(owner, infThreshold, infThreshold, baseTileColor);
         }
 
         public void SetNode(int q, int r, Player owner, int influence, bool target = true)
@@ -101,7 +111,7 @@ namespace GeometryBattles.BoardManager
             int prevInfluence = gridbuffer[q][r].GetInfluence();
             
             gridbuffer[q][r].Set(owner, influence);
-            gridbuffer[q][r].SetColor(owner, influence, infThreshold);
+            gridbuffer[q][r].SetColor(owner, influence, infThreshold, baseTileColor);
         }
 
         public void AddNode(int q, int r, Player player, int value, bool target = true)
@@ -110,15 +120,31 @@ namespace GeometryBattles.BoardManager
             Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
             if (owner == null || owner == player)
+            {
                 gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
+                if (target)
+                    gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
+            }
             else
             {   
                 if (influence < value)
+                {
                     gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                    if (target)
+                        gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
+                }
                 else if (influence > value)
+                {
                     gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
+                    if (target)
+                        gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                }
                 else
+                {
                     gridbuffer[q][r].Set(null, 0);
+                    if (target)
+                        gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                }
             }
         }
 
@@ -222,13 +248,9 @@ namespace GeometryBattles.BoardManager
                     buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
-                    {
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
-                        {
                             AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
-                            grid[i][j].SetColor(buffer[i][j].GetOwner(), buffer[i][j].GetInfluence(), infThreshold, false);
-                        }               
-                    }
+                    grid[i][j].SetColor(buffer[i][j].GetOwner(), buffer[i][j].GetInfluence(), infThreshold, baseTileColor, false);
                 }
             }
             SwapBuffer();
@@ -271,6 +293,7 @@ namespace GeometryBattles.BoardManager
         public void SetBuff(int q, int r, Player player, int buff)
         {
             grid[q][r].SetBuff(player, buff);
+            buffer[q][r].SetBuff(player, buff);
         }
     }
 }
