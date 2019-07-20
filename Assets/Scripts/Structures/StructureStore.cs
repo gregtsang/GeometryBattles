@@ -34,6 +34,7 @@ namespace GeometryBattles.StructureManager
             currStructure.boardState = this.boardState;
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
+            boardState.AddNodeHP(q, r, 100, 100);
             structures[new Vector2Int(q, r)] = currStructure;
         }
 
