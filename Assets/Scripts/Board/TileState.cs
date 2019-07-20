@@ -18,6 +18,7 @@ namespace GeometryBattles.BoardManager
         Tile tile;
         Player owner;
         int influence;
+
         Dictionary<Player, int> buff = new Dictionary<Player, int>();
 
         public Tile GetTile()

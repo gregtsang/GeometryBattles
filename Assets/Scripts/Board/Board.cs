@@ -17,9 +17,8 @@ namespace GeometryBattles.BoardManager
         public Color player1;
         public Color player2;
 
-        float tileWidth = 1.73205f;
-        float tileLength = 2.0f;
-        public float tileGap = 0.15f;
+        float tileWidth;
+        float tileLength;
         
         void Awake()
         {
@@ -28,28 +27,14 @@ namespace GeometryBattles.BoardManager
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);
 
-            SetGaps(tileGap);
+            boardState.SetGaps();
+            this.tileWidth = boardState.tileWidth;
+            this.tileLength = boardState.tileLength;
 
             CreateBoard();
             CreatePlayers(numPlayers);
 
             SetBases(numPlayers);
-        }
-
-        void SetGaps(float gap)
-        {
-            tileWidth += tileWidth * gap;
-            tileLength += tileLength * gap;
-        }
-
-        public float GetTileLength()
-        {
-            return tileLength;
-        }
-
-        public float GetTileWidth()
-        {
-            return tileWidth;
         }
 
         Vector3 CalcPos(Vector2Int boardPos, int numTiles)
