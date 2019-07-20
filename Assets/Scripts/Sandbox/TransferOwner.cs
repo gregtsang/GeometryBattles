@@ -30,6 +30,7 @@ public class TransferOwner : MonoBehaviourPun, IPunOwnershipCallbacks
 
    public void OnOwnershipTransfered(PhotonView targetView, Player previousOwner)
    {
+
          // Make sure the request is being made for this object
       if (targetView != photonView) {
          return;
