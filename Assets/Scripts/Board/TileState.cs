@@ -61,12 +61,17 @@ namespace GeometryBattles.BoardManager
 
         public void SetBuff(Player player, int buff)
         {
-            this.buff[player] = Mathf.Max(buff, this.buff[player]);
+            this.buff[player] = this.buff.ContainsKey(player) ? Mathf.Max(buff, this.buff[player]) : buff;
         }
 
         public int GetBuff(Player player)
         {
             return buff.ContainsKey(player) ? buff[player] : 0;
+        }
+
+        public void SetStructureHP(int hp)
+        {
+            structureHP = hp;
         }
 
         public void DecStructureHP(int amount)

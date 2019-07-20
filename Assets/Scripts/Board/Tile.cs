@@ -12,7 +12,7 @@ namespace GeometryBattles.BoardManager
 
         public int Q { get => q; }
         public int R { get => r; }
-       
+
         void Start()
         {   
             mat = this.GetComponent<MeshRenderer>().material;

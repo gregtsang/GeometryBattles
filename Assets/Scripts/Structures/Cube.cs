@@ -7,7 +7,7 @@ namespace GeometryBattles.StructureManager
     {
         public GameObject cubeScoutPrefab;
 
-        public float spawnRate = 10.0f;
+        public float spawnRate;
 
         void Start()
         {

@@ -5,8 +5,8 @@ namespace GeometryBattles.StructureManager
 {
     public class Pyramid : Structure
     {
-        private int range = 5;
-        private int strength = 10;
+        private int range;
+        private int strength;
 
         void Start()
         {

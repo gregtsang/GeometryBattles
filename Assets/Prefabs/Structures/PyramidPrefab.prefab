@@ -105,5 +105,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
-  maxHP: 0
+  maxHP: 100
   regenHP: 0
