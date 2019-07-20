@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using UnityEditor;
 
 namespace GeometryBattles.BoardManager
 {
@@ -10,22 +12,32 @@ namespace GeometryBattles.BoardManager
         public int startResource = 0;
         public int startMiningAmount = 1;
         public int resourceTileAmount = 5;
-        HashSet<Vector2Int> resourceTiles = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> resourceTiles = new HashSet<Vector2Int>(); // Needs to be synced
 
         public void InitResourceTiles(int boardWidth, int baseOffset)
         {
-            for (int i = 0; i < resourceTilesPerSide; i++)
-            {   
-                int qRand, rRand;
-                do
-                {
-                    qRand = Random.Range(baseOffset, boardWidth - baseOffset);
-                    rRand = Random.Range(baseOffset, boardWidth - baseOffset);
-                } while (resourceTiles.Contains(new Vector2Int(qRand, rRand))
-                        || CalcDistance(baseOffset, boardWidth - baseOffset, qRand, rRand) < minDistance 
-                        || CalcDistance(boardWidth - baseOffset, baseOffset, qRand, rRand) < minDistance);
-                resourceTiles.Add(new Vector2Int(qRand, rRand));
-                resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+            if (PhotonNetwork.IsMasterClient)
+            {
+               List<Vector2Int> resourceTileLocations = new List<Vector2Int>();
+
+               for (int i = 0; i < resourceTilesPerSide; i++)
+               {   
+                   int qRand, rRand;
+                   do
+                   {
+                       qRand = Random.Range(baseOffset, boardWidth - baseOffset);
+                       rRand = Random.Range(baseOffset, boardWidth - baseOffset);
+                   } while (resourceTiles.Contains(new Vector2Int(qRand, rRand))
+                           || CalcDistance(baseOffset, boardWidth - baseOffset, qRand, rRand) < minDistance 
+                           || CalcDistance(boardWidth - baseOffset, baseOffset, qRand, rRand) < minDistance);
+                   resourceTiles.Add(new Vector2Int(qRand, rRand));
+                   resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+                   resourceTileLocations.Add(new Vector2Int(qRand, rRand));
+                   resourceTileLocations.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+               }
+
+               PhotonView pv = GetComponent<PhotonView>();
+               pv.RPC("RPC_SetResourceTileLocation", RpcTarget.Others, resourceTileLocations);
             }
         }
 
@@ -42,6 +54,17 @@ namespace GeometryBattles.BoardManager
         public HashSet<Vector2Int> GetResourceTiles()
         {
             return resourceTiles;
+        }
+
+
+        [PunRPC]
+        private void RPC_SetResourceTileLocation(List<Vector2Int> resourceTileLocations)
+        {
+            foreach (var pos in resourceTileLocations)
+            {
+                resourceTiles.Add(pos);
+                Debug.Log("Adding Vector2Int on non-master " + pos.ToString());
+            }
         }
     }
 }
