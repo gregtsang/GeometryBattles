@@ -22,8 +22,6 @@ namespace GeometryBattles.BoardManager
         
         void Awake()
         {
-            gameCam.orthographicSize = boardWidth;
-            
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);
 
