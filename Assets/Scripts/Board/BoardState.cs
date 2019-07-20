@@ -266,6 +266,7 @@ namespace GeometryBattles.BoardManager
                 for (int j = 0; j < cap; j++)
                 {
                     buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
+                    buffer[i][j].SetStructureHP(grid[i][j].GetStructureHP());
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)

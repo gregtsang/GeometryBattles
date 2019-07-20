@@ -6,9 +6,9 @@ namespace GeometryBattles.StructureManager
 {
     public class Pentagon : Structure
     {
-        public float bombRate = 2.0f;
-        public int bombStrength = 20;
-        public int bombRadius = 1;
+        public float bombRate;
+        public int bombStrength;
+        public int bombRadius;
         int targetQ, targetR;
         bool bombard = false;
 
