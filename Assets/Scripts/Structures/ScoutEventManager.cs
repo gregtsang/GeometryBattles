@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-
-namespace GeometryBattles.StructureManager
+﻿namespace GeometryBattles.StructureManager
 {
-    public class ScoutEventManager : MonoBehaviour
+    public class ScoutEventManager
     {
         public delegate void OnCreate(CubeScout scout);
         public static event OnCreate onCreate;
