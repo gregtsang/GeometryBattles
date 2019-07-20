@@ -18,7 +18,8 @@ namespace GeometryBattles.BoardManager
         {
             if (PhotonNetwork.IsMasterClient)
             {
-               List<Vector2Int> resourceTileLocations = new List<Vector2Int>();
+
+               SerializableVector2Int[] resourceTileLocations = new SerializableVector2Int[resourceTilesPerSide * 2];
 
                for (int i = 0; i < resourceTilesPerSide; i++)
                {   
@@ -32,8 +33,8 @@ namespace GeometryBattles.BoardManager
                            || CalcDistance(boardWidth - baseOffset, baseOffset, qRand, rRand) < minDistance);
                    resourceTiles.Add(new Vector2Int(qRand, rRand));
                    resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
-                   resourceTileLocations.Add(new Vector2Int(qRand, rRand));
-                   resourceTileLocations.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+                   resourceTileLocations[i] = new SerializableVector2Int(qRand, rRand);
+                   resourceTileLocations[resourceTilesPerSide + i] = new SerializableVector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand);
                }
 
                PhotonView pv = GetComponent<PhotonView>();
@@ -58,12 +59,11 @@ namespace GeometryBattles.BoardManager
 
 
         [PunRPC]
-        private void RPC_SetResourceTileLocation(List<Vector2Int> resourceTileLocations)
+        private void RPC_SetResourceTileLocation(SerializableVector2Int[] resourceTileLocations)
         {
             foreach (var pos in resourceTileLocations)
             {
-                resourceTiles.Add(pos);
-                Debug.Log("Adding Vector2Int on non-master " + pos.ToString());
+                resourceTiles.Add(pos.Vector2Int);
             }
         }
     }
