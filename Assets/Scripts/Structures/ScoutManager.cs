@@ -20,7 +20,7 @@ namespace GeometryBattles.StructureManager
 
         void Start()
         {
-            ScoutEventManager.onCreate += AddScout;
+            BoardEventManager.onCreateScout += AddScout;
         }
 
         void Update()
@@ -56,7 +56,7 @@ namespace GeometryBattles.StructureManager
                     else
                     {
                         MoveScout(next[0], next[1], s);
-                        boardState.AddNode(next[0], next[1], s.GetPlayer(), 100);
+                        boardState.AddNode(next[0], next[1], s.GetPlayer(), boardState.infThreshold);
                         if (scoutPos.ContainsKey(next))
                         {
                             destroy.Add(s);
