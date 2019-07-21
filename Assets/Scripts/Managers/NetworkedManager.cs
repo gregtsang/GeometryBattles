@@ -8,8 +8,12 @@ public class NetworkedManager : MonoBehaviour
    [SerializeField]
    private GameObject _boardPrefab = null;
 
+   [SerializeField] bool offlineMode = false;
+
    private void Awake()
    {
+      PhotonNetwork.OfflineMode = offlineMode;      
+      
       if (PhotonNetwork.IsMasterClient)
       {
          Debug.Log("I am the master client and I am about to instantiate the board.");
