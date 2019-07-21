@@ -8,7 +8,8 @@ namespace GeometryBattles.BoardManager
         public int resourceTilesPerSide = 5;
         public int minDistance = 3;
         public int startResource = 0;
-        public int startMiningAmount = 1;
+        public int miningAmount = 1;
+        public float miningRate = 1.0f;
         public int resourceTileAmount = 5;
         HashSet<Vector2Int> resourceTiles = new HashSet<Vector2Int>();
 
