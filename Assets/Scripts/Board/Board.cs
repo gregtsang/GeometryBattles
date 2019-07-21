@@ -82,7 +82,6 @@ namespace GeometryBattles.BoardManager
                 Player currPlayer = player.GetComponent<Player>();
                 currPlayer.SetColor(i == 0 ? player1 : player2);
                 currPlayer.SetResource(resource.startResource);
-                currPlayer.SetMiningAmount(resource.startMiningAmount);
                 boardState.AddPlayer(player.GetComponent<Player>());
             }
         }

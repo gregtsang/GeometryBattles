@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 
@@ -17,7 +18,6 @@ namespace GeometryBattles.BoardManager
         public int spreadAmount = 1;
         public float spreadRate = 0.1f;
         float spreadTimer = 0.0f;
-        
         public int infMax = 200;
         public int infThreshold = 100;
 
@@ -25,10 +25,14 @@ namespace GeometryBattles.BoardManager
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
 
+        void Start()
+        {
+            StartCoroutine(MineResource());
+        }
+
         void Update()
         {
             spreadTimer -= Time.deltaTime;
-            CalcMining();
             UpdateColors();
             if (spreadTimer <= 0.0f)
             {
@@ -283,17 +287,24 @@ namespace GeometryBattles.BoardManager
             SwapBuffer();
         }
 
-        void CalcMining()
+        IEnumerator MineResource()
         {
-            foreach (var p in players)
-                p.SetMiningAmount(resource.startMiningAmount);
-            HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
-            foreach (var r in resourceTiles)
+            while (true)
             {
-                Player owner = grid[r[0]][r[1]].GetOwner();
-                int influence = grid[r[0]][r[1]].GetInfluence();
-                if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
-                    owner.AddMiningAmount(resource.resourceTileAmount);
+                Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
+                foreach (var p in players)
+                    playerMining[p] = resource.miningAmount;
+                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
+                foreach (var r in resourceTiles)
+                {
+                    Player owner = grid[r[0]][r[1]].GetOwner();
+                    int influence = grid[r[0]][r[1]].GetInfluence();
+                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
+                        playerMining[owner] += resource.resourceTileAmount;
+                }
+                foreach (var p in players)
+                    p.AddResource(playerMining[p]);
+                yield return new WaitForSeconds(resource.miningRate);
             }
         }
 
