@@ -55,7 +55,7 @@ MonoBehaviour:
     type: 3}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
-  boardWidth: 35
+  boardWidth: 10
   baseOffset: 2
   numPlayers: 2
   playerColors:
@@ -97,8 +97,8 @@ MonoBehaviour:
   resourceTilesPerSide: 5
   minDistance: 3
   startResource: 0
-  miningAmount: 0
-  miningRate: 0
+  miningAmount: 1
+  miningRate: 1
   resourceTileAmount: 5
 --- !u!114 &4645282498958639248
 MonoBehaviour:

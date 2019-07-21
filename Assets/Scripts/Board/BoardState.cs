@@ -357,6 +357,7 @@ namespace GeometryBattles.BoardManager
                 }
                 foreach (var p in players)
                     p.AddResource(playerMining[p]);
+
                 EventManager.RaiseOnResourceUpdate();
                 yield return new WaitForSeconds(resource.miningRate);
             }
@@ -366,21 +367,33 @@ namespace GeometryBattles.BoardManager
       {
          //throw new System.NotImplementedException();
 
-         if (stream.IsWriting)
+         // Static variable that controls which portion of the board to update
+         // These regions need to be in roughly 100 tile chunks (200 byte chunks)
+         // 
+         //
+         //
+         //
+
+         if (PhotonNetwork.IsMasterClient && stream.IsWriting)
          {
+            int i = 0;  
             foreach (List<TileState> row in grid)
             {
                foreach (TileState tileState in row)
                {
                   stream.SendNext((byte) (tileState.GetOwner()?.Id ?? 255));
                   stream.SendNext((byte) tileState.GetInfluence());
-                  Debug.Log("Sent grid data | Owner: " + (tileState.GetOwner()?.Id ?? 255).ToString()
-                     + " Influence: " + tileState.GetInfluence().ToString());
+                  /*Debug.Log(i.ToString() + " - Sent grid data | Owner: " + (tileState.GetOwner()?.Id ?? 255).ToString()
+                     + " Influence: " + tileState.GetInfluence().ToString());*/
+                  i++;
                }
             }
          }
-         else
+         else if(!PhotonNetwork.IsMasterClient && !stream.IsWriting)
          {
+
+            //
+            int i = 0;
             foreach (List<TileState> row in grid)
             {
                foreach (TileState tileState in row)
@@ -389,8 +402,9 @@ namespace GeometryBattles.BoardManager
                   byte influence = (byte) stream.ReceiveNext();
 
                   tileState.Set(GetPlayer(playerId), influence);
-                  Debug.Log("Received grid data | Owner: " + playerId.ToString()
-                     + " Influence: " + influence.ToString());
+                  /*Debug.Log(i.ToString() + " - Received grid data | Owner: " + playerId.ToString()
+                     + " Influence: " + influence.ToString());*/
+                  i++;
                }
             }
          }
