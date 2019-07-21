@@ -83,7 +83,7 @@ namespace GeometryBattles.BoardManager
 
         public Player GetPlayer(int i)
         {
-            if (i == -1) return null;
+            if (i < 0 || i >= players.Count) return null;
             return players[i];
         }
 
@@ -372,7 +372,7 @@ namespace GeometryBattles.BoardManager
             {
                foreach (TileState tileState in row)
                {
-                  stream.SendNext((sbyte) (tileState.GetOwner()?.Id ?? -1));
+                  stream.SendNext((byte) (tileState.GetOwner()?.Id ?? 255));
                   stream.SendNext((byte) tileState.GetInfluence());
                }
             }
