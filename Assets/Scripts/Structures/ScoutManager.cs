@@ -18,7 +18,7 @@ namespace GeometryBattles.StructureManager
 
         void Start()
         {
-            BoardEventManager.onCreateScout += AddScout;
+            EventManager.onCreateScout += AddScout;
         }
 
         void Update()
@@ -26,10 +26,11 @@ namespace GeometryBattles.StructureManager
             UpdateScouts();
         }
 
-        void AddScout(CubeScout scout)
+        void AddScout(GameObject scout)
         {
-            scouts.Add(scout);
-            scoutPos[new Vector2Int(scout.Q, scout.R)] = scout;
+            CubeScout currScout = scout.GetComponent<CubeScout>();
+            scouts.Add(currScout);
+            scoutPos[new Vector2Int(currScout.Q, currScout.R)] = currScout;
         }
 
         void UpdateScouts()

@@ -39,7 +39,6 @@ namespace GeometryBattles.BoardManager
             if (spreadTimer <= 0.0f)
             {
                 CalcBuffer();
-                BoardEventManager.RaiseOnBoardUpdate();
                 spreadTimer = spreadRate;
             }
         }
@@ -342,6 +341,7 @@ namespace GeometryBattles.BoardManager
                 }
                 foreach (var p in players)
                     p.AddResource(playerMining[p]);
+                EventManager.RaiseOnResourceUpdate();
                 yield return new WaitForSeconds(resource.miningRate);
             }
         }
