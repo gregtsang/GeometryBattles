@@ -26,8 +26,8 @@ namespace GeometryBattles.UI
             Debug.Log("I am player " + activePlayer);
         }
 
-      // Start is called before the first frame update
-      void Start()
+            // Start is called before the first frame update
+        void Start()
         {
             board = FindObjectOfType<Board>();
         }

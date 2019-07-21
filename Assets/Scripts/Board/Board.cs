@@ -81,6 +81,7 @@ namespace GeometryBattles.BoardManager
                 currPlayer.SetColor(playerColors[i]);
                 currPlayer.SetResource(resource.startResource);
                 boardState.AddPlayer(player.GetComponent<Player>());
+                currPlayer.Id = i;
             }
         }
 

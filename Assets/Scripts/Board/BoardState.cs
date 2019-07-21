@@ -35,15 +35,16 @@ namespace GeometryBattles.BoardManager
 
         void Update()
         {
-            if (PhotonNetwork.IsMasterClient)
-            { 
-               spreadTimer -= Time.deltaTime;
-               UpdateColors();
-               if (spreadTimer <= 0.0f)
-               {
-                   CalcBuffer();
-                   spreadTimer = spreadRate;
-               }
+            spreadTimer -= Time.deltaTime;
+            UpdateColors();
+            SetColors();
+            if (spreadTimer <= 0.0f)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    CalcBuffer();
+                }
+                spreadTimer = spreadRate;
             }
         }
 
@@ -82,6 +83,7 @@ namespace GeometryBattles.BoardManager
 
         public Player GetPlayer(int i)
         {
+            if (i == -1) return null;
             return players[i];
         }
 
@@ -302,10 +304,20 @@ namespace GeometryBattles.BoardManager
                     foreach (var n in neighbors)
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
                             AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
-                    grid[i][j].SetColor(buffer[i][j].GetOwner(), buffer[i][j].GetInfluence(), infThreshold, baseTileColor, false);
                 }
             }
             SwapBuffer();
+        }
+
+        void SetColors()
+        {
+            for (int i = 0; i < cap; i++)
+            {
+                for (int j = 0; j < cap; j++)
+                {
+                    grid[i][j].SetColor(grid[i][j].GetOwner(), grid[i][j].GetInfluence(), infThreshold, baseTileColor, false);
+                }
+            }
         }
 
         void UpdateColors()
@@ -352,7 +364,30 @@ namespace GeometryBattles.BoardManager
 
       public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
       {
-         throw new System.NotImplementedException();
+         //throw new System.NotImplementedException();
+
+         if (stream.IsWriting)
+         {
+            foreach (List<TileState> row in grid)
+            {
+               foreach (TileState tileState in row)
+               {
+                  stream.SendNext((sbyte) (tileState.GetOwner()?.Id ?? -1));
+                  stream.SendNext((byte) tileState.GetInfluence());
+               }
+            }
+         }
+         else
+         {
+            foreach (List<TileState> row in grid)
+            {
+               foreach (TileState tileState in row)
+               {
+                  tileState.Set(GetPlayer((int) stream.ReceiveNext()), (int) stream.ReceiveNext());
+               }
+            }
+         }
+
       }
    }
 }
