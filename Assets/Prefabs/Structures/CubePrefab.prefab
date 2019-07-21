@@ -122,12 +122,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currLevel:
-    cost: 0
-    maxHP: 0
-    regen: 0
-    spawnRate: 0
-    moveRate: 0
-    numMoves: 0
+    cost: 10
+    maxHP: 100
+    regen: 1
+    spawnRate: 10
+    moveRate: 2
+    numMoves: 10
   levels:
   - cost: 10
     maxHP: 100

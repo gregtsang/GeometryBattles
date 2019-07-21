@@ -14,6 +14,11 @@ namespace GeometryBattles.StructureManager
         public int Q { get => q; }
         public int R { get => r; }
 
+        virtual public void Upgrade()
+        {
+            
+        }
+
         virtual public void Destroy()
         {
             Destroy(gameObject);

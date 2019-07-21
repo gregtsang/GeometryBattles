@@ -52,7 +52,7 @@ namespace GeometryBattles.StructureManager
             return stats.currLevel.regen;
         }
 
-        public void Upgrade()
+        public override void Upgrade()
         {
             stats.Upgrade();
             boardState.SetNodeHP(this.q, this.r, stats.currLevel.maxHP);
@@ -62,6 +62,7 @@ namespace GeometryBattles.StructureManager
         public override void Destroy()
         {
             Buff(stats.currLevel.range, 0);
+            Destroy(gameObject);
         }
     }
 }

@@ -9,6 +9,11 @@ namespace GeometryBattles.StructureManager
 
         public CubeData stats;
 
+        void OnEnable()
+        {
+            stats = this.gameObject.GetComponent<CubeData>();
+        }
+
         void Start()
         {
             StartCoroutine("SpawnScout");
@@ -29,6 +34,27 @@ namespace GeometryBattles.StructureManager
                 BoardEventManager.RaiseOnCreateScout(currScout);
                 yield return new WaitForSeconds(stats.currLevel.spawnRate);
             }
+        }
+
+        public override int GetMaxHP()
+        {
+            return stats.currLevel.maxHP;
+        }
+
+        public override int GetHPRegen()
+        {
+            return stats.currLevel.regen;
+        }
+
+        public override void Upgrade()
+        {
+            stats.Upgrade();
+            boardState.SetNodeHP(this.q, this.r, stats.currLevel.maxHP);
+        }
+
+        public override void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }
