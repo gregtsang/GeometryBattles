@@ -28,11 +28,6 @@ namespace GeometryBattles.BoardManager
             return tile;
         }
 
-        public void SetTile(Tile tile)
-        {
-            this.tile = tile;
-        }
-
         public Player GetOwner()
         {
             return owner;
@@ -41,6 +36,11 @@ namespace GeometryBattles.BoardManager
         public int GetInfluence()
         {
             return influence;
+        }
+
+        public void SetTile(Tile tile)
+        {
+            this.tile = tile;
         }
 
         public void Set(Player owner, int influence)
@@ -59,14 +59,19 @@ namespace GeometryBattles.BoardManager
             tile.SetNextColor(color);
         }
 
+        public int GetBuff(Player player)
+        {
+            return buff.ContainsKey(player) ? buff[player] : 0;
+        }
+
         public void SetBuff(Player player, int buff)
         {
             this.buff[player] = this.buff.ContainsKey(player) ? Mathf.Max(buff, this.buff[player]) : buff;
         }
 
-        public int GetBuff(Player player)
+        public int GetStructureHP()
         {
-            return buff.ContainsKey(player) ? buff[player] : 0;
+            return structureHP;
         }
 
         public void SetStructureHP(int hp)
@@ -74,19 +79,14 @@ namespace GeometryBattles.BoardManager
             structureHP = hp;
         }
 
-        public void DecStructureHP(int amount)
-        {
-            structureHP = Mathf.Max(structureHP - amount, 0);
-        }
-
         public void AddStructureHP(int amount, int max)
         {
             structureHP = Mathf.Min(structureHP + amount, max);
         }
 
-        public int GetStructureHP()
+        public void SubStructureHP(int amount)
         {
-            return structureHP;
+            structureHP = Mathf.Max(structureHP - amount, 0);
         }
     }
 }

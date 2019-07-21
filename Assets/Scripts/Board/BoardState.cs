@@ -11,15 +11,17 @@ namespace GeometryBattles.BoardManager
         List<Player> players = new List<Player>();
         Dictionary<Player, Vector2Int> bases = new Dictionary<Player, Vector2Int>();
 
-        public Color baseTileColor = Color.white;
-        public float tileWidth = 1.73205f;
-        public float tileLength = 2.0f;
-        public float tileGap = 0.15f;
-        public int spreadAmount = 1;
-        public float spreadRate = 0.1f;
+        public Color baseTileColor;
+        float tileWidth = 1.73205f;
+        float tileLength = 2.0f;
+        public float tileGap;
+
+        public int spreadAmount;
+        public float spreadRate;
         float spreadTimer = 0.0f;
-        public int infMax = 200;
-        public int infThreshold = 100;
+
+        public int infMax;
+        public int infThreshold;
 
         int cap = -1;
         List<List<TileState>> grid;
@@ -48,6 +50,16 @@ namespace GeometryBattles.BoardManager
             tileLength += tileLength * tileGap;
         }
 
+        public float GetTileWidth()
+        {
+            return tileWidth;
+        }
+
+        public float GetTileLength()
+        {
+            return tileLength;
+        }
+
         public void SetCap(int n)
         {
             grid = new List<List<TileState>>(n);
@@ -65,14 +77,14 @@ namespace GeometryBattles.BoardManager
             cap = n;
         }
 
-        public void AddPlayer(Player player)
-        {
-            players.Add(player);
-        }
-
         public Player GetPlayer(int i)
         {
             return players[i];
+        }
+
+        public void AddPlayer(Player player)
+        {
+            players.Add(player);
         }
 
         public void InitNode(Tile node, int q, int r)
@@ -104,18 +116,6 @@ namespace GeometryBattles.BoardManager
             return grid[q][r].GetStructureHP();
         }
 
-        public void AddNodeHP(int q, int r, int amount, int max)
-        {
-            grid[q][r].AddStructureHP(amount, max);
-            buffer[q][r].AddStructureHP(amount, max);
-        }
-
-        public void SetNodeHP(int q, int r, int amount)
-        {
-            grid[q][r].SetStructureHP(amount);
-            buffer[q][r].SetStructureHP(amount);
-        }
-
         public void SetNode(int q, int r, Player owner, bool target = true)
         {
             List<List<TileState>> gridbuffer = target ? grid : buffer;
@@ -144,7 +144,7 @@ namespace GeometryBattles.BoardManager
             if (gridbuffer[q][r].GetStructureHP() > 0)
             {
                 if (owner != player)
-                    gridbuffer[q][r].DecStructureHP(value);
+                    gridbuffer[q][r].SubStructureHP(value);
             }
             else
             {
@@ -176,6 +176,24 @@ namespace GeometryBattles.BoardManager
                     }
                 }
             }
+        }
+
+        public void SetNodeHP(int q, int r, int amount)
+        {
+            grid[q][r].SetStructureHP(amount);
+            buffer[q][r].SetStructureHP(amount);
+        }
+
+        public void AddNodeHP(int q, int r, int amount, int max)
+        {
+            grid[q][r].AddStructureHP(amount, max);
+            buffer[q][r].AddStructureHP(amount, max);
+        }
+
+        public void SetBuff(int q, int r, Player player, int buff)
+        {
+            grid[q][r].SetBuff(player, buff);
+            buffer[q][r].SetBuff(player, buff);
         }
 
         public void AddBase(int q, int r, Player player)
@@ -287,27 +305,6 @@ namespace GeometryBattles.BoardManager
             SwapBuffer();
         }
 
-        IEnumerator MineResource()
-        {
-            while (true)
-            {
-                Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
-                foreach (var p in players)
-                    playerMining[p] = resource.miningAmount;
-                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
-                foreach (var r in resourceTiles)
-                {
-                    Player owner = grid[r[0]][r[1]].GetOwner();
-                    int influence = grid[r[0]][r[1]].GetInfluence();
-                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
-                        playerMining[owner] += resource.resourceTileAmount;
-                }
-                foreach (var p in players)
-                    p.AddResource(playerMining[p]);
-                yield return new WaitForSeconds(resource.miningRate);
-            }
-        }
-
         void UpdateColors()
         {
             for (int i = 0; i < cap; i++)
@@ -328,10 +325,25 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        public void SetBuff(int q, int r, Player player, int buff)
+        IEnumerator MineResource()
         {
-            grid[q][r].SetBuff(player, buff);
-            buffer[q][r].SetBuff(player, buff);
+            while (true)
+            {
+                Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
+                foreach (var p in players)
+                    playerMining[p] = resource.miningAmount;
+                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
+                foreach (var r in resourceTiles)
+                {
+                    Player owner = grid[r[0]][r[1]].GetOwner();
+                    int influence = grid[r[0]][r[1]].GetInfluence();
+                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
+                        playerMining[owner] += resource.resourceTileAmount;
+                }
+                foreach (var p in players)
+                    p.AddResource(playerMining[p]);
+                yield return new WaitForSeconds(resource.miningRate);
+            }
         }
     }
 }

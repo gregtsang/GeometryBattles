@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.BoardManager
@@ -8,14 +9,14 @@ namespace GeometryBattles.BoardManager
         public Camera gameCam;
         public BoardState boardState;
         public Resource resource;
+        
         public GameObject tilePrefab;
         public GameObject playerPrefab;
 
-        public int boardWidth = 20;
-        public int baseOffset = 2;
-        public int numPlayers = 2;
-        public Color player1;
-        public Color player2;
+        public int boardWidth;
+        public int baseOffset;
+        public int numPlayers;
+        public List<Color> playerColors;
 
         float tileWidth;
         float tileLength;
@@ -28,8 +29,8 @@ namespace GeometryBattles.BoardManager
             resource.InitResourceTiles(boardWidth, baseOffset);
 
             boardState.SetGaps();
-            this.tileWidth = boardState.tileWidth;
-            this.tileLength = boardState.tileLength;
+            this.tileWidth = boardState.GetTileWidth();
+            this.tileLength = boardState.GetTileLength();
 
             CreateBoard();
             CreatePlayers(numPlayers);
@@ -80,7 +81,7 @@ namespace GeometryBattles.BoardManager
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
                 Player currPlayer = player.GetComponent<Player>();
-                currPlayer.SetColor(i == 0 ? player1 : player2);
+                currPlayer.SetColor(playerColors[i]);
                 currPlayer.SetResource(resource.startResource);
                 boardState.AddPlayer(player.GetComponent<Player>());
             }
