@@ -12,8 +12,6 @@ namespace GeometryBattles.StructureManager
         HashSet<CubeScout> scouts = new HashSet<CubeScout>();
         List<CubeScout> destroy;
 
-        public float moveRate = 2.0f;
-        public int numMoves = 10;
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
         public int moveAwayWeight = 10;
@@ -71,7 +69,6 @@ namespace GeometryBattles.StructureManager
                             destroy.Add(s);
                             s.SelfDestruct();
                             scoutPos.Remove(curr);
-                            // Damage Structure
                         }
                         else
                         {
@@ -79,7 +76,7 @@ namespace GeometryBattles.StructureManager
                             s.SetCoords(next[0], next[1]);
                             scoutPos[next] = s;
                         }
-                        s.SetTimer(moveRate);
+                        s.SetTimer(s.GetMoveRate());
                         s.DecMoves();
                         if (s.GetMoves() <= 0)
                         {

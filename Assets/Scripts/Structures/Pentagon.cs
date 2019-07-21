@@ -6,11 +6,15 @@ namespace GeometryBattles.StructureManager
 {
     public class Pentagon : Structure
     {
-        public float bombRate;
-        public int bombStrength;
-        public int bombRadius;
+        public PentagonData stats;
+
         int targetQ, targetR;
         bool bombard = false;
+
+        void OnEnable()
+        {
+            stats = this.gameObject.GetComponent<PentagonData>();
+        }
 
         public void SetTarget(int q, int r)
         {
@@ -32,8 +36,8 @@ namespace GeometryBattles.StructureManager
                 while (queue.Count > 0)
                 {
                     Vector3Int curr = queue.Dequeue();
-                    boardState.AddNode(curr[0], curr[1], this.player, bombStrength / (1 + curr[2]));
-                    if (curr[2] < bombRadius)
+                    boardState.AddNode(curr[0], curr[1], this.player, stats.currLevel.bombStrength / (1 + curr[2]));
+                    if (curr[2] < stats.currLevel.bombRadius)
                     {
                         List<Vector2Int> neighbors = boardState.GetNeighbors(curr[0], curr[1]);
                         foreach (var n in neighbors)
@@ -46,8 +50,29 @@ namespace GeometryBattles.StructureManager
                         }
                     }
                 }
-                yield return new WaitForSeconds(bombRate);
+                yield return new WaitForSeconds(stats.currLevel.bombRate);
             }
+        }
+
+        public override int GetMaxHP()
+        {
+            return stats.currLevel.maxHP;
+        }
+
+        public override int GetHPRegen()
+        {
+            return stats.currLevel.regen;
+        }
+
+        public override void Upgrade()
+        {
+            stats.Upgrade();
+            boardState.SetNodeHP(this.q, this.r, stats.currLevel.maxHP);
+        }
+
+        public override void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

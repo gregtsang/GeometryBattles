@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8785629105136128434}
   - component: {fileID: 1415685381737746067}
   - component: {fileID: 7880289451975119633}
+  - component: {fileID: 2886031667253016464}
   m_Layer: 0
   m_Name: CubePrefab
   m_TagString: Untagged
@@ -105,8 +106,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
-  maxHP: 100
-  regenHP: 0
   cubeScoutPrefab: {fileID: 1092256797006367249, guid: c5097a8fe34f2466e9a00b22bf439008,
     type: 3}
-  spawnRate: 10
+  stats: {fileID: 0}
+--- !u!114 &2886031667253016464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8421495773974870550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f57ddf1c44ce482d9b4a45d9cadb504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currLevel:
+    cost: 10
+    maxHP: 100
+    regen: 1
+    spawnRate: 10
+    moveRate: 2
+    numMoves: 10
+  levels:
+  - cost: 10
+    maxHP: 100
+    regen: 1
+    spawnRate: 10
+    moveRate: 2
+    numMoves: 10
+  - cost: 20
+    maxHP: 200
+    regen: 2
+    spawnRate: 10
+    moveRate: 1
+    numMoves: 10
+  - cost: 30
+    maxHP: 300
+    regen: 3
+    spawnRate: 5
+    moveRate: 1
+    numMoves: 10

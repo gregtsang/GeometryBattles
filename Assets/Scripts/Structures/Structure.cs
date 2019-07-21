@@ -9,15 +9,17 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         protected int q, r;
         protected Player player;
-        public int maxHP = 100;
-        public int regenHP = 0;
         protected int hp = 100;
-        protected int level = 1;
 
         public int Q { get => q; }
         public int R { get => r; }
 
-        public void Destroy()
+        virtual public void Upgrade()
+        {
+            
+        }
+
+        virtual public void Destroy()
         {
             Destroy(gameObject);
         }
@@ -53,14 +55,15 @@ namespace GeometryBattles.StructureManager
             return hp;
         }
 
-        public int GetMaxHP()
+        public virtual int GetMaxHP()
         {
-            return maxHP;
+            return 0;
         }
 
-        public int GetHPRegen()
+        public virtual int GetHPRegen()
         {
-            return regenHP;
+            return 0;
         }
+
     }
 }

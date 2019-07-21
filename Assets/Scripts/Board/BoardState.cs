@@ -106,6 +106,12 @@ namespace GeometryBattles.BoardManager
             buffer[q][r].AddStructureHP(amount, max);
         }
 
+        public void SetNodeHP(int q, int r, int amount)
+        {
+            grid[q][r].SetStructureHP(amount);
+            buffer[q][r].SetStructureHP(amount);
+        }
+
         public void SetNode(int q, int r, Player owner, bool target = true)
         {
             List<List<TileState>> gridbuffer = target ? grid : buffer;
