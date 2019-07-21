@@ -31,7 +31,7 @@ namespace GeometryBattles.StructureManager
                 currScout.SetMoveRate(stats.currLevel.moveRate);
                 currScout.SetMoves(stats.currLevel.numMoves);
                 currScout.AddVisited(this.q, this.r);
-                BoardEventManager.RaiseOnCreateScout(currScout);
+                EventManager.RaiseOnCreateScout(scout);
                 yield return new WaitForSeconds(stats.currLevel.spawnRate);
             }
         }
