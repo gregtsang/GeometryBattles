@@ -374,6 +374,8 @@ namespace GeometryBattles.BoardManager
                {
                   stream.SendNext((byte) (tileState.GetOwner()?.Id ?? 255));
                   stream.SendNext((byte) tileState.GetInfluence());
+                  Debug.Log("Sent grid data | Owner: " + (tileState.GetOwner()?.Id ?? 255).ToString()
+                     + " Influence: " + tileState.GetInfluence().ToString());
                }
             }
          }
@@ -383,7 +385,12 @@ namespace GeometryBattles.BoardManager
             {
                foreach (TileState tileState in row)
                {
-                  tileState.Set(GetPlayer((int) stream.ReceiveNext()), (int) stream.ReceiveNext());
+                  byte playerId = (byte) stream.ReceiveNext();
+                  byte influence = (byte) stream.ReceiveNext();
+
+                  tileState.Set(GetPlayer(playerId), influence);
+                  Debug.Log("Received grid data | Owner: " + playerId.ToString()
+                     + " Influence: " + influence.ToString());
                }
             }
          }
