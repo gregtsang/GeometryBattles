@@ -330,17 +330,6 @@ namespace GeometryBattles.BoardManager
 
         IEnumerator MineResource()
         {
-<<<<<<< HEAD
-            grid[q][r].SetBuff(player, buff);
-            buffer[q][r].SetBuff(player, buff);
-        }
-
-      public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-      {
-         throw new System.NotImplementedException();
-      }
-   }
-=======
             while (true)
             {
                 Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
@@ -360,6 +349,10 @@ namespace GeometryBattles.BoardManager
                 yield return new WaitForSeconds(resource.miningRate);
             }
         }
-    }
->>>>>>> dev
+
+      public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+      {
+         throw new System.NotImplementedException();
+      }
+   }
 }
