@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
+using Photon.Pun;
 
 namespace GeometryBattles.BoardManager
 {
-    public class BoardState : MonoBehaviour
+    public class BoardState : MonoBehaviour, IPunObservable
     {
         public Resource resource;
         List<Player> players = new List<Player>();
@@ -27,13 +28,16 @@ namespace GeometryBattles.BoardManager
 
         void Update()
         {
-            spreadTimer -= Time.deltaTime;
-            CalcMining();
-            UpdateColors();
-            if (spreadTimer <= 0.0f)
-            {
-                CalcBuffer();
-                spreadTimer = spreadRate;
+            if (PhotonNetwork.IsMasterClient)
+            { 
+               spreadTimer -= Time.deltaTime;
+               CalcMining();
+               UpdateColors();
+               if (spreadTimer <= 0.0f)
+               {
+                   CalcBuffer();
+                   spreadTimer = spreadRate;
+               }
             }
         }
 
@@ -295,5 +299,10 @@ namespace GeometryBattles.BoardManager
             grid[q][r].SetBuff(player, buff);
             buffer[q][r].SetBuff(player, buff);
         }
-    }
+
+      public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+      {
+         throw new System.NotImplementedException();
+      }
+   }
 }
