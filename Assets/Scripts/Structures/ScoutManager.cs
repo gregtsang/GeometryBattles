@@ -94,17 +94,17 @@ namespace GeometryBattles.StructureManager
         void MoveScout(int q, int r, CubeScout scout)
         {
             if (q - scout.Q == 1 && r - scout.R == -1)
-                scout.gameObject.transform.position += new Vector3(0, 0, boardState.tileWidth);
+                scout.gameObject.transform.position += new Vector3(0, 0, boardState.GetTileWidth());
             else if (q - scout.Q == -1 && r - scout.R == 1)
-                scout.gameObject.transform.position += new Vector3(0, 0, -boardState.tileWidth);
+                scout.gameObject.transform.position += new Vector3(0, 0, -boardState.GetTileWidth());
             else if (q - scout.Q == 1)
-                scout.gameObject.transform.position += new Vector3(0.75f * boardState.tileLength, 0, boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
             else if (q - scout.Q == -1)
-                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.tileLength, 0, -boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
             else if (r - scout.R == 1)
-                scout.gameObject.transform.position += new Vector3(0.75f * boardState.tileLength, 0, -boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
             else
-                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.tileLength, 0, boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
         }
         
         Vector2Int NextTile(CubeScout scout)

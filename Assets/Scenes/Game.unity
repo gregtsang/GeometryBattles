@@ -209,8 +209,11 @@ MonoBehaviour:
   boardWidth: 35
   baseOffset: 2
   numPlayers: 2
-  player1: {r: 0.37254903, g: 0.13725491, b: 0.43137255, a: 0}
-  player2: {r: 0.37254903, g: 0.8156863, b: 0.7176471, a: 0}
+  playerColors:
+  - {r: 0.36862746, g: 0.14901961, b: 0.427451, a: 0}
+  - {r: 0.3921569, g: 0.8117648, b: 0.7176471, a: 0}
+  - {r: 0.8018868, g: 0.26499724, b: 0.18534178, a: 0}
+  - {r: 0.34420612, g: 0.75985336, b: 0.8584906, a: 0}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -239,8 +242,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
   baseTileColor: {r: 0.83183515, g: 0.86573374, b: 0.8773585, a: 0}
-  tileWidth: 1.73205
-  tileLength: 2
   tileGap: 0.15
   spreadAmount: 1
   spreadRate: 0.5
@@ -261,7 +262,8 @@ MonoBehaviour:
   resourceTilesPerSide: 5
   minDistance: 3
   startResource: 0
-  startMiningAmount: 1
+  miningAmount: 1
+  miningRate: 1
   resourceTileAmount: 5
 --- !u!1 &705507993
 GameObject:
