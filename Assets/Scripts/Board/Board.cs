@@ -6,7 +6,7 @@ namespace GeometryBattles.BoardManager
     public class Board : MonoBehaviour
     {
         public BoardState boardState;    // MC owns b/c MC created Board
-        public Resource resource;        //
+        public Resource resource;        // Master client assigns resource locations & sends to others
         public GameObject tilePrefab;
         public GameObject playerPrefab;
 
