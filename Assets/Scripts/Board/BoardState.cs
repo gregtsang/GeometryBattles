@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using Photon.Pun;
@@ -11,27 +12,32 @@ namespace GeometryBattles.BoardManager
         List<Player> players = new List<Player>();
         Dictionary<Player, Vector2Int> bases = new Dictionary<Player, Vector2Int>();
 
-        public Color baseTileColor = Color.white;
-        public float tileWidth = 1.73205f;
-        public float tileLength = 2.0f;
-        public float tileGap = 0.15f;
-        public int spreadAmount = 1;
-        public float spreadRate = 0.1f;
+        public Color baseTileColor;
+        float tileWidth = 1.73205f;
+        float tileLength = 2.0f;
+        public float tileGap;
+
+        public int spreadAmount;
+        public float spreadRate;
         float spreadTimer = 0.0f;
-        
-        public int infMax = 200;
-        public int infThreshold = 100;
+
+        public int infMax;
+        public int infThreshold;
 
         int cap = -1;
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
+
+        void Start()
+        {
+            StartCoroutine(MineResource());
+        }
 
         void Update()
         {
             if (PhotonNetwork.IsMasterClient)
             { 
                spreadTimer -= Time.deltaTime;
-               CalcMining();
                UpdateColors();
                if (spreadTimer <= 0.0f)
                {
@@ -45,6 +51,16 @@ namespace GeometryBattles.BoardManager
         {
             tileWidth += tileWidth * tileGap;
             tileLength += tileLength * tileGap;
+        }
+
+        public float GetTileWidth()
+        {
+            return tileWidth;
+        }
+
+        public float GetTileLength()
+        {
+            return tileLength;
         }
 
         public void SetCap(int n)
@@ -64,14 +80,14 @@ namespace GeometryBattles.BoardManager
             cap = n;
         }
 
-        public void AddPlayer(Player player)
-        {
-            players.Add(player);
-        }
-
         public Player GetPlayer(int i)
         {
             return players[i];
+        }
+
+        public void AddPlayer(Player player)
+        {
+            players.Add(player);
         }
 
         public void InitNode(Tile node, int q, int r)
@@ -96,6 +112,11 @@ namespace GeometryBattles.BoardManager
         public int GetNodeInfluence(int q, int r)
         {
             return grid[q][r].GetInfluence();
+        }
+
+        public int GetNodeHP(int q, int r)
+        {
+            return grid[q][r].GetStructureHP();
         }
 
         public void SetNode(int q, int r, Player owner, bool target = true)
@@ -123,33 +144,59 @@ namespace GeometryBattles.BoardManager
             List<List<TileState>> gridbuffer = target ? grid : buffer;
             Player owner = gridbuffer[q][r].GetOwner();
             int influence = gridbuffer[q][r].GetInfluence();
-            if (owner == null || owner == player)
+            if (gridbuffer[q][r].GetStructureHP() > 0)
             {
-                gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
-                if (target)
-                    gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
+                if (owner != player)
+                    gridbuffer[q][r].SubStructureHP(value);
             }
             else
-            {   
-                if (influence < value)
+            {
+                if (owner == null || owner == player)
                 {
-                    gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                    gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
                     if (target)
-                        gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
-                }
-                else if (influence > value)
-                {
-                    gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
-                    if (target)
-                        gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                        gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
                 }
                 else
-                {
-                    gridbuffer[q][r].Set(null, 0);
-                    if (target)
-                        gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                {   
+                    if (influence < value)
+                    {
+                        gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
+                        if (target)
+                            gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
+                    }
+                    else if (influence > value)
+                    {
+                        gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
+                        if (target)
+                            gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                    }
+                    else
+                    {
+                        gridbuffer[q][r].Set(null, 0);
+                        if (target)
+                            gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                    }
                 }
             }
+        }
+
+        public void SetNodeHP(int q, int r, int amount)
+        {
+            grid[q][r].SetStructureHP(amount);
+            buffer[q][r].SetStructureHP(amount);
+        }
+
+        public void AddNodeHP(int q, int r, int amount, int max)
+        {
+            grid[q][r].AddStructureHP(amount, max);
+            buffer[q][r].AddStructureHP(amount, max);
+        }
+
+        public void SetBuff(int q, int r, Player player, int buff)
+        {
+            grid[q][r].SetBuff(player, buff);
+            buffer[q][r].SetBuff(player, buff);
         }
 
         public void AddBase(int q, int r, Player player)
@@ -250,6 +297,7 @@ namespace GeometryBattles.BoardManager
                 for (int j = 0; j < cap; j++)
                 {
                     buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
+                    buffer[i][j].SetStructureHP(grid[i][j].GetStructureHP());
                     List<Vector2Int> neighbors = GetNeighbors(i, j);
                     foreach (var n in neighbors)
                         if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
@@ -258,20 +306,6 @@ namespace GeometryBattles.BoardManager
                 }
             }
             SwapBuffer();
-        }
-
-        void CalcMining()
-        {
-            foreach (var p in players)
-                p.SetMiningAmount(resource.startMiningAmount);
-            HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
-            foreach (var r in resourceTiles)
-            {
-                Player owner = grid[r[0]][r[1]].GetOwner();
-                int influence = grid[r[0]][r[1]].GetInfluence();
-                if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
-                    owner.AddMiningAmount(resource.resourceTileAmount);
-            }
         }
 
         void UpdateColors()
@@ -294,8 +328,9 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        public void SetBuff(int q, int r, Player player, int buff)
+        IEnumerator MineResource()
         {
+<<<<<<< HEAD
             grid[q][r].SetBuff(player, buff);
             buffer[q][r].SetBuff(player, buff);
         }
@@ -305,4 +340,26 @@ namespace GeometryBattles.BoardManager
          throw new System.NotImplementedException();
       }
    }
+=======
+            while (true)
+            {
+                Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
+                foreach (var p in players)
+                    playerMining[p] = resource.miningAmount;
+                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
+                foreach (var r in resourceTiles)
+                {
+                    Player owner = grid[r[0]][r[1]].GetOwner();
+                    int influence = grid[r[0]][r[1]].GetInfluence();
+                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
+                        playerMining[owner] += resource.resourceTileAmount;
+                }
+                foreach (var p in players)
+                    p.AddResource(playerMining[p]);
+                EventManager.RaiseOnResourceUpdate();
+                yield return new WaitForSeconds(resource.miningRate);
+            }
+        }
+    }
+>>>>>>> dev
 }

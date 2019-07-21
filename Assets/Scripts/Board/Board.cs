@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.BoardManager
@@ -7,14 +8,14 @@ namespace GeometryBattles.BoardManager
     {
         public BoardState boardState;    // MC owns b/c MC created Board
         public Resource resource;        // Master client assigns resource locations & sends to others
+
         public GameObject tilePrefab;
         public GameObject playerPrefab;
 
-        public int boardWidth = 20;
-        public int baseOffset = 2;
-        public int numPlayers = 2;
-        public Color player1;
-        public Color player2;
+        public int boardWidth;
+        public int baseOffset;
+        public int numPlayers;
+        public List<Color> playerColors;
 
         float tileWidth;
         float tileLength;
@@ -25,8 +26,8 @@ namespace GeometryBattles.BoardManager
             resource.InitResourceTiles(boardWidth, baseOffset);
 
             boardState.SetGaps();
-            this.tileWidth = boardState.tileWidth;
-            this.tileLength = boardState.tileLength;
+            this.tileWidth = boardState.GetTileWidth();
+            this.tileLength = boardState.GetTileLength();
 
             CreateBoard();
             CreatePlayers(numPlayers);
@@ -77,21 +78,27 @@ namespace GeometryBattles.BoardManager
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
                 Player currPlayer = player.GetComponent<Player>();
-                currPlayer.SetColor(i == 0 ? player1 : player2);
+                currPlayer.SetColor(playerColors[i]);
                 currPlayer.SetResource(resource.startResource);
-                currPlayer.SetMiningAmount(resource.startMiningAmount);
                 boardState.AddPlayer(player.GetComponent<Player>());
             }
         }
 
         void SetBases(int numPlayers)
         {
-            if (numPlayers == 2)
+            boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+            boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+            boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+            boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+            if (numPlayers >= 3)
             {
-                boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
-                boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
-                boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
-                boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+                boardState.SetNode(baseOffset, baseOffset, boardState.GetPlayer(2));
+                boardState.AddBase(baseOffset, baseOffset, boardState.GetPlayer(2));
+            }
+            if (numPlayers == 4)
+            {
+                boardState.SetNode(boardWidth - baseOffset - 1, boardWidth - baseOffset - 1, boardState.GetPlayer(3));
+                boardState.AddBase(boardWidth - baseOffset - 1, boardWidth - baseOffset - 1, boardState.GetPlayer(3));
             }
         }
     }

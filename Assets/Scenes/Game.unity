@@ -180,6 +180,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48d4bc31382fd4111b804df0f0cbe2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resource: {fileID: 562494488}
+  baseTileColor: {r: 0.83183515, g: 0.86573374, b: 0.8773585, a: 0}
+  tileGap: 0.15
+  spreadAmount: 1
+  spreadRate: 0.5
+  infMax: 200
+  infThreshold: 100
+--- !u!114 &562494488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 562494484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f42e8589f7f47aeb140909bbb300f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceTilesPerSide: 5
+  minDistance: 3
+  startResource: 0
+  miningAmount: 1
+  miningRate: 1
+  resourceTileAmount: 5
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,10 +645,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardState: {fileID: 562494487}
   structureStore: {fileID: 1315784110}
-  moveRate: 2
-  numMoves: 10
   moveUnownedWeight: 3
-  moveUnvisitedWeight: 3
+  moveUnvisitedWeight: 5
   moveAwayWeight: 10
 --- !u!4 &1320711754
 Transform:

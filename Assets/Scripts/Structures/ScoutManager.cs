@@ -12,15 +12,13 @@ namespace GeometryBattles.StructureManager
         HashSet<CubeScout> scouts = new HashSet<CubeScout>();
         List<CubeScout> destroy;
 
-        public float moveRate = 2.0f;
-        public int numMoves = 10;
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
         public int moveAwayWeight = 10;
 
         void Start()
         {
-            ScoutEventManager.onCreate += AddScout;
+            EventManager.onCreateScout += AddScout;
         }
 
         void Update()
@@ -28,10 +26,11 @@ namespace GeometryBattles.StructureManager
             UpdateScouts();
         }
 
-        void AddScout(CubeScout scout)
+        void AddScout(GameObject scout)
         {
-            scouts.Add(scout);
-            scoutPos[new Vector2Int(scout.Q, scout.R)] = scout;
+            CubeScout currScout = scout.GetComponent<CubeScout>();
+            scouts.Add(currScout);
+            scoutPos[new Vector2Int(currScout.Q, currScout.R)] = currScout;
         }
 
         void UpdateScouts()
@@ -56,7 +55,7 @@ namespace GeometryBattles.StructureManager
                     else
                     {
                         MoveScout(next[0], next[1], s);
-                        boardState.AddNode(next[0], next[1], s.GetPlayer(), 100);
+                        boardState.AddNode(next[0], next[1], s.GetPlayer(), boardState.infThreshold);
                         if (scoutPos.ContainsKey(next))
                         {
                             destroy.Add(s);
@@ -71,7 +70,6 @@ namespace GeometryBattles.StructureManager
                             destroy.Add(s);
                             s.SelfDestruct();
                             scoutPos.Remove(curr);
-                            // Damage Structure
                         }
                         else
                         {
@@ -79,7 +77,7 @@ namespace GeometryBattles.StructureManager
                             s.SetCoords(next[0], next[1]);
                             scoutPos[next] = s;
                         }
-                        s.SetTimer(moveRate);
+                        s.SetTimer(s.GetMoveRate());
                         s.DecMoves();
                         if (s.GetMoves() <= 0)
                         {
@@ -97,17 +95,17 @@ namespace GeometryBattles.StructureManager
         void MoveScout(int q, int r, CubeScout scout)
         {
             if (q - scout.Q == 1 && r - scout.R == -1)
-                scout.gameObject.transform.position += new Vector3(0, 0, boardState.tileWidth);
+                scout.gameObject.transform.position += new Vector3(0, 0, boardState.GetTileWidth());
             else if (q - scout.Q == -1 && r - scout.R == 1)
-                scout.gameObject.transform.position += new Vector3(0, 0, -boardState.tileWidth);
+                scout.gameObject.transform.position += new Vector3(0, 0, -boardState.GetTileWidth());
             else if (q - scout.Q == 1)
-                scout.gameObject.transform.position += new Vector3(0.75f * boardState.tileLength, 0, boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
             else if (q - scout.Q == -1)
-                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.tileLength, 0, -boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
             else if (r - scout.R == 1)
-                scout.gameObject.transform.position += new Vector3(0.75f * boardState.tileLength, 0, -boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
             else
-                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.tileLength, 0, boardState.tileWidth / 2.0f);
+                scout.gameObject.transform.position += new Vector3(-0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
         }
         
         Vector2Int NextTile(CubeScout scout)
