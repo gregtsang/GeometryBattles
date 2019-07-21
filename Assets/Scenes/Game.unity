@@ -211,9 +211,6 @@ MonoBehaviour:
   numPlayers: 2
   player1: {r: 0.37254903, g: 0.13725491, b: 0.43137255, a: 0}
   player2: {r: 0.37254903, g: 0.8156863, b: 0.7176471, a: 0}
-  PentagonPrefab: {fileID: 3714227975952305212, guid: 9bba42a490e3f4c7e924b626f78f24af,
-    type: 3}
-  structureStore: {fileID: 1315784110}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -339,7 +336,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1e-45, y: 1.394e-42, z: 0, w: 2.69e-42}
+  m_BoundingSphereOverride: {x: 1e-45, y: 6.1540925e-30, z: 1e-45, w: 6.1541045e-30}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -812,8 +809,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardState: {fileID: 562494487}
   structureStore: {fileID: 1315784110}
-  moveRate: 2
-  numMoves: 10
   moveUnownedWeight: 3
   moveUnvisitedWeight: 5
   moveAwayWeight: 10
