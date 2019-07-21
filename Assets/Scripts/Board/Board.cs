@@ -89,12 +89,19 @@ namespace GeometryBattles.BoardManager
 
         void SetBases(int numPlayers)
         {
-            if (numPlayers == 2)
+            boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+            boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+            boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+            boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+            if (numPlayers >= 3)
             {
-                boardState.SetNode(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
-                boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
-                boardState.SetNode(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
-                boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+                boardState.SetNode(baseOffset, baseOffset, boardState.GetPlayer(2));
+                boardState.AddBase(baseOffset, baseOffset, boardState.GetPlayer(2));
+            }
+            if (numPlayers == 4)
+            {
+                boardState.SetNode(boardWidth - baseOffset - 1, boardWidth - baseOffset - 1, boardState.GetPlayer(3));
+                boardState.AddBase(boardWidth - baseOffset - 1, boardWidth - baseOffset - 1, boardState.GetPlayer(3));
             }
         }
     }
