@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3776065890033186980}
   - component: {fileID: 74828243783383081}
   - component: {fileID: 219168125575198432}
+  - component: {fileID: 7167698856475866914}
   m_Layer: 0
   m_Name: PyramidPrefab
   m_TagString: Untagged
@@ -106,4 +107,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
   maxHP: 100
-  regenHP: 0
+  regen: 0
+--- !u!114 &7167698856475866914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5372098549788178022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2c9a4d669c5420abaf51b90c5e27b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levels:
+  - maxHP: 100
+    regen: 1
+    range: 3
+    strength: 10
+  - maxHP: 200
+    regen: 2
+    range: 6
+    strength: 10
+  - maxHP: 300
+    regen: 3
+    range: 6
+    strength: 20
