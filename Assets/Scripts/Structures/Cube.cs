@@ -7,7 +7,7 @@ namespace GeometryBattles.StructureManager
     {
         public GameObject cubeScoutPrefab;
 
-        public float spawnRate;
+        public CubeData stats;
 
         void Start()
         {
@@ -23,9 +23,11 @@ namespace GeometryBattles.StructureManager
                 currScout.SetHome(this.q, this.r);
                 currScout.SetCoords(this.q, this.r);
                 currScout.SetPlayer(this.player);
+                currScout.SetMoveRate(stats.currLevel.moveRate);
+                currScout.SetMoves(stats.currLevel.numMoves);
                 currScout.AddVisited(this.q, this.r);
                 BoardEventManager.RaiseOnCreateScout(currScout);
-                yield return new WaitForSeconds(spawnRate);
+                yield return new WaitForSeconds(stats.currLevel.spawnRate);
             }
         }
     }

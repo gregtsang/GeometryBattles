@@ -4,27 +4,28 @@ using UnityEngine;
 namespace GeometryBattles.StructureManager
 {
     [System.Serializable]
-    public class PyramidLevel
+    public class CubeLevel
     {
         public int cost;
         public int maxHP;
         public int regen;
-        public int range;
-        public int strength;
+        public float spawnRate;
+        public float moveRate;
+        public int numMoves;
     }
 
-    public class PyramidData : MonoBehaviour
+    public class CubeData : MonoBehaviour
     {
-        public PyramidLevel currLevel;
+        public CubeLevel currLevel;
 
-        public List<PyramidLevel> levels;
+        public List<CubeLevel> levels;
 
         void OnEnable()
         {
             currLevel = levels[0];
         }
 
-        public PyramidLevel GetNextLevel()
+        public CubeLevel GetNextLevel()
         {
             int currLevelIndex = levels.IndexOf(currLevel);
             return currLevelIndex < levels.Count - 1 ? levels[currLevelIndex + 1] : null;

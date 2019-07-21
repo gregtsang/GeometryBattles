@@ -8,6 +8,7 @@ namespace GeometryBattles.StructureManager
     {
         public Player player;
 
+        float moveRate;
         float moveTimer = 0.0f;
         int movesLeft = 10;
         int q, r;
@@ -44,6 +45,16 @@ namespace GeometryBattles.StructureManager
             return player;
         }
 
+        public void SetMoveRate(float rate)
+        {
+            moveRate = rate;
+        }
+
+        public float GetMoveRate()
+        {
+            return moveRate;
+        }
+
         public void SetTimer(float time)
         {
             this.moveTimer = time;
@@ -62,6 +73,11 @@ namespace GeometryBattles.StructureManager
         public int GetMoves()
         {
             return movesLeft;
+        }
+
+        public void SetMoves(int moves)
+        {
+            movesLeft = moves;
         }
 
         public void AddVisited(int q, int r)
