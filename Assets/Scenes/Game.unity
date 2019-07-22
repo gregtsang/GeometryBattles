@@ -208,12 +208,12 @@ MonoBehaviour:
     type: 3}
   boardWidth: 35
   baseOffset: 2
-  numPlayers: 2
+  numPlayers: 4
   playerColors:
-  - {r: 0.41568628, g: 0.6313726, b: 0.8862745, a: 0}
-  - {r: 0.99215686, g: 0.3019608, b: 0.3254902, a: 0}
-  - {r: 0.22745098, g: 0.8784314, b: 0.56078434, a: 0}
-  - {r: 0.9882353, g: 0.27450982, b: 0.96862745, a: 0}
+  - {r: 0.13864839, g: 0.7930688, b: 0.9816306, a: 0}
+  - {r: 0.67660415, g: 0, b: 1.0038143, a: 0}
+  - {r: 0.06100529, g: 0.43258297, b: 1.3532083, a: 0}
+  - {r: 1.1424627, g: 0, b: 0.52131796, a: 0}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -241,9 +241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
-  baseTileColor: {r: 0.83183515, g: 0.86573374, b: 0.8773585, a: 0}
+  baseTileColor: {r: 0.132387, g: 0.15238014, b: 0.16037738, a: 0}
   tileGap: 0.15
-  spreadAmount: 1
+  spreadAmount: 5
   spreadRate: 0.5
   infMax: 200
   infThreshold: 100
@@ -395,7 +395,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.26477394, g: 0.3052045, b: 0.3207547, a: 0}
+  m_BackGroundColor: {r: 0.08235294, g: 0.09019608, b: 0.101960786, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
