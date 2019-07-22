@@ -5,11 +5,14 @@ namespace GeometryBattles.BoardManager
 {
     public class Resource : MonoBehaviour
     {
-        public int resourceTilesPerSide = 5;
-        public int minDistance = 3;
-        public int startResource = 0;
-        public int startMiningAmount = 1;
-        public int resourceTileAmount = 5;
+        public int resourceTilesPerSide;
+        public int minDistance;
+        
+        public int startResource;
+        public int miningAmount;
+        public float miningRate;
+        public int resourceTileAmount;
+        
         HashSet<Vector2Int> resourceTiles = new HashSet<Vector2Int>();
 
         public void InitResourceTiles(int boardWidth, int baseOffset)
@@ -29,9 +32,9 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        int CalcDistance(int q1, int r1, int q2, int r2)
+        public HashSet<Vector2Int> GetResourceTiles()
         {
-            return (Mathf.Abs(q1 - q2) + Mathf.Abs(q1 + r1 - q2 - r2) + Mathf.Abs(r1 - r2)) / 2;
+            return resourceTiles;
         }
 
         public bool IsResourceTile(int q, int r)
@@ -39,9 +42,9 @@ namespace GeometryBattles.BoardManager
             return resourceTiles.Contains(new Vector2Int(q, r));
         }
 
-        public HashSet<Vector2Int> GetResourceTiles()
+        int CalcDistance(int q1, int r1, int q2, int r2)
         {
-            return resourceTiles;
+            return (Mathf.Abs(q1 - q2) + Mathf.Abs(q1 + r1 - q2 - r2) + Mathf.Abs(r1 - r2)) / 2;
         }
     }
 }

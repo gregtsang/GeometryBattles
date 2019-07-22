@@ -13,22 +13,19 @@ namespace GeometryBattles.BoardManager
             this.tile = tile;
             this.owner = owner;
             this.influence = influence;
+            this.structureHP = 0;
         }
 
         Tile tile;
         Player owner;
         int influence;
+        int structureHP;
 
         Dictionary<Player, int> buff = new Dictionary<Player, int>();
 
         public Tile GetTile()
         {
             return tile;
-        }
-
-        public void SetTile(Tile tile)
-        {
-            this.tile = tile;
         }
 
         public Player GetOwner()
@@ -39,6 +36,11 @@ namespace GeometryBattles.BoardManager
         public int GetInfluence()
         {
             return influence;
+        }
+
+        public void SetTile(Tile tile)
+        {
+            this.tile = tile;
         }
 
         public void Set(Player owner, int influence)
@@ -57,14 +59,34 @@ namespace GeometryBattles.BoardManager
             tile.SetNextColor(color);
         }
 
-        public void SetBuff(Player player, int buff)
-        {
-            this.buff[player] = buff;
-        }
-
         public int GetBuff(Player player)
         {
             return buff.ContainsKey(player) ? buff[player] : 0;
+        }
+
+        public void SetBuff(Player player, int buff)
+        {
+            this.buff[player] = this.buff.ContainsKey(player) ? Mathf.Max(buff, this.buff[player]) : buff;
+        }
+
+        public int GetStructureHP()
+        {
+            return structureHP;
+        }
+
+        public void SetStructureHP(int hp)
+        {
+            structureHP = hp;
+        }
+
+        public void AddStructureHP(int amount, int max)
+        {
+            structureHP = Mathf.Min(structureHP + amount, max);
+        }
+
+        public void SubStructureHP(int amount)
+        {
+            structureHP = Mathf.Max(structureHP - amount, 0);
         }
     }
 }

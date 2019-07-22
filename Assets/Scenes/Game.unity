@@ -209,12 +209,11 @@ MonoBehaviour:
   boardWidth: 35
   baseOffset: 2
   numPlayers: 2
-  player1: {r: 0.37254903, g: 0.13725491, b: 0.43137255, a: 0}
-  player2: {r: 0.37254903, g: 0.8156863, b: 0.7176471, a: 0}
-  tileGap: 0.15
-  store: {fileID: 1315784110}
-  cubePrefab: {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4,
-    type: 3}
+  playerColors:
+  - {r: 0.41568628, g: 0.6313726, b: 0.8862745, a: 0}
+  - {r: 0.99215686, g: 0.3019608, b: 0.3254902, a: 0}
+  - {r: 0.22745098, g: 0.8784314, b: 0.56078434, a: 0}
+  - {r: 0.9882353, g: 0.27450982, b: 0.96862745, a: 0}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -243,8 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
   baseTileColor: {r: 0.83183515, g: 0.86573374, b: 0.8773585, a: 0}
-  tileWidth: 1.73205
-  tileLength: 2
+  tileGap: 0.15
   spreadAmount: 1
   spreadRate: 0.5
   infMax: 200
@@ -264,7 +262,8 @@ MonoBehaviour:
   resourceTilesPerSide: 5
   minDistance: 3
   startResource: 0
-  startMiningAmount: 1
+  miningAmount: 1
+  miningRate: 1
   resourceTileAmount: 5
 --- !u!1 &705507993
 GameObject:
@@ -339,7 +338,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1e-45, y: 1.394e-42, z: 0, w: 2.69e-42}
+  m_BoundingSphereOverride: {x: 1e-45, y: 6.1540925e-30, z: 1e-45, w: 6.1541045e-30}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -812,8 +811,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardState: {fileID: 562494487}
   structureStore: {fileID: 1315784110}
-  moveRate: 2
-  numMoves: 10
+  moveUnownedWeight: 3
+  moveUnvisitedWeight: 5
+  moveAwayWeight: 10
 --- !u!4 &1320711754
 Transform:
   m_ObjectHideFlags: 0

@@ -9,6 +9,21 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
 
+        void Update()
+        {
+            List<Structure> destroy = new List<Structure>();
+            foreach(var s in structures)
+            {
+                s.Value.SetHP(boardState.GetNodeHP(s.Key[0], s.Key[1]));
+                if (s.Value.GetHP() <= 0)
+                    destroy.Add(s.Value);
+                else
+                    boardState.AddNodeHP(s.Key[0], s.Key[1], s.Value.GetHPRegen(), s.Value.GetMaxHP());
+            }
+            foreach (var d in destroy)
+                RemoveStructure(d.Q, d.R);
+        }
+
         public void AddStructure(int q, int r, GameObject structurePrefab)
         {
             Tile currTile = boardState.GetNodeTile(q, r);
@@ -19,13 +34,14 @@ namespace GeometryBattles.StructureManager
             currStructure.boardState = this.boardState;
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
+            boardState.AddNodeHP(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
             structures[new Vector2Int(q, r)] = currStructure;
         }
 
         public void RemoveStructure(int q, int r)
         {
             Vector2Int key = new Vector2Int(q, r);
-            structures[key].Sell();
+            structures[key].Destroy();
             structures.Remove(key);
         }
 
