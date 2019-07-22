@@ -7,6 +7,7 @@ namespace GeometryBattles.UI
     public class ClickDrag : MonoBehaviour
     {
         Vector3 prevMousePos;
+        Vector3 prevPoint;
         Camera cam;
         [SerializeField] int mouseButton = 1;
         [SerializeField] float dragSpeed = 1f;
@@ -22,14 +23,28 @@ namespace GeometryBattles.UI
         {
             if (Input.GetMouseButtonDown(mouseButton))
             {
-                prevMousePos = Input.mousePosition;
+                prevPoint = GetPoint();
             }
 
             if (Input.GetMouseButton(mouseButton))
             {
-                Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - prevMousePos);
-                transform.Translate(-1* pos.x * dragSpeed * cam.orthographicSize, -1 * pos.y * dragSpeed * cam.orthographicSize, 0);
-                prevMousePos = Input.mousePosition;
+                Vector3 currPoint = GetPoint();
+                cam.transform.Translate(prevPoint - currPoint, Space.World);
+                prevPoint = GetPoint();
+            }
+        }
+
+        private Vector3 GetPoint()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
+            {
+                //return new Vector3(hit.point.x, 0, hit.point.z);
+                return hit.point;
+            }
+            else
+            {
+                return new Vector3();
             }
         }
     }
