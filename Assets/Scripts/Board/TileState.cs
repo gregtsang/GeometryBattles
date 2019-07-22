@@ -49,14 +49,23 @@ namespace GeometryBattles.BoardManager
             this.influence = influence;
         }
 
-        public void SetColor(Player owner, int influence, int threshold, Color baseColor, bool instant = true)
+        public void SetColor(Player owner, int influence, int threshold, bool instant = true)
         {
+            Color baseColor = tile.GetBaseColor();
             Color color = Color.Lerp(baseColor, owner ? owner.GetColor() : baseColor, Mathf.Min((float)influence / (float)threshold, 1.0f));
             if (instant)
+            {
                 tile.SetPrevColor(color);
+                tile.SetNextColor(color);
+            }
             else
-                tile.SetPrevColor(tile.GetMat().GetColor("_BaseColor"));
-            tile.SetNextColor(color);
+            {
+                if (color != tile.GetNextColor())
+                {
+                    tile.SetPrevColor(tile.GetMat().GetColor("_BaseColor"));
+                    tile.SetNextColor(color);
+                }
+            }
         }
 
         public int GetBuff(Player player)

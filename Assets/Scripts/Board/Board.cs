@@ -16,6 +16,7 @@ namespace GeometryBattles.BoardManager
         public int boardWidth;
         public int baseOffset;
         public int numPlayers;
+        [ColorUsageAttribute(true,true)]
         public List<Color> playerColors;
 
         float tileWidth;
@@ -65,8 +66,10 @@ namespace GeometryBattles.BoardManager
                     tile.name = "Tile[" + q + "," + r + "]";
                     Tile currTile = tile.GetComponent<Tile>();
                     currTile.SetCoords(q, r);
-                    currTile.SetPrevColor(boardState.baseTileColor);
-                    currTile.SetNextColor(boardState.baseTileColor);
+                    Color randColor = Color.Lerp(boardState.baseTileColor, Color.white, Random.Range(0.0f, 0.1f));
+                    currTile.SetBaseColor(randColor);
+                    currTile.SetPrevColor(randColor);
+                    currTile.SetNextColor(randColor);
                     boardState.InitNode(currTile, q, r);
                     if (resource.IsResourceTile(q, r))
                         tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.white * 2);

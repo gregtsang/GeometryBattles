@@ -4,6 +4,7 @@ namespace GeometryBattles.BoardManager
 {
     public class Tile : MonoBehaviour
     {
+        Color baseColor;
         Color prevColor;
         Color nextColor;
         Material mat;
@@ -29,6 +30,11 @@ namespace GeometryBattles.BoardManager
             return mat;
         }
 
+        public Color GetBaseColor()
+        {
+            return baseColor;
+        }
+
         public Color GetPrevColor()
         {
             return prevColor;
@@ -39,6 +45,11 @@ namespace GeometryBattles.BoardManager
             return nextColor;
         }
 
+        public void SetBaseColor(Color color)
+        {
+            baseColor = color;
+        }
+    
         public void SetPrevColor(Color color)
         {
             prevColor = color;
