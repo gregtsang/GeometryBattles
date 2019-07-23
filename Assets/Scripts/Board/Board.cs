@@ -6,7 +6,6 @@ namespace GeometryBattles.BoardManager
 {
     public class Board : MonoBehaviour
     {
-        public Camera gameCam;
         public BoardState boardState;
         public Resource resource;
         
@@ -24,8 +23,6 @@ namespace GeometryBattles.BoardManager
         
         void Awake()
         {
-            gameCam.orthographicSize = boardWidth;
-            
             boardState.SetCap(boardWidth);
             resource.InitResourceTiles(boardWidth, baseOffset);
 

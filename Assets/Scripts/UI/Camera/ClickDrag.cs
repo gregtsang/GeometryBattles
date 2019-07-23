@@ -10,13 +10,11 @@ namespace GeometryBattles.UI
         Vector3 prevPoint;
         Camera cam;
         [SerializeField] int mouseButton = 1;
-        [SerializeField] float dragSpeed = 1f;
 
         private void Start()
         {
             cam = GetComponent<Camera>();
         }
-        
         
         // Update is called once per frame
         void Update()
@@ -39,7 +37,6 @@ namespace GeometryBattles.UI
             RaycastHit hit;
             if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
             {
-                //return new Vector3(hit.point.x, 0, hit.point.z);
                 return hit.point;
             }
             else
