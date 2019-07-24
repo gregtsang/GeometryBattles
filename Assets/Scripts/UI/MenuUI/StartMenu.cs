@@ -11,6 +11,7 @@ namespace GeometryBattles.MenuUI
         [SerializeField] GameObject creditsCanvas = null;
         [SerializeField] GameObject gameLobbyCanvas = null;
         [SerializeField] GameObject createGameCanvas = null;
+        [SerializeField] GameObject connectCanvas = null;
         
         public void QuitGame()
         {
@@ -39,6 +40,12 @@ namespace GeometryBattles.MenuUI
         {
             DisableAllCanvases();
             createGameCanvas.SetActive(true);
+        }
+
+        public void ShowConnectCanvas()
+        {
+            DisableAllCanvases();
+            connectCanvas.SetActive(true);
         }
 
         public void LoadGameScene()
