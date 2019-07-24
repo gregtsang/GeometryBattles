@@ -422,102 +422,90 @@ namespace GeometryBattles.BoardManager
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-        //     if (PhotonNetwork.IsMasterClient && stream.IsWriting)
-        //     {
-        //      int i = 0;  
-        //     foreach (List<TileState> row in grid)
-        //     {
-        //        foreach (TileState tileState in row)
-        //        {
-        //           stream.SendNext((byte) (tileState.GetOwner()?.Id ?? 255));
-        //           stream.SendNext((byte) tileState.GetInfluence());
-        //           /*Debug.Log(i.ToString() + " - Sent grid data | Owner: " + (tileState.GetOwner()?.Id ?? 255).ToString()
-        //              + " Influence: " + tileState.GetInfluence().ToString());*/
-        //           i++;
-        //        }
-        //     }
-        //  }
-        //  else if(!PhotonNetwork.IsMasterClient && !stream.IsWriting)
-        //  {
-
-        //     //
-        //     int i = 0;
-        //     foreach (List<TileState> row in grid)
-        //     {
-        //        foreach (TileState tileState in row)
-        //        {
-        //           byte playerId = (byte) stream.ReceiveNext();
-        //           byte influence = (byte) stream.ReceiveNext();
-
-        //           tileState.Set(GetPlayer(playerId), influence);
-        //           /*Debug.Log(i.ToString() + " - Received grid data | Owner: " + playerId.ToString()
-        //              + " Influence: " + influence.ToString());*/
-        //           i++;
-        //        }
-        //     }
-        //  }
-
-            byte[] gridState = new byte[grideSize * 2];
-
             int q = 0;
             int r = 0;
-            int i = 0;
             bool snakeRight = true;
 
             if (PhotonNetwork.IsMasterClient && stream.IsWriting)
             {
-                do
-                {
-                    TileState ts = GetTileState(ref q, ref r, ref snakeRight);
-
-                    Player owner = ts.GetOwner();
-                    byte influence = (byte) ts.GetInfluence();
-                    byte tileCount = 1;
-
-                    TileState nextTS = PeekNextTileState(q, r);
-
-                    while (tileCount < 32 && nextTS?.GetInfluence() == influence && nextTS?.GetOwner() == owner)
-                    {
-                            // Side-Effect: Updates Q and R
-                        GetTileState(ref q, ref r, ref snakeRight);
-
-                            // We've reached the end of the grid – stop
-                        if (q == -1) break;
-
-                            // Look @ next tile w/out updating Q and R
-                        nextTS = PeekNextTileState(q, r);
-                        ++tileCount;
-                    }
-
-                        // Left 3 bits represent player #
-                    byte ownerAndNumberOfTiles = 0;
-                    if (owner?.Id == null)  ownerAndNumberOfTiles |= 0b111_00000;
-                    else if (owner.Id == 0) ownerAndNumberOfTiles |= 0b000_00000;
-                    else if (owner.Id == 1) ownerAndNumberOfTiles |= 0b001_00000;
-                    else if (owner.Id == 2) ownerAndNumberOfTiles |= 0b010_00000;
-                    else if (owner.Id == 3) ownerAndNumberOfTiles |= 0b011_00000;
-                    else if (owner.Id == 4) ownerAndNumberOfTiles |= 0b100_00000;
-                    else if (owner.Id == 5) ownerAndNumberOfTiles |= 0b101_00000;
-
-                        // Right 5 bits are matching tiles
-                    ownerAndNumberOfTiles |= tileCount;
-
-                    gridState[i++] = ownerAndNumberOfTiles;
-                    gridState[i++] = influence;
-                    //Debug.Log($"i: {i} ownerAndNumberOfTiles: {ownerAndNumberOfTiles}" +
-                    //    $" | influence: {influence}");
-
-                } while (q != -1);
-
-                byte[] payload = new byte[i];
-                Array.ConstrainedCopy(gridState, 0, payload, 0, i);
-                Debug.Log($"Sending payload of size {i} bytes");
+                byte[] payload = CompressBoardState(ref q, ref r, ref snakeRight);
+                Debug.Log($"Sending payload of size {payload?.Length ?? 0} bytes");
                 stream.SendNext(payload);
             }
             else if (!PhotonNetwork.IsMasterClient && !stream.IsWriting)
             {
-                stream.ReceiveNext();
+                byte[] payload = (byte[]) stream.ReceiveNext();
             }
         }
+
+
+        // Precondition: q and r must be valid positions in the grid
+        private byte[] CompressBoardState(ref int q, ref int r, ref bool snakeRight)
+        {
+                /* First bit: 1xxx_xxxx -> snaking right
+                              0xxx_xxxx -> snaking left
+
+                   Next 7 bits: q coordinate
+                   Next 8 bits: r coordinate (msb unused)
+                */
+            byte[] gridState = new byte[grideSize * 2];
+            gridState[0]  = (byte) q;
+            gridState[0] |= (byte) (snakeRight ? 0b_1000_0000 : 0);
+            gridState[1]  = (byte) r;    
+            int bytesUsed = 2;
+
+            while (q != -1)
+            {
+                TileState startTS = GetTileState(ref q, ref r, ref snakeRight);
+                TileState nextTS  = PeekNextTileState(q, r);
+                byte      copies  = 1;
+
+                while (CanContinuePacking(copies, startTS, nextTS))
+                {
+                        // Side-Effect: Updates q and r to next tile
+                    GetTileState(ref q, ref r, ref snakeRight);
+
+                        // Get next tile w/out updating q and r
+                    nextTS = PeekNextTileState(q, r);
+                    ++copies;
+                }
+
+                gridState[bytesUsed++] = GetPlayerAndTilesByte(startTS, copies);
+                gridState[bytesUsed++] = (byte) startTS.GetInfluence();
+            }
+
+            byte[] payload = new byte[bytesUsed];
+            Array.ConstrainedCopy(gridState, 0, payload, 0, bytesUsed);
+            return payload;
+        }
+
+        private bool
+        CanContinuePacking(byte copies, TileState startTS, TileState nextTS)
+        {
+            return copies < 32
+                && nextTS?.GetInfluence() == (byte) startTS.GetInfluence() 
+                && nextTS?.GetOwner() == startTS.GetOwner();
+        }
+
+
+        private byte GetPlayerAndTilesByte(TileState startTS, byte copies)
+        {
+            byte   result = 0;
+            Player owner  = startTS.GetOwner();
+
+            if (owner?.Id is null)  result |= 0b111_00000;
+            else if (owner.Id == 0) result |= 0b000_00000;
+            else if (owner.Id == 1) result |= 0b001_00000;
+            else if (owner.Id == 2) result |= 0b010_00000;
+            else if (owner.Id == 3) result |= 0b011_00000;
+            else if (owner.Id == 4) result |= 0b100_00000;
+            else if (owner.Id == 5) result |= 0b101_00000;
+
+                // Right 5 bits are the # of contiguous tiles matching startTS
+            result |= copies;
+
+            return result;
+        }
+        
     }
 }
