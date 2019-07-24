@@ -30,7 +30,7 @@ namespace GeometryBattles.BoardManager
             this.tileLength = boardState.GetTileLength();
 
             CreateBoard();
-            CreatePlayers(numPlayers);
+            CreatePlayers(numPlayers); // should be set based on the # of players in the room?
 
             SetBases(numPlayers);
         }

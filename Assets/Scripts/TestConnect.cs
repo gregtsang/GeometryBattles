@@ -8,7 +8,7 @@ public class TestConnect : MonoBehaviourPunCallbacks {
 
          // Test SendRate and SerializationRate
       //PhotonNetwork.SendRate = 20;
-      PhotonNetwork.SerializationRate = 2;
+      PhotonNetwork.SerializationRate = 1;
 
       PhotonNetwork.AutomaticallySyncScene = true;
       PhotonNetwork.NickName = MasterManager.GameSettings.NickName;

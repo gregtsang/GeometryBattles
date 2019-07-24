@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using Photon.Pun;
+using System;
 
 namespace GeometryBattles.BoardManager
 {
@@ -27,13 +28,69 @@ namespace GeometryBattles.BoardManager
         int cap = -1;
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
+        private int grideSize;
 
         void Start()
         {
             StartCoroutine(MineResource());
+            calculateGridSize();
         }
 
-        void Update()
+        private void calculateGridSize()
+        {
+            int count = 0;
+
+            foreach (var row in grid) foreach (var tile in row)
+                ++count;
+
+            grideSize = count;
+        }
+
+            // Get tile @ (q, r) and prepare q and r for next call. q and r will be
+            // set to -1, -1 if it's reached the end
+        private TileState GetTileState(ref int q, ref int r, ref bool snakeRight)
+        {
+            TileState result = grid[q][r];
+
+                // Move next column over
+            r += (snakeRight ? 1 : -1);
+
+                // If our next column is now out of bounds…
+            if (grid[q].Count == r || r == -1)
+            {
+                    // Move down a row
+                q += 1;
+
+                    // If our row moved out of bounds
+                if (grid.Count == q)
+                {
+                    r = -1;
+                    q = -1;
+                }
+                    // We moved down a row successfully
+                else
+                {
+                    snakeRight = !snakeRight;
+                    r = snakeRight ? 0 : grid[q].Count - 1;
+                }
+            }
+
+            return result;
+        }
+
+        private TileState PeekNextTileState(int q, int r)
+        {
+            if (q == -1)
+            {
+                return null;
+            }
+            else 
+            {
+                return grid[q][r];
+            }
+        }
+
+      void Update()
         {
             spreadTimer -= Time.deltaTime;
             UpdateColors();
@@ -363,52 +420,104 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-      public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-      {
-         //throw new System.NotImplementedException();
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+        //     if (PhotonNetwork.IsMasterClient && stream.IsWriting)
+        //     {
+        //      int i = 0;  
+        //     foreach (List<TileState> row in grid)
+        //     {
+        //        foreach (TileState tileState in row)
+        //        {
+        //           stream.SendNext((byte) (tileState.GetOwner()?.Id ?? 255));
+        //           stream.SendNext((byte) tileState.GetInfluence());
+        //           /*Debug.Log(i.ToString() + " - Sent grid data | Owner: " + (tileState.GetOwner()?.Id ?? 255).ToString()
+        //              + " Influence: " + tileState.GetInfluence().ToString());*/
+        //           i++;
+        //        }
+        //     }
+        //  }
+        //  else if(!PhotonNetwork.IsMasterClient && !stream.IsWriting)
+        //  {
 
-         // Static variable that controls which portion of the board to update
-         // These regions need to be in roughly 100 tile chunks (200 byte chunks)
-         // 
-         //
-         //
-         //
+        //     //
+        //     int i = 0;
+        //     foreach (List<TileState> row in grid)
+        //     {
+        //        foreach (TileState tileState in row)
+        //        {
+        //           byte playerId = (byte) stream.ReceiveNext();
+        //           byte influence = (byte) stream.ReceiveNext();
 
-         if (PhotonNetwork.IsMasterClient && stream.IsWriting)
-         {
-            int i = 0;  
-            foreach (List<TileState> row in grid)
-            {
-               foreach (TileState tileState in row)
-               {
-                  stream.SendNext((byte) (tileState.GetOwner()?.Id ?? 255));
-                  stream.SendNext((byte) tileState.GetInfluence());
-                  /*Debug.Log(i.ToString() + " - Sent grid data | Owner: " + (tileState.GetOwner()?.Id ?? 255).ToString()
-                     + " Influence: " + tileState.GetInfluence().ToString());*/
-                  i++;
-               }
-            }
-         }
-         else if(!PhotonNetwork.IsMasterClient && !stream.IsWriting)
-         {
+        //           tileState.Set(GetPlayer(playerId), influence);
+        //           /*Debug.Log(i.ToString() + " - Received grid data | Owner: " + playerId.ToString()
+        //              + " Influence: " + influence.ToString());*/
+        //           i++;
+        //        }
+        //     }
+        //  }
 
-            //
+            byte[] gridState = new byte[grideSize * 2];
+
+            int q = 0;
+            int r = 0;
             int i = 0;
-            foreach (List<TileState> row in grid)
+            bool snakeRight = true;
+
+            if (PhotonNetwork.IsMasterClient && stream.IsWriting)
             {
-               foreach (TileState tileState in row)
-               {
-                  byte playerId = (byte) stream.ReceiveNext();
-                  byte influence = (byte) stream.ReceiveNext();
+                do
+                {
+                    TileState ts = GetTileState(ref q, ref r, ref snakeRight);
 
-                  tileState.Set(GetPlayer(playerId), influence);
-                  /*Debug.Log(i.ToString() + " - Received grid data | Owner: " + playerId.ToString()
-                     + " Influence: " + influence.ToString());*/
-                  i++;
-               }
+                    Player owner = ts.GetOwner();
+                    byte influence = (byte) ts.GetInfluence();
+                    byte tileCount = 1;
+
+                    TileState nextTS = PeekNextTileState(q, r);
+
+                    while (tileCount < 32 && nextTS?.GetInfluence() == influence && nextTS?.GetOwner() == owner)
+                    {
+                            // Side-Effect: Updates Q and R
+                        GetTileState(ref q, ref r, ref snakeRight);
+
+                            // We've reached the end of the grid – stop
+                        if (q == -1) break;
+
+                            // Look @ next tile w/out updating Q and R
+                        nextTS = PeekNextTileState(q, r);
+                        ++tileCount;
+                    }
+
+                        // Left 3 bits represent player #
+                    byte ownerAndNumberOfTiles = 0;
+                    if (owner?.Id == null)  ownerAndNumberOfTiles |= 0b111_00000;
+                    else if (owner.Id == 0) ownerAndNumberOfTiles |= 0b000_00000;
+                    else if (owner.Id == 1) ownerAndNumberOfTiles |= 0b001_00000;
+                    else if (owner.Id == 2) ownerAndNumberOfTiles |= 0b010_00000;
+                    else if (owner.Id == 3) ownerAndNumberOfTiles |= 0b011_00000;
+                    else if (owner.Id == 4) ownerAndNumberOfTiles |= 0b100_00000;
+                    else if (owner.Id == 5) ownerAndNumberOfTiles |= 0b101_00000;
+
+                        // Right 5 bits are matching tiles
+                    ownerAndNumberOfTiles |= tileCount;
+
+                    gridState[i++] = ownerAndNumberOfTiles;
+                    gridState[i++] = influence;
+                    //Debug.Log($"i: {i} ownerAndNumberOfTiles: {ownerAndNumberOfTiles}" +
+                    //    $" | influence: {influence}");
+
+                } while (q != -1);
+
+                byte[] payload = new byte[i];
+                Array.ConstrainedCopy(gridState, 0, payload, 0, i);
+                Debug.Log($"Sending payload of size {i} bytes");
+                stream.SendNext(payload);
             }
-         }
-
-      }
-   }
+            else if (!PhotonNetwork.IsMasterClient && !stream.IsWriting)
+            {
+                stream.ReceiveNext();
+            }
+        }
+    }
 }
