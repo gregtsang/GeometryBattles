@@ -21,7 +21,7 @@ namespace GeometryBattles.BoardManager
 
         float tileWidth;
         float tileLength;
-        
+
         void Awake()
         {
             gameCam.orthographicSize = boardWidth;
@@ -44,7 +44,7 @@ namespace GeometryBattles.BoardManager
             float x = (numTiles - 1.0f) * -0.75f * tileLength + boardPos.x * 1.5f * tileLength;
             float z = (boardWidth - 1.0f - boardPos.y) * (tileWidth / 2.0f);
 
-            return new Vector3(x, 0, z);
+            return new Vector3(x, -5.0f, z);
         }
 
         void CreateBoard()
