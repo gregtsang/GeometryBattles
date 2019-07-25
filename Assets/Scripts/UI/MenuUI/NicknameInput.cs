@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using GeometryBattles.Networking;
 
-public class NicknameInput : MonoBehaviour
+namespace GeometryBattles.MenuUI
 {
-    void Start()
+    public class NicknameInput : MonoBehaviour
     {
-        TMP_InputField inputField;   
-        inputField = GetComponent<TMP_InputField>();
-        inputField.text = MasterManager.GameSettings.nickname;
-        inputField.onValueChanged.AddListener(delegate {
-            InputFieldValueChanged(inputField.text);
-        });
-    }
+        void Start()
+        {
+            TMP_InputField inputField;   
+            inputField = GetComponent<TMP_InputField>();
+            inputField.text = MasterManager.GameSettings.nickname;
+            inputField.onValueChanged.AddListener(delegate {
+                InputFieldValueChanged(inputField.text);
+            });
+        }
 
-    void InputFieldValueChanged(string value)
-    {
-        MasterManager.GameSettings.nickname = value;
+        void InputFieldValueChanged(string value)
+        {
+            ServerConnectionSettings.UpdateNickName(value);
+        }
     }
 }

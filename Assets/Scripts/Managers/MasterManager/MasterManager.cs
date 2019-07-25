@@ -16,7 +16,6 @@ public class MasterManager : SingletonScriptableObject<MasterManager>
    [SerializeField]
    private List<NetworkedPrefab> _networkPrefabs = new List<NetworkedPrefab>();
 
-
    public static GameObject NetworkInstantiate(GameObject obj, Vector3 pos, Quaternion rot)
    {
       foreach (var networkPrefab in Instance._networkPrefabs)
