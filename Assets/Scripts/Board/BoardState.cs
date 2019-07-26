@@ -26,22 +26,27 @@ namespace GeometryBattles.BoardManager
         int cap = -1;
         List<List<TileState>> grid;
         List<List<TileState>> buffer;
-
-        void Start()
-        {
-            StartCoroutine(MineResource());
-        }
+        public bool start = false;
 
         void Update()
         {
-            spreadTimer -= Time.deltaTime;
-            UpdateColors();
-            if (spreadTimer <= 0.0f)
+            if (start)
             {
-                CalcBuffer();
-                SetColors();
-                spreadTimer = spreadRate;
+                spreadTimer -= Time.deltaTime;
+                UpdateColors();
+                if (spreadTimer <= 0.0f)
+                {
+                    CalcBuffer();
+                    SetColors();
+                    spreadTimer = spreadRate;
+                }
             }
+        }
+
+        public void StartGame()
+        {
+            start = true;
+            StartCoroutine(MineResource());
         }
 
         public void SetGaps()

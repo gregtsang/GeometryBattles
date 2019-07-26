@@ -206,14 +206,16 @@ MonoBehaviour:
     type: 3}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
+  basePrefab: {fileID: 5760942321799811838, guid: ff3364436b4904a0dac49c48724501d5,
+    type: 3}
   boardWidth: 50
   baseOffset: 2
   numPlayers: 4
   playerColors:
-  - {r: 0.13864839, g: 0.7930688, b: 0.9816306, a: 0}
-  - {r: 0.67660415, g: 0, b: 1.0038143, a: 0}
-  - {r: 0.06100529, g: 0.43258297, b: 1.3532083, a: 0}
-  - {r: 1.427451, g: 0, b: 1.309804, a: 0}
+  - {r: 0.13864839, g: 0.7930688, b: 0.9816306, a: 1}
+  - {r: 0.67660415, g: 0, b: 1.0038143, a: 1}
+  - {r: 0.06100529, g: 0.43258297, b: 1.3532083, a: 1}
+  - {r: 1.427451, g: 0, b: 1.309804, a: 1}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -241,12 +243,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 562494488}
-  baseTileColor: {r: 0.132387, g: 0.15238014, b: 0.16037738, a: 0.003921569}
+  baseTileColor: {r: 0.132387, g: 0.15238014, b: 0.16037738, a: 1}
   tileGap: 0.15
   spreadAmount: 5
   spreadRate: 0.5
   infMax: 200
   infThreshold: 100
+  start: 0
 --- !u!114 &562494488
 MonoBehaviour:
   m_ObjectHideFlags: 0

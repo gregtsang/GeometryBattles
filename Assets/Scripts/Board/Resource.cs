@@ -25,8 +25,8 @@ namespace GeometryBattles.BoardManager
                     qRand = Random.Range(baseOffset, boardWidth - baseOffset);
                     rRand = Random.Range(baseOffset, boardWidth - baseOffset);
                 } while (resourceTiles.Contains(new Vector2Int(qRand, rRand))
-                        || CalcDistance(baseOffset, boardWidth - baseOffset, qRand, rRand) < minDistance 
-                        || CalcDistance(boardWidth - baseOffset, baseOffset, qRand, rRand) < minDistance);
+                        || CalcDistance(baseOffset, boardWidth - baseOffset - 1, qRand, rRand) < minDistance 
+                        || CalcDistance(boardWidth - baseOffset - 1, baseOffset, qRand, rRand) < minDistance);
                 resourceTiles.Add(new Vector2Int(qRand, rRand));
                 resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
             }
