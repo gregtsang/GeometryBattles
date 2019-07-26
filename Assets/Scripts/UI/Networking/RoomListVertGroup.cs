@@ -4,37 +4,53 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
-using System;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace GeometryBattles.MenuUI
 {
     public class RoomListVertGroup : MonoBehaviourPunCallbacks
     {
-        HashSet<string> currRooms = new HashSet<string>();
-        
-        int i = 0;
+        [SerializeField] TextMeshProUGUI roomNameText = null;
+        [SerializeField] TextMeshProUGUI playerCountText = null;
+
+        Dictionary<string, RoomInfoSelectable> currentRooms = new Dictionary<string, RoomInfoSelectable>();
 
         override public void OnRoomListUpdate(List<RoomInfo> roomList)
         {
             foreach(RoomInfo roomInfo in roomList)
             {
-                if (currRooms.Contains(roomInfo.Name) && roomInfo.RemovedFromList)
+                if (currentRooms.ContainsKey(roomInfo.Name))
                 {
-                    DeleteRoomFromList(roomInfo.Name);
+                    if (roomInfo.RemovedFromList)
+                    {
+                        DeleteRoomFromList(roomInfo.Name);
+                    }
+                    else
+                    {
+                        currentRooms[roomInfo.Name].SetRoomInfo(roomInfo);
+                    }
                 }
                 else
                 {
-                    AddRoomToList(roomInfo.Name);
+                    AddRoomToList(roomInfo);
                 }
             }
         }
 
-        private void AddRoomToList(string name)
+        private void AddRoomToList(RoomInfo newRoom)
         {
-            GameObject newGameObject = new GameObject(name);
-            newGameObject.AddComponent<TextMeshProUGUI>().text = name;
+            GameObject newGameObject = new GameObject();
+            RoomInfoSelectable roomInfoSelectable = newGameObject.AddComponent<RoomInfoSelectable>();
+            roomInfoSelectable.SetRoomInfo(newRoom);
+            roomInfoSelectable.RoomNameText = roomNameText;
+            roomInfoSelectable.PlayerCountText = playerCountText;
+
+            newGameObject.AddComponent<TextMeshProUGUI>().text = newRoom.Name;
+            newGameObject.AddComponent<Selectable>();
             newGameObject.transform.SetParent(gameObject.transform, false);
-            currRooms.Add(name);
+
+            currentRooms.Add(newRoom.Name, roomInfoSelectable);
         }
 
         private void DeleteRoomFromList(string name)
@@ -44,31 +60,8 @@ namespace GeometryBattles.MenuUI
                 if (child.text == name)
                 {
                     Destroy(child.gameObject);
-                    currRooms.Remove(name);
+                    currentRooms.Remove(name);
                     break;
-                }
-            }
-        }
-
-        private void Start()
-        {
-        }
-
-        override public void OnEnable()
-        {
-            base.OnEnable();
-            StartCoroutine(CreateFakeRoom());
-        }
-
-        IEnumerator CreateFakeRoom()
-        {
-            while (true)
-            {
-                AddRoomToList("Room " + i++.ToString());
-                yield return new WaitForSeconds(5);
-                if (i % 2 == 0 && i != 0)
-                {
-                    DeleteRoomFromList("Room " + (i - 1));
                 }
             }
         }
