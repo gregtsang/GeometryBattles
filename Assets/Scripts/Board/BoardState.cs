@@ -29,19 +29,26 @@ namespace GeometryBattles.BoardManager
         Dictionary<Vector2Int, TileState> grid;
         Dictionary<Vector2Int, TileState> buffer;
 
+        private PhotonView photonView;
+
         void Update()
         {
             if (start)
             {
                 spreadTimer -= Time.deltaTime;
                 UpdateColors();
-                if (spreadTimer <= 0.0f)
+                if (spreadTimer <= 0.0f && PhotonNetwork.IsMasterClient)
                 {
+                    photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
                     CalcBuffer();
                     SetColors();
                     spreadTimer = spreadRate;
                 }
             }
+        }
+
+        private void Start() {
+            photonView = GetComponent<PhotonView>();
         }
 
         public void StartGame()
