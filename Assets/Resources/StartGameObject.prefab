@@ -280,6 +280,7 @@ GameObject:
   - component: {fileID: 5121737777226419906}
   - component: {fileID: 5121737777226419907}
   - component: {fileID: 5121737777226419904}
+  - component: {fileID: 5327724417247064271}
   m_Layer: 0
   m_Name: HexActions
   m_TagString: Untagged
@@ -330,6 +331,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _displayName: Sell Tile
   valueFactor: 0.05
+--- !u!114 &5327724417247064271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121737777226419909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &3192035524350768609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -400,7 +423,7 @@ PrefabInstance:
     - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
       propertyPath: numPlayers
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7088680478476419446, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}

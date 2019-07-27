@@ -33,5 +33,6 @@ MonoBehaviour:
   - RPC_ChangeReadyState
   - RPC_SetResourceTileLocation
   - RPC_SetColors
+  - RPC_PurchaseTile
   DisableAutoOpenWizard: 1
   ShowSettings: 1
