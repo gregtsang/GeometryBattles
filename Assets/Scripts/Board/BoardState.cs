@@ -86,6 +86,11 @@ namespace GeometryBattles.BoardManager
             buffer[new Vector2Int(q, r)] = new TileState(node);
         }
 
+        public bool ContainsNode(int q, int r)
+        {
+            return grid.ContainsKey(new Vector2Int(q, r));
+        }
+
         public Tile GetNodeTile(int q, int r)
         {
             return grid[new Vector2Int(q, r)].GetTile();

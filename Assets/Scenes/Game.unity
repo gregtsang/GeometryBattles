@@ -207,9 +207,9 @@ MonoBehaviour:
     type: 3}
   basePrefab: {fileID: 5760942321799811838, guid: ff3364436b4904a0dac49c48724501d5,
     type: 3}
-  boardWidth: 25
+  boardWidth: 35
   baseOffset: 2
-  numPlayers: 3
+  numPlayers: 6
   playerColors:
   - {r: 0.13864839, g: 0.7930688, b: 0.9816306, a: 1}
   - {r: 0.67660415, g: 0, b: 1.0038143, a: 1}
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f42e8589f7f47aeb140909bbb300f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceTilesPerPlayer: 5
+  resourceTilesPerPlayer: 3
   minDistance: 3
   startResource: 0
   miningAmount: 1
