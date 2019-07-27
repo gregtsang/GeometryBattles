@@ -15,7 +15,12 @@ public class NetworkedManager : MonoBehaviour
       if (PhotonNetwork.IsMasterClient)
       {
          Debug.Log("I am the master client and I am about to instantiate the board.");
-         MasterManager.NetworkInstantiate(_boardPrefab, Vector3.zero, Quaternion.identity);
+         //MasterManager.NetworkInstantiate(_boardPrefab, Vector3.zero, Quaternion.identity);
+         PhotonNetwork.Instantiate(
+            "StartGameObject",
+            Vector3.zero,
+            Quaternion.identity
+         );
       }
    }
 }
