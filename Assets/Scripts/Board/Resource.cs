@@ -58,6 +58,11 @@ namespace GeometryBattles.BoardManager
             return resourceTiles;
         }
 
+        public void RemoveResourceTile(int q, int r)
+        {
+            resourceTiles.Remove(new Vector2Int(q, r));
+        }
+
         public bool IsResourceTile(int q, int r)
         {
             return resourceTiles.Contains(new Vector2Int(q, r));
