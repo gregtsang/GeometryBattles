@@ -19,39 +19,57 @@ namespace GeometryBattles.BoardManager
 
         public void InitResourceTiles(List<Vector2Int> bases, int baseOffset, int boardWidth, int numPlayers)
         {
-            int min = baseOffset;
-            int max = numPlayers == 2 ? boardWidth - baseOffset : 2 * boardWidth - 1 - baseOffset;
-            for (int i = 0; i < resourceTilesPerPlayer; i++)
-            {   
-                int qRand, rRand;
-                do
-                {
-                    qRand = Random.Range(min, max);
-                    rRand = Random.Range(min, max);
-                } while (resourceTiles.Contains(new Vector2Int(qRand, rRand)) || !IsValidResource(qRand, rRand, bases));
-                Vector2Int curr = new Vector2Int(qRand, rRand);
-                Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
-                resourceTiles.Add(curr);
-                if (numPlayers == 2)
-                {
-                    resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
-                }
-                else if (numPlayers == 3)
-                {
-                    for (int j = 1; j < numPlayers; j++)
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                int min = baseOffset;
+                int max = numPlayers == 2 ? boardWidth - baseOffset : 2 * boardWidth - 1 - baseOffset;
+
+                List<SerializableVector2Int> resourceTileLocations = 
+                    new List<SerializableVector2Int>();
+
+                for (int i = 0; i < resourceTilesPerPlayer; i++)
+                {   
+                    int qRand, rRand;
+                    do
                     {
-                        curr = Rotate120(curr, center);
-                        resourceTiles.Add(curr);
+                        qRand = Random.Range(min, max);
+                        rRand = Random.Range(min, max);
+                    } while (resourceTiles.Contains(new Vector2Int(qRand, rRand)) || !IsValidResource(qRand, rRand, bases));
+
+                    Vector2Int curr = new Vector2Int(qRand, rRand);
+                    Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
+
+                    //resourceTiles.Add(curr);
+                    resourceTileLocations.Add(new SerializableVector2Int(curr.x, curr.y));
+
+                    if (numPlayers == 2)
+                    {
+                        //resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+                        resourceTileLocations.Add(new SerializableVector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));    
+                    }
+                    else if (numPlayers == 3)
+                    {
+                        for (int j = 1; j < numPlayers; j++)
+                        {
+                            curr = Rotate120(curr, center);
+                            //resourceTiles.Add(curr);
+                            resourceTileLocations.Add(new SerializableVector2Int(curr.x, curr.y));
+                        }
+                    }
+                    else if (numPlayers == 6)
+                    {
+                        for (int j = 1; j < numPlayers; j++)
+                        {
+                            curr = Rotate60(curr, center);
+                            //resourceTiles.Add(curr);
+                            resourceTileLocations.Add(new SerializableVector2Int(curr.x, curr.y));
+                        }
                     }
                 }
-                else if (numPlayers == 6)
-                {
-                    for (int j = 1; j < numPlayers; j++)
-                    {
-                        curr = Rotate60(curr, center);
-                        resourceTiles.Add(curr);
-                    }
-                }
+
+                PhotonView pv = GetComponent<PhotonView>();
+                pv.RPC("RPC_SetResourceTileLocation", RpcTarget.AllViaServer, resourceTileLocations.ToArray());
             }
         }
 
@@ -91,6 +109,7 @@ namespace GeometryBattles.BoardManager
         [PunRPC]
         private void RPC_SetResourceTileLocation(SerializableVector2Int[] resourceTileLocations)
         {
+            Debug.Log("Setting resource tile positions");
             foreach (var pos in resourceTileLocations)
             {
                 resourceTiles.Add(pos.Vector2Int);
