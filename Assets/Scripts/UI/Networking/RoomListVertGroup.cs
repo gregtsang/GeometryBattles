@@ -11,8 +11,7 @@ namespace GeometryBattles.MenuUI
 {
     public class RoomListVertGroup : MonoBehaviourPunCallbacks
     {
-        [SerializeField] TextMeshProUGUI roomNameText = null;
-        [SerializeField] TextMeshProUGUI playerCountText = null;
+        [SerializeField] TMP_InputField gameNameInputField = null;
 
         Dictionary<string, RoomInfoSelectable> currentRooms = new Dictionary<string, RoomInfoSelectable>();
 
@@ -38,13 +37,31 @@ namespace GeometryBattles.MenuUI
             }
         }
 
+        override public void OnLeftLobby()
+        {
+            ResetRoomList();
+        }
+
+        public RoomInfo GetRoomInfoByName(string gameName)
+        {
+            RoomInfoSelectable roomInfo;
+            return currentRooms.TryGetValue(gameName, out roomInfo) ? roomInfo.RoomInfo : null;
+        }
+
+        private void ResetRoomList()
+        {
+            foreach (RoomInfoSelectable roomInfo in currentRooms.Values)
+            {
+                Destroy(roomInfo.gameObject);
+            }
+        }
+
         private void AddRoomToList(RoomInfo newRoom)
         {
             GameObject newGameObject = new GameObject();
             RoomInfoSelectable roomInfoSelectable = newGameObject.AddComponent<RoomInfoSelectable>();
             roomInfoSelectable.SetRoomInfo(newRoom);
-            roomInfoSelectable.RoomNameText = roomNameText;
-            roomInfoSelectable.PlayerCountText = playerCountText;
+            roomInfoSelectable.InputField = gameNameInputField;
 
             newGameObject.AddComponent<TextMeshProUGUI>().text = newRoom.Name;
             newGameObject.AddComponent<Selectable>();

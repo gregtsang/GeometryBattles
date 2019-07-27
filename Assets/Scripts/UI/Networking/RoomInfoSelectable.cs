@@ -11,47 +11,57 @@ namespace GeometryBattles.MenuUI
 {
     public class RoomInfoSelectable : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
-        TextMeshProUGUI roomNameText = null;
-        TextMeshProUGUI playerCountText = null;
+        TMP_InputField inputField = null;
+
         RoomInfo roomInfo;
 
         bool selected = false;
 
+        public TMP_InputField InputField { get => inputField; set => inputField = value; }
         public RoomInfo RoomInfo { get => roomInfo; }
-        public TextMeshProUGUI RoomNameText { get => roomNameText; set => roomNameText = value; }
-        public TextMeshProUGUI PlayerCountText { get => playerCountText; set => playerCountText = value; }
 
         public void SetRoomInfo(RoomInfo roomInfoIn)
         {
             roomInfo = roomInfoIn;
             if (selected)
             {
-                UpdateRoomInfoGUI();
+                UpdateRoomNameText();
             }
         }
 
         private void ClearRoomInfoGUI()
         {
-            RoomNameText.text = "";
-            PlayerCountText.text = "";
+            //roomInfoDisplay.ClearRoomInfo();
         }
 
-        private void UpdateRoomInfoGUI()
+        private void UpdateRoomNameText()
         {
-            RoomNameText.text = roomInfo.Name;
-            PlayerCountText.text = roomInfo.PlayerCount.ToString() + " / " + roomInfo.MaxPlayers.ToString();
+            inputField.text = roomInfo.Name;
+            //roomInfoDisplay.SetRoomInfo(roomInfo);
         }
 
         public void OnSelect(BaseEventData eventData)
         {
             selected = true;
-            UpdateRoomInfoGUI();
+            FormatSelfSelected();
+            UpdateRoomNameText();
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
             selected = false;
-            ClearRoomInfoGUI();
+            FormatSelfUnSelected();
+            //ClearRoomInfoGUI();
+        }
+
+        private void FormatSelfSelected()
+        {
+            GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+        }
+
+        private void FormatSelfUnSelected()
+        {
+            GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
         }
 
         private void OnDestroy()
