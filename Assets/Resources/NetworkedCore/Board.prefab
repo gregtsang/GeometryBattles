@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4037846071619613830
+--- !u!1 &6509530979159464691
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,11 +8,11 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4037846071619613828}
-  - component: {fileID: 4037846071619613831}
-  - component: {fileID: 4037846071619613829}
-  - component: {fileID: 4037846071619613834}
-  - component: {fileID: 3819821971659363046}
+  - component: {fileID: 6509530979159464689}
+  - component: {fileID: 6509530979159464690}
+  - component: {fileID: 6509530979159464688}
+  - component: {fileID: 6509530979159464703}
+  - component: {fileID: 7088680478476419446}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -20,13 +20,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4037846071619613828
+--- !u!4 &6509530979159464689
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4037846071619613830}
+  m_GameObject: {fileID: 6509530979159464691}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,27 +34,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4037846071619613831
+--- !u!114 &6509530979159464690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4037846071619613830}
+  m_GameObject: {fileID: 6509530979159464691}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b8f27cd4e0d54d57a3e3c6abd21bd59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardState: {fileID: 4037846071619613829}
-  resource: {fileID: 4037846071619613834}
+  boardState: {fileID: 6509530979159464688}
+  resource: {fileID: 6509530979159464703}
   tilePrefab: {fileID: 424929264639770933, guid: 98c5e67f03c1940c48aed1dcd8e0f05d,
     type: 3}
   playerPrefab: {fileID: 223352192007783710, guid: efe688d0c3b474219a42c26d34dcc649,
     type: 3}
   basePrefab: {fileID: 5760942321799811838, guid: ff3364436b4904a0dac49c48724501d5,
     type: 3}
-  boardWidth: 25
+  boardWidth: 35
   baseOffset: 2
   numPlayers: 6
   playerColors:
@@ -64,19 +64,19 @@ MonoBehaviour:
   - {r: 1.1424627, g: 0, b: 0.52131796, a: 1}
   - {r: 0.24171089, g: 0.13201278, b: 1.2168132, a: 1}
   - {r: 1.509434, g: 0.0071199886, b: 0.09905394, a: 1}
---- !u!114 &4037846071619613829
+--- !u!114 &6509530979159464688
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4037846071619613830}
+  m_GameObject: {fileID: 6509530979159464691}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48d4bc31382fd4111b804df0f0cbe2f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resource: {fileID: 4037846071619613834}
+  resource: {fileID: 6509530979159464703}
   baseTileColor: {r: 0.132387, g: 0.15238014, b: 0.16037738, a: 1}
   tileGap: 0.15
   spreadAmount: 5
@@ -84,31 +84,31 @@ MonoBehaviour:
   infMax: 200
   infThreshold: 100
   start: 0
---- !u!114 &4037846071619613834
+--- !u!114 &6509530979159464703
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4037846071619613830}
+  m_GameObject: {fileID: 6509530979159464691}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15f42e8589f7f47aeb140909bbb300f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceTilesPerSide: 5
+  resourceTilesPerPlayer: 3
   minDistance: 3
   startResource: 0
   miningAmount: 1
   miningRate: 1
   resourceTileAmount: 5
---- !u!114 &3819821971659363046
+--- !u!114 &7088680478476419446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4037846071619613830}
+  m_GameObject: {fileID: 6509530979159464691}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
