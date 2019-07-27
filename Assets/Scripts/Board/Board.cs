@@ -316,6 +316,7 @@ namespace GeometryBattles.BoardManager
                 Player currPlayer = player.GetComponent<Player>();
                 currPlayer.SetColor(playerColors[i]);
                 currPlayer.SetResource(resource.startResource);
+                currPlayer.Id = i;
                 boardState.AddPlayer(player.GetComponent<Player>());
             }
         }

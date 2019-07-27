@@ -31,7 +31,7 @@ namespace GeometryBattles.UI
             (uiManager.GetActivePlayer(), tilePrefab);
             //DebugLogActions(actions);
 
-            Debug.Log($"I clicked as {uiManager.GetActivePlayer()}");
+            Debug.Log($"I clicked as {uiManager.GetActivePlayer().Id}");
 
             if (actions.Count == 1)
             {
