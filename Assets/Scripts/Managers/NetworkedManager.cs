@@ -10,7 +10,11 @@ public class NetworkedManager : MonoBehaviour
 
    private void Awake()
    {
-      PhotonNetwork.OfflineMode = offlineMode;      
+      PhotonNetwork.OfflineMode = offlineMode;
+      if (offlineMode)
+      {
+         PhotonNetwork.CreateRoom("offline");
+      }
       
       if (PhotonNetwork.IsMasterClient)
       {
