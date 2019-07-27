@@ -39,7 +39,7 @@ namespace GeometryBattles.Construction
         [PunRPC]
         private void RPC_PurchaseTile(int pid, int q, int r)
         {
-            Debug.Log("Called RPC_PurchaseTile tile");
+            Debug.Log($"Called RPC_PurchaseTile for player {pid} @ tile ({q}, {r})");
             Player player = board.boardState.GetPlayer(pid);
             Tile tile = board.boardState.GetNodeTile(q, r);
 
