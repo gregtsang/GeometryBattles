@@ -39,10 +39,10 @@ namespace GeometryBattles.BoardManager
 
             CreatePlayers();
             CreateBases();
-            //resource.InitResourceTiles(boardState.GetBases(), baseOffset, boardWidth, numPlayers);
-
             string shape = numPlayers == 2 ? "rhombus" : "hexagon";    
             CreateBoard(shape);
+            resource.InitResourceTiles(boardState.GetBases(), baseOffset, boardWidth, numPlayers);
+
             StartCoroutine(SetBoard());
         }
 
@@ -172,18 +172,30 @@ namespace GeometryBattles.BoardManager
             }
             while (fadeCount < tileSet.Count) yield return null;
             HashSet<Vector2Int> resources = resource.GetResourceTiles();
+            List<Vector2Int> remove = new List<Vector2Int>();
             foreach(Vector2Int r in resources)
             {
-                Tile currTile = boardState.GetNodeTile(r[0], r[1]);
-                Color baseColor = currTile.GetBaseColor();
-                float lerpRate = 0.2f;
-                while (lerpRate > 0.0f)
+                if (boardState.ContainsNode(r[0], r[1]))
                 {
-                    lerpRate -= Time.deltaTime;
-                    Color lerpedColor = Color.Lerp(baseColor, Color.white * 2, 1.0f - (lerpRate / 0.2f));
-                    currTile.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", lerpedColor);
-                    yield return null;
+                    Tile currTile = boardState.GetNodeTile(r[0], r[1]);
+                    Color baseColor = currTile.GetBaseColor();
+                    float lerpRate = 0.2f;
+                    while (lerpRate > 0.0f)
+                    {
+                        lerpRate -= Time.deltaTime;
+                        Color lerpedColor = Color.Lerp(baseColor, Color.white * 2, 1.0f - (lerpRate / 0.2f));
+                        currTile.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", lerpedColor);
+                        yield return null;
+                    }
                 }
+                else
+                {
+                    remove.Add(r);
+                }
+            }
+            foreach (Vector2Int r in remove)
+            {
+                resource.RemoveResourceTile(r[0], r[1]);
             }
             if (numPlayers == 2)
             {

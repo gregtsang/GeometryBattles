@@ -7,7 +7,7 @@ namespace GeometryBattles.BoardManager
 {
     public class Resource : MonoBehaviour
     {
-        public int resourceTilesPerSide;
+        public int resourceTilesPerPlayer;
         public int minDistance;
         
         public int startResource;
@@ -19,22 +19,50 @@ namespace GeometryBattles.BoardManager
 
         public void InitResourceTiles(List<Vector2Int> bases, int baseOffset, int boardWidth, int numPlayers)
         {
-            for (int i = 0; i < resourceTilesPerSide; i++)
+            int min = baseOffset;
+            int max = numPlayers == 2 ? boardWidth - baseOffset : 2 * boardWidth - 1 - baseOffset;
+            for (int i = 0; i < resourceTilesPerPlayer; i++)
             {   
                 int qRand, rRand;
                 do
                 {
-                    qRand = Random.Range(baseOffset, boardWidth - baseOffset);
-                    rRand = Random.Range(baseOffset, boardWidth - baseOffset);
-                } while (resourceTiles.Contains(new Vector2Int(qRand, rRand)) || !IsValidResource(qRand, rRand, bases)); // pull into method
-                resourceTiles.Add(new Vector2Int(qRand, rRand));
-                resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+                    qRand = Random.Range(min, max);
+                    rRand = Random.Range(min, max);
+                } while (resourceTiles.Contains(new Vector2Int(qRand, rRand)) || !IsValidResource(qRand, rRand, bases));
+                Vector2Int curr = new Vector2Int(qRand, rRand);
+                Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
+                resourceTiles.Add(curr);
+                if (numPlayers == 2)
+                {
+                    resourceTiles.Add(new Vector2Int(boardWidth - 1 - qRand, boardWidth - 1 - rRand));
+                }
+                else if (numPlayers == 3)
+                {
+                    for (int j = 1; j < numPlayers; j++)
+                    {
+                        curr = Rotate120(curr, center);
+                        resourceTiles.Add(curr);
+                    }
+                }
+                else if (numPlayers == 6)
+                {
+                    for (int j = 1; j < numPlayers; j++)
+                    {
+                        curr = Rotate60(curr, center);
+                        resourceTiles.Add(curr);
+                    }
+                }
             }
         }
 
         public HashSet<Vector2Int> GetResourceTiles()
         {
             return resourceTiles;
+        }
+
+        public void RemoveResourceTile(int q, int r)
+        {
+            resourceTiles.Remove(new Vector2Int(q, r));
         }
 
         public bool IsResourceTile(int q, int r)
@@ -81,14 +109,6 @@ namespace GeometryBattles.BoardManager
         {
             Vector3Int temp = new Vector3Int(curr[0] - center[0], curr[1] - center[1], -curr[0] - curr[1] + center[0] + center[1]);
             Vector2Int res = new Vector2Int(temp[2], temp[0]);
-            res += center;
-            return res;
-        }
-
-        Vector2Int Rotate180(Vector2Int curr, Vector2Int center)
-        {
-            Vector2Int temp = curr - center;
-            Vector2Int res = new Vector2Int(-temp[0], -temp[1]);
             res += center;
             return res;
         }
