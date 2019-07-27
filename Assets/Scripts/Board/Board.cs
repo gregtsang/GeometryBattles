@@ -30,7 +30,7 @@ namespace GeometryBattles.BoardManager
         float dropSpeed = -1500.0f;
 
         void Awake()
-        {   
+        {
             boardState.SetCap(boardWidth);
 
             boardState.SetGaps();

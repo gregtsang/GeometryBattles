@@ -13,9 +13,9 @@ namespace GeometryBattles.MenuUI
         
         Button button;
 
-        public void InputTextUpdate()
+        public void InputTextUpdate(string value)
         {
-            if (textInputField.text.Length >= minChars)
+            if (value.Length >= minChars)
             {
                 button.interactable = true;
             }
@@ -29,7 +29,10 @@ namespace GeometryBattles.MenuUI
         void Start()
         {
             button = GetComponent<Button>();
-            InputTextUpdate();
+            InputTextUpdate(textInputField.text);
+            textInputField.onValueChanged.AddListener(delegate {
+                InputTextUpdate(textInputField.text);
+            });
         }
     }
 }
