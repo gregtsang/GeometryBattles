@@ -7,7 +7,6 @@ namespace GeometryBattles.BoardManager
 {
     public class Board : MonoBehaviour
     {
-        public Camera gameCam;
         public BoardState boardState;
         public Resource resource;
         
@@ -24,48 +23,63 @@ namespace GeometryBattles.BoardManager
         float tileWidth;
         float tileLength;
         
+        List<Vector2Int> tileSet = new List<Vector2Int>();
         int fadeCount;
         float fadeDistance = 50.0f;
         float dropDistance = 200.0f;
         float dropSpeed = -1500.0f;
 
         void Awake()
-        {
-            gameCam.orthographicSize = boardWidth;
-            
+        {   
             boardState.SetCap(boardWidth);
-            resource.InitResourceTiles(boardWidth, baseOffset);
+            //resource.InitResourceTiles(boardWidth, baseOffset);
 
             boardState.SetGaps();
             this.tileWidth = boardState.GetTileWidth();
             this.tileLength = boardState.GetTileLength();
 
-            CreateBoard();
+            string shape = numPlayers == 2 ? "rhombus" : "hexagon";
+                
+            CreateBoard(shape);
             CreatePlayers(numPlayers);
             StartCoroutine(SetBoard());
         }
 
-        Vector3 CalcPos(Vector2Int boardPos, int numTiles)
+        Vector3 CalcPos(Vector2Int boardPos, int numTiles, int rows)
         {
             float x = (numTiles - 1.0f) * -0.75f * tileLength + boardPos.x * 1.5f * tileLength;
-            float z = (boardWidth - 1.0f - boardPos.y) * (tileWidth / 2.0f);
+            float z = (rows / 2 - boardPos.y) * (tileWidth / 2.0f);
 
             return new Vector3(x, -fadeDistance, z);
         }
 
-        void CreateBoard()
+        void CreateBoard(string shape)
+        {
+            switch (shape)
+            {
+                case "rhombus":
+                    CreateRhombus();
+                    break;
+                case "hexagon":
+                    CreateHexagon();
+                    break;
+            }
+        }
+
+        void CreateRhombus()
         {
             GameObject tiles = new GameObject();
             tiles.name = "Tiles";
             tiles.transform.parent = this.transform;
-            for (int y = 0; y < 2 * boardWidth - 1; y++)
+            int rows = 2 * boardWidth - 1;
+            for (int y = 0; y < rows; y++)
             {
                 int numTiles = boardWidth - Mathf.Abs(boardWidth - y - 1);
 
                 for (int x = 0; x < numTiles; x++)
                 {
                     Vector2Int boardPos = new Vector2Int(x, y);
-                    Vector3 scenePos = CalcPos(boardPos, numTiles);
+                    Vector3 scenePos = CalcPos(boardPos, numTiles, rows);
                     GameObject tile = Instantiate(tilePrefab, scenePos, Quaternion.identity, tiles.transform) as GameObject;
                     int q = y < boardWidth ? boardWidth - 1 - y + x : x;
                     int r = y < boardWidth ? x : y - boardWidth + 1 + x;
@@ -79,6 +93,58 @@ namespace GeometryBattles.BoardManager
                     randColor.a = 0.0f;
                     tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randColor);
                     boardState.InitNode(q, r, currTile);
+                    tileSet.Add(new Vector2Int(q, r));
+                }
+            }
+        }
+
+        void CreateHexagon()
+        {
+            GameObject tiles = new GameObject();
+            tiles.name = "Tiles";
+            tiles.transform.parent = this.transform;
+            
+            int rows = 4 * boardWidth - 3;
+            for (int y = 0; y < rows; y++)
+            {
+                int numTiles;
+                if (y < boardWidth) numTiles = y + 1;
+                else if (y >= rows - boardWidth) numTiles = rows - y;
+                else if (boardWidth % 2 == 0) numTiles = y % 2 == 1 ? boardWidth : boardWidth - 1;
+                else numTiles = y % 2 == 0 ? boardWidth : boardWidth - 1;
+
+                for (int x = 0; x < numTiles; x++)
+                {
+                    Vector2Int boardPos = new Vector2Int(x, y);
+                    Vector3 scenePos = CalcPos(boardPos, numTiles, rows);
+                    GameObject tile = Instantiate(tilePrefab, scenePos, Quaternion.identity, tiles.transform) as GameObject;
+                    int q, r;
+                    if (y < boardWidth)
+                    {
+                        q = boardWidth - 1 - y + 2 * x;
+                        r = numTiles - 1 - x;
+                    }
+                    else if (y >= rows - boardWidth)
+                    {
+                        q = boardWidth - rows + y + 2 * x;
+                        r = 2 * (boardWidth - 1) - x;
+                    }
+                    else
+                    {
+                        q = boardWidth - numTiles + 2 * x;
+                        r = (y - boardWidth + 1) / 2 + boardWidth - 1 - x;
+                    }
+                    tile.name = "Tile[" + q + "," + r + "]";
+                    Tile currTile = tile.GetComponent<Tile>();
+                    currTile.SetCoords(q, r);
+                    Color randColor = Color.Lerp(boardState.baseTileColor, Color.white, Random.Range(0.0f, 0.1f));
+                    currTile.SetBaseColor(randColor);
+                    currTile.SetPrevColor(randColor);
+                    currTile.SetNextColor(randColor);
+                    randColor.a = 0.0f;
+                    tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randColor);
+                    boardState.InitNode(q, r, currTile);
+                    tileSet.Add(new Vector2Int(q, r));
                 }
             }
         }
@@ -86,31 +152,26 @@ namespace GeometryBattles.BoardManager
         IEnumerator SetBoard()
         {
             fadeCount = 0;
-            List<Vector2Int> tiles = new List<Vector2Int>();
-            for (int i = 0; i < boardWidth; i++)
-            {
-                for (int j = 0; j < boardWidth; j++)
-                    tiles.Add(new Vector2Int(i, j));
-            }
-            for (int i = tiles.Count - 1; i > 0; i--)
+            for (int i = tileSet.Count - 1; i > 0; i--)
             {
                 int j = Random.Range(0, i + 1);
-                Vector2Int temp = tiles[i];
-                tiles[i] = tiles[j];
-                tiles[j] = temp;
+                Vector2Int temp = tileSet[i];
+                tileSet[i] = tileSet[j];
+                tileSet[j] = temp;
             }
             int index = 0;
-            while (index < tiles.Count)
+            while (index < tileSet.Count)
             {
-                for (int i = index; i < index + boardWidth; i++)
-                    StartCoroutine(FadeInTile(tiles[i][0], tiles[i][1]));
-                index += boardWidth;
+                for (int i = index; i < Mathf.Min(index + tileSet.Count / boardWidth, tileSet.Count); i++)
+                {
+                    StartCoroutine(FadeInTile(tileSet[i][0], tileSet[i][1]));
+                }
+                index += tileSet.Count / boardWidth;
                 yield return new WaitForSeconds(0.05f);
             }
-            while (fadeCount < boardWidth * boardWidth)
-                yield return null;
+            while (fadeCount < tileSet.Count) yield return null;
             HashSet<Vector2Int> resources = resource.GetResourceTiles();
-            foreach(var r in resources)
+            foreach(Vector2Int r in resources)
             {
                 Tile currTile = boardState.GetNodeTile(r[0], r[1]);
                 Color baseColor = currTile.GetBaseColor();
@@ -123,10 +184,33 @@ namespace GeometryBattles.BoardManager
                     yield return null;
                 }
             }
-            StartCoroutine(SetBase(baseOffset, boardWidth - baseOffset - 1, 0));
-            StartCoroutine(SetBase(boardWidth - baseOffset - 1, baseOffset, 1));
-            StartCoroutine(SetBase(baseOffset, baseOffset, 2));
-            StartCoroutine(SetBase(boardWidth - baseOffset - 1, boardWidth - baseOffset - 1, 3));
+            if (numPlayers == 2)
+            {
+                StartCoroutine(SetBase(baseOffset, boardWidth - baseOffset - 1, 0));
+                StartCoroutine(SetBase(boardWidth - baseOffset - 1, baseOffset, 1));
+            }
+            else if (numPlayers == 3)
+            {
+                Vector3Int curr = new Vector3Int(boardWidth - 1, baseOffset, 1 - boardWidth - baseOffset);
+                Vector3Int center = new Vector3Int(boardWidth - 1, boardWidth - 1, 2 - 2 * boardWidth);
+                StartCoroutine(SetBase(curr[0], curr[1], 0));
+                for (int i = 1; i < numPlayers; i++)
+                {
+                    curr = Rotate120(curr, center);
+                    StartCoroutine(SetBase(curr[0], curr[1], i));
+                }
+            }
+            else if (numPlayers == 6)
+            {
+                Vector3Int curr = new Vector3Int(boardWidth - 1, baseOffset, 1 - boardWidth - baseOffset);
+                Vector3Int center = new Vector3Int(boardWidth - 1, boardWidth - 1, 2 - 2 * boardWidth);
+                StartCoroutine(SetBase(curr[0], curr[1], 0));
+                for (int i = 1; i < numPlayers; i++)
+                {
+                    curr = Rotate60(curr, center);
+                    StartCoroutine(SetBase(curr[0], curr[1], i));
+                }
+            }
             boardState.StartGame();
         }
 
@@ -162,6 +246,22 @@ namespace GeometryBattles.BoardManager
             }
             boardState.SetNode(q, r, boardState.GetPlayer(player));
             boardState.AddBase(q, r, boardState.GetPlayer(player));
+        }
+
+        Vector3Int Rotate60(Vector3Int curr, Vector3Int center)
+        {
+            Vector3Int temp = curr - center;
+            Vector3Int res = new Vector3Int(-temp[2], -temp[0], -temp[1]);
+            res += center;
+            return res;
+        }
+
+        Vector3Int Rotate120(Vector3Int curr, Vector3Int center)
+        {
+            Vector3Int temp = curr - center;
+            Vector3Int res = new Vector3Int(temp[1], temp[2], temp[0]);
+            res += center;
+            return res;
         }
 
         void CreatePlayers(int numPlayers)

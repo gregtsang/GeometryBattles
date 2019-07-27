@@ -199,7 +199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b8f27cd4e0d54d57a3e3c6abd21bd59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameCam: {fileID: 963194227}
   boardState: {fileID: 562494487}
   resource: {fileID: 562494488}
   tilePrefab: {fileID: 424929264639770933, guid: 98c5e67f03c1940c48aed1dcd8e0f05d,
@@ -208,14 +207,16 @@ MonoBehaviour:
     type: 3}
   basePrefab: {fileID: 5760942321799811838, guid: ff3364436b4904a0dac49c48724501d5,
     type: 3}
-  boardWidth: 50
+  boardWidth: 25
   baseOffset: 2
-  numPlayers: 4
+  numPlayers: 6
   playerColors:
   - {r: 0.13864839, g: 0.7930688, b: 0.9816306, a: 1}
   - {r: 0.67660415, g: 0, b: 1.0038143, a: 1}
   - {r: 0.06100529, g: 0.43258297, b: 1.3532083, a: 1}
   - {r: 1.1424627, g: 0, b: 0.52131796, a: 1}
+  - {r: 0.24171089, g: 0.13201278, b: 1.2168132, a: 1}
+  - {r: 1.509434, g: 0.0071199886, b: 0.09905394, a: 1}
 --- !u!4 &562494486
 Transform:
   m_ObjectHideFlags: 0
@@ -415,7 +416,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 11
+  orthographic size: 50
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
