@@ -49,6 +49,11 @@ namespace GeometryBattles.MenuUI
             statusText.text = "Joining Room...";
         }
 
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+
         override public void OnCreatedRoom()
         {
             Debug.Log("Created Room!");
@@ -62,6 +67,7 @@ namespace GeometryBattles.MenuUI
         override public void OnJoinedRoom()
         {
             Debug.Log("Joined Room!");
+            startMenu.ShowPreGameCanvas();
         }
 
         override public void OnJoinRoomFailed(short returnCode, string message)

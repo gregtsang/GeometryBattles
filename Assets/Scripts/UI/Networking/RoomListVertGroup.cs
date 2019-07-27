@@ -32,7 +32,10 @@ namespace GeometryBattles.MenuUI
                 }
                 else
                 {
-                    AddRoomToList(roomInfo);
+                    if (!roomInfo.RemovedFromList)
+                    {
+                        AddRoomToList(roomInfo);
+                    }
                 }
             }
         }

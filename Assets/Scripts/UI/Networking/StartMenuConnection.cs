@@ -29,6 +29,11 @@ namespace GeometryBattles.MenuUI
             PhotonNetwork.ConnectUsingSettings();
         }
 
+        public void Disconnect()
+        {
+            PhotonNetwork.Disconnect();
+        }
+
         override public void OnConnectedToMaster()
         {
             print("Connected to server : )");
