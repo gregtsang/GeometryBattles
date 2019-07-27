@@ -325,7 +325,6 @@ namespace GeometryBattles.BoardManager
                 }
             }
             SwapBuffer();
-            spreadTimer = spreadRate;
         }
 
         void SetColors()
