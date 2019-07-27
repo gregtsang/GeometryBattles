@@ -14,11 +14,11 @@ namespace GeometryBattles.StructureManager
             List<Structure> destroy = new List<Structure>();
             foreach(var s in structures)
             {
-                s.Value.SetHP(boardState.GetNodeHP(s.Key[0], s.Key[1]));
+                s.Value.SetHP(boardState.GetNodeShield(s.Key[0], s.Key[1]));
                 if (s.Value.GetHP() <= 0)
                     destroy.Add(s.Value);
                 else
-                    boardState.AddNodeHP(s.Key[0], s.Key[1], s.Value.GetHPRegen(), s.Value.GetMaxHP());
+                    boardState.AddNodeShield(s.Key[0], s.Key[1], s.Value.GetHPRegen(), s.Value.GetMaxHP());
             }
             foreach (var d in destroy)
                 RemoveStructure(d.Q, d.R);
@@ -34,7 +34,7 @@ namespace GeometryBattles.StructureManager
             currStructure.boardState = this.boardState;
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
-            boardState.AddNodeHP(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
+            boardState.AddNodeShield(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
             structures[new Vector2Int(q, r)] = currStructure;
         }
 

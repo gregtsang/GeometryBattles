@@ -25,87 +25,29 @@ namespace GeometryBattles.BoardManager
         public int infMax;
         public int infThreshold;
 
-        int cap = -1;
-        List<List<TileState>> grid;
-        List<List<TileState>> buffer;
-        private int grideSize;
-
-        private PhotonView pv;
-
-        void Start()
-        {
-            StartCoroutine(MineResource());
-            calculateGridSize();
-            pv = GetComponent<PhotonView>();
-        }
-
-        private void calculateGridSize()
-        {
-            int count = 0;
-
-            foreach (var row in grid) foreach (var tile in row)
-                ++count;
-
-            grideSize = count;
-        }
-
-            // Get tile @ (q, r) and prepare q and r for next call. q and r will be
-            // set to -1, -1 if it's reached the end
-        private TileState GetTileState(ref int q, ref int r, ref bool snakeRight)
-        {
-            TileState result = grid[q][r];
-
-                // Move next column over
-            r += (snakeRight ? 1 : -1);
-
-                // If our next column is now out of bounds…
-            if (grid[q].Count == r || r == -1)
-            {
-                    // Move down a row
-                q += 1;
-
-                    // If our row moved out of bounds
-                if (grid.Count == q)
-                {
-                    r = -1;
-                    q = -1;
-                }
-                    // We moved down a row successfully
-                else
-                {
-                    snakeRight = !snakeRight;
-                    r = snakeRight ? 0 : grid[q].Count - 1;
-                }
-            }
-
-            return result;
-        }
-
-        private TileState PeekNextTileState(int q, int r)
-        {
-            if (q == -1)
-            {
-                return null;
-            }
-            else 
-            {
-                return grid[q][r];
-            }
-        }
+        public bool start = false;
+        Dictionary<Vector2Int, TileState> grid;
+        Dictionary<Vector2Int, TileState> buffer;
 
         void Update()
         {
-            spreadTimer -= Time.deltaTime;
-            UpdateColors();
-            SetColors();
-            if (spreadTimer <= 0.0f)
+            if (start)
             {
-                if (PhotonNetwork.IsMasterClient)
+                spreadTimer -= Time.deltaTime;
+                UpdateColors();
+                if (spreadTimer <= 0.0f)
                 {
                     CalcBuffer();
-                    pv.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
+                    SetColors();
+                    spreadTimer = spreadRate;
                 }
             }
+        }
+
+        public void StartGame()
+        {
+            start = true;
+            StartCoroutine(MineResource());
         }
 
         public void SetGaps()
@@ -126,19 +68,8 @@ namespace GeometryBattles.BoardManager
 
         public void SetCap(int n)
         {
-            grid = new List<List<TileState>>(n);
-            buffer = new List<List<TileState>>(n);
-            for (int i = 0; i < n; i++)
-            {
-                grid.Add(new List<TileState>(n));
-                buffer.Add(new List<TileState>(n));
-                for (int j = 0; j < n; j++)
-                {
-                    grid[i].Add(new TileState(null, null, 0));
-                    buffer[i].Add(new TileState(null, null, 0));
-                }
-            }
-            cap = n;
+            grid = new Dictionary<Vector2Int, TileState>(n * n);
+            buffer = new Dictionary<Vector2Int, TileState>(n * n);
         }
 
         public Player GetPlayer(int i)
@@ -152,113 +83,126 @@ namespace GeometryBattles.BoardManager
             players.Add(player);
         }
 
-        public void InitNode(Tile node, int q, int r)
+        public void InitNode(int q, int r, Tile node)
         {
-            if (cap > 0 && q < cap && r < cap)
-            {
-                grid[q][r].SetTile(node);
-                buffer[q][r].SetTile(node);
-            }
+            grid[new Vector2Int(q, r)] = new TileState(node);
+            buffer[new Vector2Int(q, r)] = new TileState(node);
         }
 
         public Tile GetNodeTile(int q, int r)
         {
-            return grid[q][r].GetTile();
+            return grid[new Vector2Int(q, r)].GetTile();
         }
 
         public Player GetNodeOwner(int q, int r)
         {
-            return grid[q][r].GetOwner();
+            return grid[new Vector2Int(q, r)].GetOwner();
         }
 
         public int GetNodeInfluence(int q, int r)
         {
-            return grid[q][r].GetInfluence();
+            return grid[new Vector2Int(q, r)].GetInfluence();
         }
 
-        public int GetNodeHP(int q, int r)
+        public int GetNodeShield(int q, int r)
         {
-            return grid[q][r].GetStructureHP();
+            return grid[new Vector2Int(q, r)].GetShield();
         }
 
-        public void SetNode(int q, int r, Player owner, bool target = true)
+        public void SetNode(int q, int r, Player owner, bool targetMain = true)
         {
-            List<List<TileState>> gridbuffer = target ? grid : buffer;
-            Player prevOwner = gridbuffer[q][r].GetOwner();
-            int prevInfluence = gridbuffer[q][r].GetInfluence();
-            
-            gridbuffer[q][r].Set(owner, infThreshold);
-            gridbuffer[q][r].SetColor(owner, infThreshold, infThreshold, baseTileColor);
+            SetNode(q, r, owner, infThreshold, targetMain);
         }
 
-        public void SetNode(int q, int r, Player owner, int influence, bool target = true)
+        public void SetNode(int q, int r, Player owner, int influence, bool targetMain = true)
         {
-            List<List<TileState>> gridbuffer = target ? grid : buffer;
-            Player prevOwner = gridbuffer[q][r].GetOwner();
-            int prevInfluence = gridbuffer[q][r].GetInfluence();
-            
-            gridbuffer[q][r].Set(owner, influence);
-            gridbuffer[q][r].SetColor(owner, influence, infThreshold, baseTileColor);
+            Dictionary<Vector2Int, TileState> gridbuffer = targetMain ? grid : buffer;
+            Vector2Int coords = new Vector2Int(q, r);
+            Player prevOwner = gridbuffer[coords].GetOwner();
+            int prevInfluence = gridbuffer[coords].GetInfluence();
+
+            gridbuffer[coords].Set(owner, influence);
+            gridbuffer[coords].SetColor(owner, influence, infThreshold);
         }
 
-        public void AddNode(int q, int r, Player player, int value, bool target = true)
+        public void AddNode(int q, int r, Player player, int value, bool targetMain = true)
         {
-            List<List<TileState>> gridbuffer = target ? grid : buffer;
-            Player owner = gridbuffer[q][r].GetOwner();
-            int influence = gridbuffer[q][r].GetInfluence();
-            if (gridbuffer[q][r].GetStructureHP() > 0)
+            Dictionary<Vector2Int, TileState> gridbuffer = targetMain ? grid : buffer;
+            Vector2Int coords = new Vector2Int(q, r);
+            Player prevOwner = gridbuffer[coords].GetOwner();
+            int prevInfluence = gridbuffer[coords].GetInfluence();
+
+            if (gridbuffer[coords].GetShield() > 0)
             {
-                if (owner != player)
-                    gridbuffer[q][r].SubStructureHP(value);
+                if (prevOwner != player)
+                {
+                    gridbuffer[coords].SubShield(value);
+                }
             }
             else
             {
-                if (owner == null || owner == player)
+                Player nextOwner;
+                int nextInfluence;
+                if (prevOwner == null || prevOwner == player)
                 {
-                    gridbuffer[q][r].Set(player, Mathf.Min(influence + value, infMax));
-                    if (target)
-                        gridbuffer[q][r].SetColor(player, Mathf.Min(influence + value, infMax), infThreshold, baseTileColor);
+                    nextOwner = player;
+                    nextInfluence = Mathf.Min(prevInfluence + value, infMax);
                 }
                 else
-                {   
-                    if (influence < value)
+                {
+                    if (prevInfluence < value)
                     {
-                        gridbuffer[q][r].Set(player, Mathf.Min(value - influence, infMax));
-                        if (target)
-                            gridbuffer[q][r].SetColor(player, Mathf.Min(value - influence, infMax), infThreshold, baseTileColor);
+                        nextOwner = player;
+                        nextInfluence = Mathf.Min(value - prevInfluence, infMax);
                     }
-                    else if (influence > value)
+                    else if (prevInfluence > value)
                     {
-                        gridbuffer[q][r].Set(owner, Mathf.Min(influence - value, infMax));
-                        if (target)
-                            gridbuffer[q][r].SetColor(owner, Mathf.Min(influence - value, infMax), infThreshold, baseTileColor);
+                        nextOwner = prevOwner;
+                        nextInfluence = Mathf.Min(prevInfluence - value, infMax);
                     }
                     else
                     {
-                        gridbuffer[q][r].Set(null, 0);
-                        if (target)
-                            gridbuffer[q][r].SetColor(null, 0, infThreshold, baseTileColor);
+                        nextOwner = null;
+                        nextInfluence = 0;
                     }
+                }
+                gridbuffer[coords].Set(nextOwner, nextInfluence);
+                if (targetMain)
+                {
+                    gridbuffer[coords].SetColor(nextOwner, nextInfluence, infThreshold);
                 }
             }
         }
 
-        public void SetNodeHP(int q, int r, int amount)
+        public void SetNodeShield(int q, int r, int amount)
         {
-            grid[q][r].SetStructureHP(amount);
-            buffer[q][r].SetStructureHP(amount);
+            Vector2Int coords = new Vector2Int(q, r);
+            grid[coords].SetShield(amount);
+            buffer[coords].SetShield(amount);
         }
 
-        public void AddNodeHP(int q, int r, int amount, int max)
+        public void AddNodeShield(int q, int r, int amount, int max)
         {
-            grid[q][r].AddStructureHP(amount, max);
-            buffer[q][r].AddStructureHP(amount, max);
+            Vector2Int coords = new Vector2Int(q, r);
+            grid[coords].AddShield(amount, max);
+            buffer[coords].AddShield(amount, max);
         }
 
-        public void SetBuff(int q, int r, Player player, int buff)
+        public void SetNodeBuff(int q, int r, Player player, int buff)
         {
-            grid[q][r].SetBuff(player, buff);
-            buffer[q][r].SetBuff(player, buff);
+            Vector2Int coords = new Vector2Int(q, r);
+            grid[coords].SetBuff(player, buff);
+            buffer[coords].SetBuff(player, buff);
+        }
+
+        public List<Vector2Int> GetBases()
+        {
+            List<Vector2Int> res = new List<Vector2Int>();
+            foreach (Vector2Int b in bases.Values)
+            {
+                res.Add(b);
+            }
+            return res;
         }
 
         public void AddBase(int q, int r, Player player)
@@ -270,22 +214,24 @@ namespace GeometryBattles.BoardManager
         {
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
             visited.Add(new Vector2Int(q, r));
-            Queue<Vector2Int> queue = new Queue<Vector2Int>();
-            queue.Enqueue(new Vector2Int(q, r));
-            while (queue.Count > 0)
+            Stack<Vector2Int> stack = new Stack<Vector2Int>();
+            stack.Push(new Vector2Int(q, r));
+            while (stack.Count > 0)
             {
-                Vector2Int curr = queue.Dequeue();
+                Vector2Int curr = stack.Pop();
                 if (curr[0] == bases[player][0] && curr[1] == bases[player][1])
+                {
                     return true;
+                }
                 else
                 {
                     List<Vector2Int> neighbors = GetNeighbors(curr[0], curr[1]);
-                    foreach (var n in neighbors)
+                    foreach (Vector2Int n in neighbors)
                     {
-                        if (!visited.Contains(n) && grid[n[0]][n[1]].GetOwner() == player && grid[n[0]][n[1]].GetInfluence() >= infThreshold)
+                        if (!visited.Contains(n) && grid[n].GetOwner() == player && grid[n].GetInfluence() >= infThreshold)
                         {
                             visited.Add(n);
-                            queue.Enqueue(new Vector2Int(n[0], n[1]));
+                            stack.Push(n);
                         }
                     }
                 }
@@ -295,7 +241,7 @@ namespace GeometryBattles.BoardManager
 
         public bool IsOwned(int q, int r)
         {
-            return grid[q][r].GetInfluence() >= infThreshold;
+            return grid[new Vector2Int(q, r)].GetInfluence() >= infThreshold;
         }
 
         public int ClosestOwned(int q, int r, Player player)
@@ -307,12 +253,15 @@ namespace GeometryBattles.BoardManager
             while (queue.Count > 0)
             {
                 Vector3Int curr = queue.Dequeue();
-                if (grid[curr[0]][curr[1]].GetOwner() == player && grid[curr[0]][curr[1]].GetInfluence() >= infThreshold)
+                Vector2Int coords = new Vector2Int(curr[0], curr[1]);
+                if (grid[coords].GetOwner() == player && grid[coords].GetInfluence() >= infThreshold)
+                {
                     return curr[2];
+                }
                 else
                 {
                     List<Vector2Int> neighbors = GetNeighbors(curr[0], curr[1]);
-                    foreach (var n in neighbors)
+                    foreach (Vector2Int n in neighbors)
                     {
                         if (!visited.Contains(n))
                         {
@@ -328,42 +277,42 @@ namespace GeometryBattles.BoardManager
         public List<Vector2Int> GetNeighbors(int q, int r)
         {
             List<Vector2Int> neighbors = new List<Vector2Int>();
-            bool qMin = q == 0, qMax = q == cap - 1, rMin = r == 0, rMax = r == cap - 1;
-            if (!qMin)
+            if (grid.ContainsKey(new Vector2Int(q - 1, r)))
                 neighbors.Add(new Vector2Int(q - 1, r));
-            if (!qMax)
+            if (grid.ContainsKey(new Vector2Int(q + 1, r)))
                 neighbors.Add(new Vector2Int(q + 1, r));
-            if (!rMin)
+            if (grid.ContainsKey(new Vector2Int(q, r - 1)))
                 neighbors.Add(new Vector2Int(q, r - 1));
-            if (!rMax)
+            if (grid.ContainsKey(new Vector2Int(q, r + 1)))
                 neighbors.Add(new Vector2Int(q, r + 1));
-            if (!qMin && !rMax)
+            if (grid.ContainsKey(new Vector2Int(q - 1, r + 1)))
                 neighbors.Add(new Vector2Int(q - 1, r + 1));
-            if (!qMax && !rMin)
+            if (grid.ContainsKey(new Vector2Int(q + 1, r - 1)))
                 neighbors.Add(new Vector2Int(q + 1, r - 1));
             return neighbors;
         }
 
         void SwapBuffer()
         {
-            List<List<TileState>> temp;
+            Dictionary<Vector2Int, TileState> temp;
             temp = grid;
             grid = buffer;
             buffer = temp;
         }
 
         void CalcBuffer()
-        {            
-            for (int i = 0; i < cap; i++)
+        {
+            foreach (KeyValuePair<Vector2Int, TileState> tile in grid)
             {
-                for (int j = 0; j < cap; j++)
+                buffer[tile.Key].Set(tile.Value.GetOwner(), tile.Value.GetInfluence());
+                buffer[tile.Key].SetShield(tile.Value.GetShield());
+                List<Vector2Int> neighbors = GetNeighbors(tile.Key[0], tile.Key[1]);
+                foreach (Vector2Int n in neighbors)
                 {
-                    buffer[i][j].Set(grid[i][j].GetOwner(), grid[i][j].GetInfluence());
-                    buffer[i][j].SetStructureHP(grid[i][j].GetStructureHP());
-                    List<Vector2Int> neighbors = GetNeighbors(i, j);
-                    foreach (var n in neighbors)
-                        if (grid[n[0]][n[1]].GetInfluence() >= infThreshold)
-                            AddNode(i, j, grid[n[0]][n[1]].GetOwner(), spreadAmount + grid[n[0]][n[1]].GetBuff(grid[n[0]][n[1]].GetOwner()), false);
+                    if (grid[n].GetInfluence() >= infThreshold)
+                    {
+                        AddNode(tile.Key[0], tile.Key[1], grid[n].GetOwner(), spreadAmount + grid[n].GetBuff(grid[n].GetOwner()), false);
+                    }
                 }
             }
             SwapBuffer();
@@ -372,30 +321,35 @@ namespace GeometryBattles.BoardManager
 
         void SetColors()
         {
-            for (int i = 0; i < cap; i++)
+            foreach (TileState tile in grid.Values)
             {
-                for (int j = 0; j < cap; j++)
-                {
-                    grid[i][j].SetColor(grid[i][j].GetOwner(), grid[i][j].GetInfluence(), infThreshold, baseTileColor, false);
-                }
+                tile.SetColor(tile.GetOwner(), tile.GetInfluence(), infThreshold, false);
             }
         }
 
         void UpdateColors()
         {
-            for (int i = 0; i < cap; i++)
+            foreach (KeyValuePair<Vector2Int, TileState> tile in grid)
             {
-                for (int j = 0; j < cap; j++)
+                Tile currTile = tile.Value.GetTile();
+                Color nextColor = currTile.GetNextColor();
+                Color prevColor = currTile.GetPrevColor();
+                Color currColor = currTile.GetMat().GetColor("_BaseColor");
+                if (!resource.IsResourceTile(tile.Key[0], tile.Key[1]) && nextColor != currColor)
                 {
-                    Tile currTile = grid[i][j].GetTile();
-                    Color nextColor = currTile.GetNextColor();
-                    Color prevColor = currTile.GetPrevColor();
-                    Color currColor = currTile.GetMat().GetColor("_BaseColor");
-                    if (!resource.IsResourceTile(i, j) && nextColor != currColor)
+                    Color lerpedColor;
+                    lerpedColor = Color.Lerp(prevColor, nextColor, 1.0f - Mathf.Max(0.0f, spreadTimer / spreadRate));
+                    currTile.GetMat().SetColor("_BaseColor", lerpedColor);
+                }
+                else if (resource.IsResourceTile(tile.Key[0], tile.Key[1]))
+                {
+                    if (tile.Value.GetInfluence() >= 100 && currColor == Color.white * 2)
                     {
-                        Color lerpedColor;
-                        lerpedColor = Color.Lerp(prevColor, nextColor, 1.0f - Mathf.Max(0.0f, spreadTimer / spreadRate));
-                        currTile.GetMat().SetColor("_BaseColor", lerpedColor);
+                        currTile.GetMat().SetColor("_BaseColor", Color.Lerp(Color.white, tile.Value.GetOwner().GetColor(), 0.5f));
+                    }
+                    else if (tile.Value.GetInfluence() < 100 && currColor != Color.white * 2)
+                    {
+                        currTile.GetMat().SetColor("_BaseColor", Color.white * 2);
                     }
                 }
             }
@@ -406,19 +360,24 @@ namespace GeometryBattles.BoardManager
             while (true)
             {
                 Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
-                foreach (var p in players)
-                    playerMining[p] = resource.miningAmount;
-                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
-                foreach (var r in resourceTiles)
+                foreach (Player p in players)
                 {
-                    Player owner = grid[r[0]][r[1]].GetOwner();
-                    int influence = grid[r[0]][r[1]].GetInfluence();
-                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
-                        playerMining[owner] += resource.resourceTileAmount;
+                    playerMining[p] = resource.miningAmount;
                 }
-                foreach (var p in players)
+                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
+                foreach (Vector2Int r in resourceTiles)
+                {
+                    Player owner = grid[r].GetOwner();
+                    int influence = grid[r].GetInfluence();
+                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
+                    {
+                        playerMining[owner] += resource.resourceTileAmount;
+                    }
+                }
+                foreach (Player p in players)
+                {
                     p.AddResource(playerMining[p]);
-
+                }
                 EventManager.RaiseOnResourceUpdate();
                 yield return new WaitForSeconds(resource.miningRate);
             }
@@ -446,72 +405,73 @@ namespace GeometryBattles.BoardManager
 
 
         // Precondition: q and r must be valid positions in the grid
-        private byte[] CompressBoardState(ref int q, ref int r, ref bool snakeRight)
-        {
-                /* First bit: 1xxx_xxxx -> snaking right
-                              0xxx_xxxx -> snaking left
+        // Broken w/ current usage of hash table
+        // private byte[] CompressBoardState(ref int q, ref int r, ref bool snakeRight)
+        // {
+        //         /* First bit: 1xxx_xxxx -> snaking right
+        //                       0xxx_xxxx -> snaking left
 
-                   Next 7 bits: q coordinate
-                   Next 8 bits: r coordinate (msb unused)
-                */
-            byte[] gridState = new byte[grideSize * 2];
-            gridState[0]  = (byte) q;
-            gridState[0] |= (byte) (snakeRight ? 0b_1000_0000 : 0);
-            gridState[1]  = (byte) r;    
-            int bytesUsed = 2;
+        //            Next 7 bits: q coordinate
+        //            Next 8 bits: r coordinate (msb unused)
+        //         */
+        //     byte[] gridState = new byte[grideSize * 2];
+        //     gridState[0]  = (byte) q;
+        //     gridState[0] |= (byte) (snakeRight ? 0b_1000_0000 : 0);
+        //     gridState[1]  = (byte) r;    
+        //     int bytesUsed = 2;
 
-            while (q != -1)
-            {
-                TileState startTS = GetTileState(ref q, ref r, ref snakeRight);
-                TileState nextTS  = PeekNextTileState(q, r);
-                byte      copies  = 1;
+        //     while (q != -1)
+        //     {
+        //         TileState startTS = GetTileState(ref q, ref r, ref snakeRight);
+        //         TileState nextTS  = PeekNextTileState(q, r);
+        //         byte      copies  = 1;
 
-                while (CanContinuePacking(copies, startTS, nextTS))
-                {
-                        // Side-Effect: Updates q and r to next tile
-                    GetTileState(ref q, ref r, ref snakeRight);
+        //         while (CanContinuePacking(copies, startTS, nextTS))
+        //         {
+        //                 // Side-Effect: Updates q and r to next tile
+        //             GetTileState(ref q, ref r, ref snakeRight);
 
-                        // Get next tile w/out updating q and r
-                    nextTS = PeekNextTileState(q, r);
-                    ++copies;
-                }
+        //                 // Get next tile w/out updating q and r
+        //             nextTS = PeekNextTileState(q, r);
+        //             ++copies;
+        //         }
 
-                gridState[bytesUsed++] = GetPlayerAndTilesByte(startTS, copies);
-                gridState[bytesUsed++] = (byte) startTS.GetInfluence();
-            }
+        //         gridState[bytesUsed++] = GetPlayerAndTilesByte(startTS, copies);
+        //         gridState[bytesUsed++] = (byte) startTS.GetInfluence();
+        //     }
 
-            byte[] payload = new byte[bytesUsed];
-            Array.ConstrainedCopy(gridState, 0, payload, 0, bytesUsed);
-            return payload;
-        }
+        //     byte[] payload = new byte[bytesUsed];
+        //     Array.ConstrainedCopy(gridState, 0, payload, 0, bytesUsed);
+        //     return payload;
+        // }
 
-        private bool
-        CanContinuePacking(byte copies, TileState startTS, TileState nextTS)
-        {
-            return copies < 32
-                && nextTS?.GetInfluence() == (byte) startTS.GetInfluence() 
-                && nextTS?.GetOwner() == startTS.GetOwner();
-        }
+        // private bool
+        // CanContinuePacking(byte copies, TileState startTS, TileState nextTS)
+        // {
+        //     return copies < 32
+        //         && nextTS?.GetInfluence() == (byte) startTS.GetInfluence() 
+        //         && nextTS?.GetOwner() == startTS.GetOwner();
+        // }
 
 
-        private byte GetPlayerAndTilesByte(TileState startTS, byte copies)
-        {
-            byte   result = 0;
-            Player owner  = startTS.GetOwner();
+        // private byte GetPlayerAndTilesByte(TileState startTS, byte copies)
+        // {
+        //     byte   result = 0;
+        //     Player owner  = startTS.GetOwner();
 
-            if (owner?.Id is null)  result |= 0b111_00000;
-            else if (owner.Id == 0) result |= 0b000_00000;
-            else if (owner.Id == 1) result |= 0b001_00000;
-            else if (owner.Id == 2) result |= 0b010_00000;
-            else if (owner.Id == 3) result |= 0b011_00000;
-            else if (owner.Id == 4) result |= 0b100_00000;
-            else if (owner.Id == 5) result |= 0b101_00000;
+        //     if (owner?.Id is null)  result |= 0b111_00000;
+        //     else if (owner.Id == 0) result |= 0b000_00000;
+        //     else if (owner.Id == 1) result |= 0b001_00000;
+        //     else if (owner.Id == 2) result |= 0b010_00000;
+        //     else if (owner.Id == 3) result |= 0b011_00000;
+        //     else if (owner.Id == 4) result |= 0b100_00000;
+        //     else if (owner.Id == 5) result |= 0b101_00000;
 
-                // Right 5 bits are the # of contiguous tiles matching startTS
-            result |= copies;
+        //         // Right 5 bits are the # of contiguous tiles matching startTS
+        //     result |= copies;
 
-            return result;
-        }
+        //     return result;
+        // }
 
         [PunRPC]
         private void RPC_CalcBuffer()

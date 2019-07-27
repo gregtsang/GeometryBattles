@@ -9,7 +9,7 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         protected int q, r;
         protected Player player;
-        protected int hp = 100;
+        protected int hp;
 
         public int Q { get => q; }
         public int R { get => r; }
