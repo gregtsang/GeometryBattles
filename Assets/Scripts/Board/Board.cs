@@ -39,10 +39,10 @@ namespace GeometryBattles.BoardManager
 
             CreatePlayers();
             CreateBases();
-            //resource.InitResourceTiles(boardState.GetBases(), baseOffset, boardWidth, numPlayers);
-
             string shape = numPlayers == 2 ? "rhombus" : "hexagon";    
             CreateBoard(shape);
+            resource.InitResourceTiles(boardState.GetBases(), baseOffset, boardWidth, numPlayers);
+
             StartCoroutine(SetBoard());
         }
 

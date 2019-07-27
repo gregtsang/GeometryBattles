@@ -209,7 +209,7 @@ MonoBehaviour:
     type: 3}
   boardWidth: 25
   baseOffset: 2
-  numPlayers: 6
+  numPlayers: 3
   playerColors:
   - {r: 0.13864839, g: 0.7930688, b: 0.9816306, a: 1}
   - {r: 0.67660415, g: 0, b: 1.0038143, a: 1}
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f42e8589f7f47aeb140909bbb300f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceTilesPerSide: 5
+  resourceTilesPerPlayer: 5
   minDistance: 3
   startResource: 0
   miningAmount: 1
