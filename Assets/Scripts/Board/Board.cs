@@ -224,6 +224,8 @@ namespace GeometryBattles.BoardManager
                     StartCoroutine(SetBase(curr[0], curr[1], i));
                 }
             }
+
+            yield return new WaitForSeconds(20);
             boardState.StartGame();
         }
 
