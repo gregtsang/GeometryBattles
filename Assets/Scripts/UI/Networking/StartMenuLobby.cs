@@ -15,10 +15,10 @@ namespace GeometryBattles.MenuUI
         [SerializeField] TMP_Text statusText = null;
 
         [Header("Join Game Fields")]
-        [SerializeField] TMP_Text joinGameNameField = null;
+        [SerializeField] TMP_InputField joinGameNameField = null;
 
         [Header("Create Game Fields")]
-        [SerializeField] TMP_Text gameNameField = null;
+        [SerializeField] TMP_InputField gameNameField = null;
         [SerializeField] Slider playersCountSlider = null;
         [SerializeField] Toggle publicToggle = null;
 

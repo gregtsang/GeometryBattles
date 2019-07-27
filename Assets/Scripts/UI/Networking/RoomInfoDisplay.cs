@@ -13,7 +13,6 @@ namespace GeometryBattles.MenuUI
     {
         [SerializeField] TMP_InputField roomNameText = null;
         [SerializeField] TextMeshProUGUI playerCountText = null;
-        [SerializeField] Button joinGameButton = null;
 
         [SerializeField] RoomListVertGroup roomListVertGroup = null;
         
@@ -36,17 +35,13 @@ namespace GeometryBattles.MenuUI
             }
             else
             {
-                roomNameText.text = roomInfo.Name;
                 playerCountText.text = roomInfo.PlayerCount.ToString() + " / " + roomInfo.MaxPlayers.ToString();
-                joinGameButton.gameObject.SetActive(true);
             }
         }
 
         public void ClearRoomInfo()
         {
-            roomNameText.text = "";
             playerCountText.text = "";
-            joinGameButton.gameObject.SetActive(false);
         }
 
         override public void OnJoinedLobby()

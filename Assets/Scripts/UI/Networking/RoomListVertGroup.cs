@@ -44,8 +44,12 @@ namespace GeometryBattles.MenuUI
 
         public RoomInfo GetRoomInfoByName(string gameName)
         {
-            RoomInfoSelectable roomInfo;
-            return currentRooms.TryGetValue(gameName, out roomInfo) ? roomInfo.RoomInfo : null;
+            Debug.Log(gameName + "(" + gameName.Length + ")");
+            if (currentRooms.ContainsKey(gameName))
+            {
+                return currentRooms[gameName].RoomInfo;
+            }
+            return null;
         }
 
         private void ResetRoomList()

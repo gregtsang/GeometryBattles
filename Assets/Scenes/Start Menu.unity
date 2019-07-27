@@ -610,7 +610,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 603201667}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3816,6 +3816,7 @@ GameObject:
   m_Component:
   - component: {fileID: 603201667}
   - component: {fileID: 603201668}
+  - component: {fileID: 603201669}
   m_Layer: 5
   m_Name: Room Info
   m_TagString: Untagged
@@ -3834,6 +3835,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1221329548}
   - {fileID: 912274775}
   - {fileID: 132367380}
   - {fileID: 612788336}
@@ -3859,8 +3861,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomNameText: {fileID: 912274774}
   playerCountText: {fileID: 132367381}
-  joinGameButton: {fileID: 612788337}
-  roomListVertGroup: {fileID: 0}
+  roomListVertGroup: {fileID: 1922589664}
+--- !u!222 &603201669
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603201666}
+  m_CullTransparentMesh: 0
 --- !u!1 &607315447
 GameObject:
   m_ObjectHideFlags: 0
@@ -4011,6 +4020,7 @@ GameObject:
   - component: {fileID: 612788339}
   - component: {fileID: 612788338}
   - component: {fileID: 612788337}
+  - component: {fileID: 612788340}
   m_Layer: 5
   m_Name: Join Game Button
   m_TagString: Untagged
@@ -4031,7 +4041,7 @@ RectTransform:
   m_Children:
   - {fileID: 2106305620}
   m_Father: {fileID: 603201667}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4131,6 +4141,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 612788335}
   m_CullTransparentMesh: 0
+--- !u!114 &612788340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612788335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1afead5bd85f2b041949077c09e41790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textInputField: {fileID: 912274774}
+  minChars: 3
 --- !u!1 &657880602
 GameObject:
   m_ObjectHideFlags: 0
@@ -4979,7 +5003,7 @@ RectTransform:
   m_Children:
   - {fileID: 821660923}
   m_Father: {fileID: 603201667}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -6086,6 +6110,80 @@ RectTransform:
   m_AnchoredPosition: {x: 402.1, y: 263.5}
   m_SizeDelta: {x: 313.5, y: 64.2}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1221329547
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1221329548}
+  - component: {fileID: 1221329550}
+  - component: {fileID: 1221329549}
+  m_Layer: 5
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1221329548
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221329547}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 603201667}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -247.78, y: 27}
+  m_SizeDelta: {x: 595.55, y: 309.7}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1221329549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221329547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0.9773574, b: 1, a: 0.039215688}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &1221329550
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1221329547}
+  m_CullTransparentMesh: 0
 --- !u!1 &1249055037
 GameObject:
   m_ObjectHideFlags: 0
@@ -7979,8 +8077,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   statusText: {fileID: 2048676060}
-  joinGameNameField: {fileID: 0}
-  gameNameField: {fileID: 232672945}
+  joinGameNameField: {fileID: 912274774}
+  gameNameField: {fileID: 570776738}
   playersCountSlider: {fileID: 33287268}
   publicToggle: {fileID: 1218657839}
 --- !u!1 &1737323472
@@ -10969,16 +11067,15 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: join
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4fd20215e7c22d741a7ec1b03054da73, type: 2}
-  m_sharedMaterial: {fileID: -4905307858969015962, guid: 4fd20215e7c22d741a7ec1b03054da73,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
