@@ -32,5 +32,6 @@ MonoBehaviour:
   - RPC_CalcBuffer
   - RPC_ChangeReadyState
   - RPC_SetResourceTileLocation
+  - RPC_SetColors
   DisableAutoOpenWizard: 1
   ShowSettings: 1
