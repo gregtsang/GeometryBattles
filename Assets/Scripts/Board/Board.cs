@@ -78,7 +78,7 @@ namespace GeometryBattles.BoardManager
                     currTile.SetNextColor(randColor);
                     randColor.a = 0.0f;
                     tile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", randColor);
-                    boardState.InitNode(currTile, q, r);
+                    boardState.InitNode(q, r, currTile);
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace GeometryBattles.BoardManager
             Vector3 basePos = boardState.GetNodeTile(q, r).transform.position;
             basePos += new Vector3(0.0f, dropDistance, 0.0f);
             GameObject currBase = Instantiate(basePrefab, basePos, basePrefab.transform.rotation) as GameObject;
-            currBase.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", playerColors[player]);
+            currBase.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", playerColors[player] * 2);
             Color trailColor = playerColors[player] * 2;
             currBase.GetComponent<TrailRenderer>().material.SetColor("_BaseColor", trailColor);
             while (currBase.transform.position.y > 0.5f)

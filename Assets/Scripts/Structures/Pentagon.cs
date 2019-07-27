@@ -67,7 +67,7 @@ namespace GeometryBattles.StructureManager
         public override void Upgrade()
         {
             stats.Upgrade();
-            boardState.SetNodeHP(this.q, this.r, stats.currLevel.maxHP);
+            boardState.SetNodeShield(this.q, this.r, stats.currLevel.maxHP);
         }
 
         public override void Destroy()

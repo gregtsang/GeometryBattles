@@ -23,7 +23,7 @@ namespace GeometryBattles.StructureManager
                 for (int j = Mathf.Max(-range, -range - i); j <= Mathf.Min(range, range - i); j++)
                 {
                     if (this.q + i >= 0 && this.r + j >= 0)
-                        boardState.SetBuff(this.q + i, this.r + j, boardState.GetNodeOwner(this.q, this.r), strength);
+                        boardState.SetNodeBuff(this.q + i, this.r + j, boardState.GetNodeOwner(this.q, this.r), strength);
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace GeometryBattles.StructureManager
         public override void Upgrade()
         {
             stats.Upgrade();
-            boardState.SetNodeHP(this.q, this.r, stats.currLevel.maxHP);
+            boardState.SetNodeShield(this.q, this.r, stats.currLevel.maxHP);
             Buff(stats.currLevel.range, stats.currLevel.strength);
         }
 

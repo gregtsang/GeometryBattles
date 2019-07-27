@@ -8,18 +8,18 @@ namespace GeometryBattles.BoardManager
     {
         public TileState() {}
 
-        public TileState(Tile tile, Player owner, int influence)
+        public TileState(Tile tile)
         {
             this.tile = tile;
-            this.owner = owner;
-            this.influence = influence;
-            this.structureHP = 0;
+            this.owner = null;
+            this.influence = 0;
+            this.shield = 0;
         }
 
         Tile tile;
         Player owner;
         int influence;
-        int structureHP;
+        int shield;
 
         Dictionary<Player, int> buff = new Dictionary<Player, int>();
 
@@ -78,24 +78,24 @@ namespace GeometryBattles.BoardManager
             this.buff[player] = this.buff.ContainsKey(player) ? Mathf.Max(buff, this.buff[player]) : buff;
         }
 
-        public int GetStructureHP()
+        public int GetShield()
         {
-            return structureHP;
+            return shield;
         }
 
-        public void SetStructureHP(int hp)
+        public void SetShield(int hp)
         {
-            structureHP = hp;
+            shield = hp;
         }
 
-        public void AddStructureHP(int amount, int max)
+        public void AddShield(int amount, int max)
         {
-            structureHP = Mathf.Min(structureHP + amount, max);
+            shield = Mathf.Min(shield + amount, max);
         }
 
-        public void SubStructureHP(int amount)
+        public void SubShield(int amount)
         {
-            structureHP = Mathf.Max(structureHP - amount, 0);
+            shield = Mathf.Max(shield - amount, 0);
         }
     }
 }
