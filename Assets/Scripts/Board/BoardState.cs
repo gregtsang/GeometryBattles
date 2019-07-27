@@ -192,6 +192,16 @@ namespace GeometryBattles.BoardManager
             buffer[coords].SetBuff(player, buff);
         }
 
+        public List<Vector2Int> GetBases()
+        {
+            List<Vector2Int> res = new List<Vector2Int>();
+            foreach (Vector2Int b in bases.Values)
+            {
+                res.Add(b);
+            }
+            return res;
+        }
+
         public void AddBase(int q, int r, Player player)
         {
             bases[player] = new Vector2Int(q, r);

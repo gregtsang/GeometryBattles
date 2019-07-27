@@ -32,16 +32,17 @@ namespace GeometryBattles.BoardManager
         void Awake()
         {   
             boardState.SetCap(boardWidth);
-            //resource.InitResourceTiles(boardWidth, baseOffset);
 
             boardState.SetGaps();
             this.tileWidth = boardState.GetTileWidth();
             this.tileLength = boardState.GetTileLength();
 
-            string shape = numPlayers == 2 ? "rhombus" : "hexagon";
-                
+            CreatePlayers();
+            CreateBases();
+            //resource.InitResourceTiles(boardState.GetBases(), baseOffset, boardWidth, numPlayers);
+
+            string shape = numPlayers == 2 ? "rhombus" : "hexagon";    
             CreateBoard(shape);
-            CreatePlayers(numPlayers);
             StartCoroutine(SetBoard());
         }
 
@@ -191,8 +192,8 @@ namespace GeometryBattles.BoardManager
             }
             else if (numPlayers == 3)
             {
-                Vector3Int curr = new Vector3Int(boardWidth - 1, baseOffset, 1 - boardWidth - baseOffset);
-                Vector3Int center = new Vector3Int(boardWidth - 1, boardWidth - 1, 2 - 2 * boardWidth);
+                Vector2Int curr = new Vector2Int(boardWidth - 1, baseOffset);
+                Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
                 StartCoroutine(SetBase(curr[0], curr[1], 0));
                 for (int i = 1; i < numPlayers; i++)
                 {
@@ -202,8 +203,8 @@ namespace GeometryBattles.BoardManager
             }
             else if (numPlayers == 6)
             {
-                Vector3Int curr = new Vector3Int(boardWidth - 1, baseOffset, 1 - boardWidth - baseOffset);
-                Vector3Int center = new Vector3Int(boardWidth - 1, boardWidth - 1, 2 - 2 * boardWidth);
+                Vector2Int curr = new Vector2Int(boardWidth - 1, baseOffset);
+                Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
                 StartCoroutine(SetBase(curr[0], curr[1], 0));
                 for (int i = 1; i < numPlayers; i++)
                 {
@@ -230,6 +231,37 @@ namespace GeometryBattles.BoardManager
             fadeCount++;
         }
 
+        void CreateBases()
+        {
+            if (numPlayers == 2)
+            {
+                boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
+                boardState.AddBase(boardWidth - baseOffset - 1, baseOffset, boardState.GetPlayer(1));
+            }
+            else if (numPlayers == 3)
+            {
+                Vector2Int curr = new Vector2Int(boardWidth - 1, baseOffset);
+                Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
+                boardState.AddBase(curr[0], curr[1], boardState.GetPlayer(0));
+                for (int i = 1; i < numPlayers; i++)
+                {
+                    curr = Rotate120(curr, center);
+                    boardState.AddBase(curr[0], curr[1], boardState.GetPlayer(i));
+                }
+            }
+            else if (numPlayers == 6)
+            {
+                Vector2Int curr = new Vector2Int(boardWidth - 1, baseOffset);
+                Vector2Int center = new Vector2Int(boardWidth - 1, boardWidth - 1);
+                boardState.AddBase(curr[0], curr[1], boardState.GetPlayer(0));
+                for (int i = 1; i < numPlayers; i++)
+                {
+                    curr = Rotate60(curr, center);
+                    boardState.AddBase(curr[0], curr[1], boardState.GetPlayer(i));
+                }
+            }
+        }
+
         IEnumerator SetBase(int q, int r, int player)
         {
             Vector3 basePos = boardState.GetNodeTile(q, r).transform.position;
@@ -245,26 +277,25 @@ namespace GeometryBattles.BoardManager
                 yield return null;
             }
             boardState.SetNode(q, r, boardState.GetPlayer(player));
-            boardState.AddBase(q, r, boardState.GetPlayer(player));
         }
 
-        Vector3Int Rotate60(Vector3Int curr, Vector3Int center)
+        Vector2Int Rotate60(Vector2Int curr, Vector2Int center)
         {
-            Vector3Int temp = curr - center;
-            Vector3Int res = new Vector3Int(-temp[2], -temp[0], -temp[1]);
+            Vector3Int temp = new Vector3Int(curr[0] - center[0], curr[1] - center[1], -curr[0] - curr[1] + center[0] + center[1]);
+            Vector2Int res = new Vector2Int(-temp[1], -temp[2]);
             res += center;
             return res;
         }
 
-        Vector3Int Rotate120(Vector3Int curr, Vector3Int center)
+        Vector2Int Rotate120(Vector2Int curr, Vector2Int center)
         {
-            Vector3Int temp = curr - center;
-            Vector3Int res = new Vector3Int(temp[1], temp[2], temp[0]);
+            Vector3Int temp = new Vector3Int(curr[0] - center[0], curr[1] - center[1], -curr[0] - curr[1] + center[0] + center[1]);
+            Vector2Int res = new Vector2Int(temp[2], temp[0]);
             res += center;
             return res;
         }
 
-        void CreatePlayers(int numPlayers)
+        void CreatePlayers()
         {
             for (int i = 0; i < numPlayers; i++)
             {
