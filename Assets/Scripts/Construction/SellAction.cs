@@ -42,12 +42,16 @@ namespace GeometryBattles.Construction
             int q = tile.Q;
             int r = tile.R;
 
-            pv.RPC("RPC_SellTile", RpcTarget.AllViaServer, player, tile);
+            //if (!(pv is null)) Debug.Log("PhotonView exists.");
+            //Debug.Log("Calling RPC_SellTile");
+
+            pv.RPC("RPC_SellTile", RpcTarget.AllViaServer, pid, q, r);
         }
 
         [PunRPC]
         private void RPC_SellTile(int pid, int q, int r)
         {
+            //Debug.Log("Called RPC_SellTile");
             Player player = board.boardState.GetPlayer(pid);
             Tile tile = board.boardState.GetNodeTile(q, r);
 

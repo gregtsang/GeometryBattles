@@ -32,12 +32,14 @@ namespace GeometryBattles.Construction
             int q = tile.Q;
             int r = tile.R;
 
-            pv.RPC("RPC_PurchaseTile", RpcTarget.AllViaServer, player, tile);
+            Debug.Log("Calling purchase tile");
+            pv.RPC("RPC_PurchaseTile", RpcTarget.AllViaServer, pid, q, r);
         }
 
         [PunRPC]
         private void RPC_PurchaseTile(int pid, int q, int r)
         {
+            Debug.Log("Called RPC_PurchaseTile tile");
             Player player = board.boardState.GetPlayer(pid);
             Tile tile = board.boardState.GetNodeTile(q, r);
 
@@ -45,6 +47,7 @@ namespace GeometryBattles.Construction
             {
                 player.AddResource(-1 * GetTileCost(player, tile));                
                 board.boardState.SetNode(tile.Q, tile.R, player);
+                Debug.Log("Tile purchased");
             }
         }
 

@@ -34,5 +34,6 @@ MonoBehaviour:
   - RPC_SetResourceTileLocation
   - RPC_SetColors
   - RPC_PurchaseTile
+  - RPC_SellTile
   DisableAutoOpenWizard: 1
   ShowSettings: 1
