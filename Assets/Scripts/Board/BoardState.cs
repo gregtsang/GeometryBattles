@@ -30,10 +30,13 @@ namespace GeometryBattles.BoardManager
         List<List<TileState>> buffer;
         private int grideSize;
 
+        private PhotonView pv;
+
         void Start()
         {
             StartCoroutine(MineResource());
             calculateGridSize();
+            pv = GetComponent<PhotonView>();
         }
 
         private void calculateGridSize()
@@ -90,7 +93,7 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-      void Update()
+        void Update()
         {
             spreadTimer -= Time.deltaTime;
             UpdateColors();
@@ -100,8 +103,8 @@ namespace GeometryBattles.BoardManager
                 if (PhotonNetwork.IsMasterClient)
                 {
                     CalcBuffer();
+                    pv.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
                 }
-                spreadTimer = spreadRate;
             }
         }
 
@@ -364,6 +367,7 @@ namespace GeometryBattles.BoardManager
                 }
             }
             SwapBuffer();
+            spreadTimer = spreadRate;
         }
 
         void SetColors()
@@ -422,19 +426,21 @@ namespace GeometryBattles.BoardManager
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            int q = 0;
-            int r = 0;
-            bool snakeRight = true;
+            // int q = 0;
+            // int r = 0;
+            // bool snakeRight = true;
 
             if (PhotonNetwork.IsMasterClient && stream.IsWriting)
             {
-                byte[] payload = CompressBoardState(ref q, ref r, ref snakeRight);
-                Debug.Log($"Sending payload of size {payload?.Length ?? 0} bytes");
-                stream.SendNext(payload);
+                // byte[] payload = CompressBoardState(ref q, ref r, ref snakeRight);
+                // Debug.Log($"Sending payload of size {payload?.Length ?? 0} bytes");
+                // stream.SendNext(payload);
+                ;
             }
             else if (!PhotonNetwork.IsMasterClient && !stream.IsWriting)
             {
-                byte[] payload = (byte[]) stream.ReceiveNext();
+                // byte[] payload = (byte[]) stream.ReceiveNext();
+                ;
             }
         }
 
@@ -506,6 +512,14 @@ namespace GeometryBattles.BoardManager
 
             return result;
         }
-        
+
+        [PunRPC]
+        private void RPC_CalcBuffer()
+        {
+            if (!PhotonNetwork.IsMasterClient)
+            {
+                CalcBuffer();
+            }
+        }
     }
 }
