@@ -45,6 +45,7 @@ namespace GeometryBattles.MenuUI
         {
             PhotonNetwork.JoinRoom(joinGameNameField.text);
             Debug.Log("Joining game " + joinGameNameField.text);
+            joinGameNameField.text = "";
             startMenu.ShowConnectingCanvas();
             statusText.text = "Joining Room...";
         }
