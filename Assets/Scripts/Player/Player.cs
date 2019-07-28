@@ -5,7 +5,10 @@ namespace GeometryBattles.PlayerManager
     public class Player : MonoBehaviour
     {   
         [SerializeField] int resource = 0;
+        private int _id;
         Color color;
+
+        public int Id { get => _id; set => _id = value; }
 
         public int GetResource()
         {

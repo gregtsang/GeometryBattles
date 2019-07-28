@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using GeometryBattles.BoardManager;
+using Photon.Pun;
 
 namespace GeometryBattles.UI
 {
@@ -12,7 +13,20 @@ namespace GeometryBattles.UI
         
         private Board board;
 
-        // Start is called before the first frame update
+        private void Awake()
+        {
+            for (int i = 0; i != PhotonNetwork.PlayerList.Length; ++i)
+            {
+                if (PhotonNetwork.PlayerList[i].IsLocal)
+                {
+                    activePlayer = i;
+                }
+            }
+
+            Debug.Log("I am player " + activePlayer);
+        }
+
+            // Start is called before the first frame update
         void Start()
         {
             board = FindObjectOfType<Board>();

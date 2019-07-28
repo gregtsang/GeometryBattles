@@ -16,7 +16,7 @@ MonoBehaviour:
     AppIdRealtime: a0922adf-0187-43c8-8d09-94a4952330f1
     AppIdChat: 
     AppIdVoice: 
-    AppVersion: 0.1
+    AppVersion: 
     UseNameServer: 1
     FixedRegion: usw
     Server: 
@@ -29,8 +29,13 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   RpcList:
+  - RPC_CalcBuffer
   - RPC_ChangeReadyState
   - RPC_StartCountdown
   - RPC_StopCountdown
+  - RPC_SetResourceTileLocation
+  - RPC_SetColors
+  - RPC_PurchaseTile
+  - RPC_SellTile
   DisableAutoOpenWizard: 1
   ShowSettings: 1

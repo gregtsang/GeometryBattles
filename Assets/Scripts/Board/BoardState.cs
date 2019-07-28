@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
+using Photon.Pun;
+using System;
 
 namespace GeometryBattles.BoardManager
 {
-    public class BoardState : MonoBehaviour
+    public class BoardState : MonoBehaviour, IPunObservable
     {
         public Resource resource;
         List<Player> players = new List<Player>();
@@ -27,6 +29,8 @@ namespace GeometryBattles.BoardManager
         Dictionary<Vector2Int, TileState> grid;
         Dictionary<Vector2Int, TileState> buffer;
 
+        private PhotonView photonView;
+
         void Update()
         {
             if (start)
@@ -35,11 +39,18 @@ namespace GeometryBattles.BoardManager
                 UpdateColors();
                 if (spreadTimer <= 0.0f)
                 {
-                    CalcBuffer();
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
+                    }
                     SetColors();
                     spreadTimer = spreadRate;
                 }
             }
+        }
+
+        private void Start() {
+            photonView = GetComponent<PhotonView>();
         }
 
         public void StartGame()
@@ -72,6 +83,7 @@ namespace GeometryBattles.BoardManager
 
         public Player GetPlayer(int i)
         {
+            if (i < 0 || i >= players.Count) return null;
             return players[i];
         }
 
@@ -382,6 +394,102 @@ namespace GeometryBattles.BoardManager
                 EventManager.RaiseOnResourceUpdate();
                 yield return new WaitForSeconds(resource.miningRate);
             }
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            // int q = 0;
+            // int r = 0;
+            // bool snakeRight = true;
+
+            if (PhotonNetwork.IsMasterClient && stream.IsWriting)
+            {
+                // byte[] payload = CompressBoardState(ref q, ref r, ref snakeRight);
+                // Debug.Log($"Sending payload of size {payload?.Length ?? 0} bytes");
+                // stream.SendNext(payload);
+                ;
+            }
+            else if (!PhotonNetwork.IsMasterClient && !stream.IsWriting)
+            {
+                // byte[] payload = (byte[]) stream.ReceiveNext();
+                ;
+            }
+        }
+
+
+        // Precondition: q and r must be valid positions in the grid
+        // Broken w/ current usage of hash table
+        // private byte[] CompressBoardState(ref int q, ref int r, ref bool snakeRight)
+        // {
+        //         /* First bit: 1xxx_xxxx -> snaking right
+        //                       0xxx_xxxx -> snaking left
+
+        //            Next 7 bits: q coordinate
+        //            Next 8 bits: r coordinate (msb unused)
+        //         */
+        //     byte[] gridState = new byte[grideSize * 2];
+        //     gridState[0]  = (byte) q;
+        //     gridState[0] |= (byte) (snakeRight ? 0b_1000_0000 : 0);
+        //     gridState[1]  = (byte) r;    
+        //     int bytesUsed = 2;
+
+        //     while (q != -1)
+        //     {
+        //         TileState startTS = GetTileState(ref q, ref r, ref snakeRight);
+        //         TileState nextTS  = PeekNextTileState(q, r);
+        //         byte      copies  = 1;
+
+        //         while (CanContinuePacking(copies, startTS, nextTS))
+        //         {
+        //                 // Side-Effect: Updates q and r to next tile
+        //             GetTileState(ref q, ref r, ref snakeRight);
+
+        //                 // Get next tile w/out updating q and r
+        //             nextTS = PeekNextTileState(q, r);
+        //             ++copies;
+        //         }
+
+        //         gridState[bytesUsed++] = GetPlayerAndTilesByte(startTS, copies);
+        //         gridState[bytesUsed++] = (byte) startTS.GetInfluence();
+        //     }
+
+        //     byte[] payload = new byte[bytesUsed];
+        //     Array.ConstrainedCopy(gridState, 0, payload, 0, bytesUsed);
+        //     return payload;
+        // }
+
+        // private bool
+        // CanContinuePacking(byte copies, TileState startTS, TileState nextTS)
+        // {
+        //     return copies < 32
+        //         && nextTS?.GetInfluence() == (byte) startTS.GetInfluence() 
+        //         && nextTS?.GetOwner() == startTS.GetOwner();
+        // }
+
+
+        // private byte GetPlayerAndTilesByte(TileState startTS, byte copies)
+        // {
+        //     byte   result = 0;
+        //     Player owner  = startTS.GetOwner();
+
+        //     if (owner?.Id is null)  result |= 0b111_00000;
+        //     else if (owner.Id == 0) result |= 0b000_00000;
+        //     else if (owner.Id == 1) result |= 0b001_00000;
+        //     else if (owner.Id == 2) result |= 0b010_00000;
+        //     else if (owner.Id == 3) result |= 0b011_00000;
+        //     else if (owner.Id == 4) result |= 0b100_00000;
+        //     else if (owner.Id == 5) result |= 0b101_00000;
+
+        //         // Right 5 bits are the # of contiguous tiles matching startTS
+        //     result |= copies;
+
+        //     return result;
+        // }
+
+        [PunRPC]
+        private void RPC_CalcBuffer()
+        {
+                CalcBuffer();
         }
     }
 }
