@@ -11,7 +11,7 @@ public class NetworkedManager : MonoBehaviour
    private void Awake()
    {
       PhotonNetwork.OfflineMode = offlineMode;
-      if (offlineMode)
+      if (PhotonNetwork.OfflineMode)
       {
          PhotonNetwork.CreateRoom("offline");
       }
