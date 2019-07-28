@@ -27,8 +27,11 @@ namespace GeometryBattles.UI
         private void OnMouseDown()
         {
             string errMsg = "";
-            var actions = HexActionManager.getViableActions(uiManager.GetActivePlayer(), tilePrefab);
+            var actions = HexActionManager.getViableActions
+            (uiManager.GetActivePlayer(), tilePrefab);
             //DebugLogActions(actions);
+
+            Debug.Log($"I clicked as {uiManager.GetActivePlayer().Id}");
 
             if (actions.Count == 1)
             {

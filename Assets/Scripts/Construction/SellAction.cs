@@ -4,6 +4,7 @@ using UnityEngine;
 using GeometryBattles.HexAction;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
+using Photon.Pun;
 
 namespace GeometryBattles.Construction
 {
@@ -36,12 +37,31 @@ namespace GeometryBattles.Construction
 
         public void doAction(Player player, Tile tile)
         {
+            PhotonView pv = GetComponent<PhotonView>();
+            int pid = player.Id;
+            int q = tile.Q;
+            int r = tile.R;
+
+            //if (!(pv is null)) Debug.Log("PhotonView exists.");
+            //Debug.Log("Calling RPC_SellTile");
+
+            pv.RPC("RPC_SellTile", RpcTarget.AllViaServer, pid, q, r);
+        }
+
+        [PunRPC]
+        private void RPC_SellTile(int pid, int q, int r)
+        {
+            //Debug.Log("Called RPC_SellTile");
+            Player player = board.boardState.GetPlayer(pid);
+            Tile tile = board.boardState.GetNodeTile(q, r);
+
             if (canDoAction(player, tile))
             {
                 player.AddResource(GetTileValue(tile));
                 board.boardState.SetNode(tile.Q, tile.R, null, 0);
             }
         }
+
 
         public string GetTipText(Player player, Tile tile)
         {

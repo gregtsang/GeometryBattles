@@ -175,4 +175,4 @@ MonoBehaviour:
   minZoom: 7
   maxZoom: 150
   minRotation: 13
-  maxRotation: 90
+  maxRotation: 89.9

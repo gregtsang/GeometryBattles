@@ -4,6 +4,7 @@ using UnityEngine;
 using GeometryBattles.HexAction;
 using GeometryBattles.PlayerManager;
 using GeometryBattles.BoardManager;
+using Photon.Pun;
 
 namespace GeometryBattles.Construction
 {
@@ -26,10 +27,27 @@ namespace GeometryBattles.Construction
 
         public void doAction(Player player, Tile tile)
         {
+            PhotonView pv = GetComponent<PhotonView>();
+            int pid = player.Id;
+            int q = tile.Q;
+            int r = tile.R;
+
+            Debug.Log("Calling purchase tile");
+            pv.RPC("RPC_PurchaseTile", RpcTarget.AllViaServer, pid, q, r);
+        }
+
+        [PunRPC]
+        private void RPC_PurchaseTile(int pid, int q, int r)
+        {
+            Debug.Log($"Called RPC_PurchaseTile for player {pid} @ tile ({q}, {r})");
+            Player player = board.boardState.GetPlayer(pid);
+            Tile tile = board.boardState.GetNodeTile(q, r);
+
             if (canDoAction(player, tile))
             {
                 player.AddResource(-1 * GetTileCost(player, tile));                
                 board.boardState.SetNode(tile.Q, tile.R, player);
+                Debug.Log("Tile purchased");
             }
         }
 

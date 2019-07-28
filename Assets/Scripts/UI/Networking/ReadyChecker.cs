@@ -66,7 +66,7 @@ public class ReadyChecker : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.Log("STARTING GAME...");
-            SceneManager.LoadScene(1);
+            PhotonNetwork.LoadLevel(1);;
         }
     }
 
