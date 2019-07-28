@@ -47,6 +47,12 @@ namespace GeometryBattles.MenuUI
             ResetRoomList();
         }
 
+        override public void OnJoinedLobby()
+        {
+            ResetRoomList();
+            gameNameInputField.text = "";
+        }
+
         public RoomInfo GetRoomInfoByName(string gameName)
         {
             if (currentRooms.ContainsKey(gameName))
@@ -62,6 +68,7 @@ namespace GeometryBattles.MenuUI
             {
                 Destroy(roomInfo.gameObject);
             }
+            currentRooms = new Dictionary<string, RoomInfoSelectable>();
         }
 
         private void AddRoomToList(RoomInfo newRoom)
@@ -86,6 +93,10 @@ namespace GeometryBattles.MenuUI
                 {
                     Destroy(child.gameObject);
                     currentRooms.Remove(name);
+                    if (gameNameInputField.text == name)
+                    {
+                        gameNameInputField.text = "";
+                    }
                     break;
                 }
             }
