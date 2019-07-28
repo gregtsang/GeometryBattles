@@ -27,7 +27,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3192035524350768583}
+  - {fileID: 8510145826787012368}
   - {fileID: 5121737776393210995}
   - {fileID: 5121737777226419906}
   - {fileID: 5121737776867737068}
@@ -360,11 +360,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5321664550817974417}
     m_Modifications:
-    - target: {fileID: 6509530979159464691, guid: 47969af662b3c48f3bad1bb0d4096e07,
-        type: 3}
-      propertyPath: m_Name
-      value: Board
-      objectReference: {fileID: 0}
     - target: {fileID: 6509530979159464689, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -420,6 +415,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464691, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: m_Name
+      value: Board
+      objectReference: {fileID: 0}
     - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
       propertyPath: numPlayers
@@ -437,7 +437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47969af662b3c48f3bad1bb0d4096e07, type: 3}
---- !u!4 &3192035524350768583 stripped
+--- !u!4 &8510145826787012368 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6509530979159464689, guid: 47969af662b3c48f3bad1bb0d4096e07,
     type: 3}
