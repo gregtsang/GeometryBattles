@@ -30,5 +30,7 @@ MonoBehaviour:
   RunInBackground: 1
   RpcList:
   - RPC_ChangeReadyState
+  - RPC_StartCountdown
+  - RPC_StopCountdown
   DisableAutoOpenWizard: 1
   ShowSettings: 1

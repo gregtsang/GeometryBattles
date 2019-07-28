@@ -14,7 +14,7 @@ namespace GeometryBattles.MenuUI
         [SerializeField] TMP_InputField roomNameText = null;
         [SerializeField] TextMeshProUGUI playerCountText = null;
 
-        [SerializeField] RoomListVertGroup roomListVertGroup = null;
+        [SerializeField] RoomList roomList = null;
         
         private void Start()
         {
@@ -26,7 +26,7 @@ namespace GeometryBattles.MenuUI
 
         public void SetRoomInfo(string roomName)
         {
-            RoomInfo roomInfo = roomListVertGroup.GetRoomInfoByName(roomName);
+            RoomInfo roomInfo = roomList.GetRoomInfoByName(roomName);
             
             if (roomInfo == null)
             {

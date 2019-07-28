@@ -45,8 +45,14 @@ namespace GeometryBattles.MenuUI
         {
             PhotonNetwork.JoinRoom(joinGameNameField.text);
             Debug.Log("Joining game " + joinGameNameField.text);
+            joinGameNameField.text = "";
             startMenu.ShowConnectingCanvas();
             statusText.text = "Joining Room...";
+        }
+
+        public void LeaveRoom()
+        {
+            PhotonNetwork.LeaveRoom();
         }
 
         override public void OnCreatedRoom()
@@ -62,6 +68,7 @@ namespace GeometryBattles.MenuUI
         override public void OnJoinedRoom()
         {
             Debug.Log("Joined Room!");
+            startMenu.ShowPreGameCanvas();
         }
 
         override public void OnJoinRoomFailed(short returnCode, string message)

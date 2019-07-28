@@ -9,9 +9,11 @@ using UnityEngine.EventSystems;
 
 namespace GeometryBattles.MenuUI
 {
-    public class RoomListVertGroup : MonoBehaviourPunCallbacks
+    public class RoomList : MonoBehaviourPunCallbacks
     {
         [SerializeField] TMP_InputField gameNameInputField = null;
+        
+        [SerializeField] Transform targetTransform = null;
 
         Dictionary<string, RoomInfoSelectable> currentRooms = new Dictionary<string, RoomInfoSelectable>();
 
@@ -47,7 +49,6 @@ namespace GeometryBattles.MenuUI
 
         public RoomInfo GetRoomInfoByName(string gameName)
         {
-            Debug.Log(gameName + "(" + gameName.Length + ")");
             if (currentRooms.ContainsKey(gameName))
             {
                 return currentRooms[gameName].RoomInfo;
@@ -72,14 +73,14 @@ namespace GeometryBattles.MenuUI
 
             newGameObject.AddComponent<TextMeshProUGUI>().text = newRoom.Name;
             newGameObject.AddComponent<Selectable>();
-            newGameObject.transform.SetParent(gameObject.transform, false);
+            newGameObject.transform.SetParent(targetTransform, false);
 
             currentRooms.Add(newRoom.Name, roomInfoSelectable);
         }
 
         private void DeleteRoomFromList(string name)
         {
-            foreach (TMP_Text child in gameObject.transform.GetComponentsInChildren<TMP_Text>())
+            foreach (TMP_Text child in targetTransform.GetComponentsInChildren<TMP_Text>())
             {
                 if (child.text == name)
                 {
