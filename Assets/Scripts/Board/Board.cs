@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
+using Photon.Pun;
 
 namespace GeometryBattles.BoardManager
 {
@@ -17,6 +18,7 @@ namespace GeometryBattles.BoardManager
         public int boardWidth;
         public int baseOffset;
         public int numPlayers;
+        int readyCheck = 0;
         [ColorUsageAttribute(true,true)]
         public List<Color> playerColors;
 
@@ -31,6 +33,7 @@ namespace GeometryBattles.BoardManager
 
         void Awake()
         {   
+            PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
             boardState.SetCap(boardWidth);
 
             boardState.SetGaps();
@@ -39,11 +42,33 @@ namespace GeometryBattles.BoardManager
 
             CreatePlayers();
             CreateBases();
-            string shape = numPlayers == 2 ? "rhombus" : "hexagon";    
+            string shape = numPlayers <= 2 ? "rhombus" : "hexagon";    
             CreateBoard(shape);
             resource.InitResourceTiles(boardState.GetBases(), baseOffset, boardWidth, numPlayers);
 
             StartCoroutine(SetBoard());
+        }
+
+        public void OnEvent(ExitGames.Client.Photon.EventData photonEvent)
+        {
+            byte eventCode = photonEvent.Code;
+            Debug.Log(eventCode);
+            if (eventCode == 0)
+            {
+                readyCheck++;
+                if (readyCheck == numPlayers)
+                {
+                    PhotonView pv = gameObject.GetComponent<PhotonView>();
+                    pv.RPC("RPC_StartGame", RpcTarget.AllViaServer);
+                    PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+                }
+            }
+        }
+
+        [PunRPC]
+        private void RPC_StartGame()
+        {
+            boardState.StartGame();
         }
 
         Vector3 CalcPos(Vector2Int boardPos, int numTiles, int rows)
@@ -224,9 +249,29 @@ namespace GeometryBattles.BoardManager
                     StartCoroutine(SetBase(curr[0], curr[1], i));
                 }
             }
+            else if (numPlayers == 1)
+            {
+                StartCoroutine(SetBase(baseOffset, boardWidth - baseOffset - 1, 0));
+            }
 
-            yield return new WaitForSeconds(20);
-            boardState.StartGame();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                readyCheck++;
+            }
+            else
+            {
+                byte evCode = 0;
+                Photon.Realtime.RaiseEventOptions raiseEventOptions = new Photon.Realtime.RaiseEventOptions { Receivers = Photon.Realtime.ReceiverGroup.MasterClient };
+                ExitGames.Client.Photon.SendOptions sendOptions = new ExitGames.Client.Photon.SendOptions { Reliability = true };
+                PhotonNetwork.RaiseEvent(evCode, null, raiseEventOptions, sendOptions);
+            }
+            // Below only for testing
+            if (readyCheck > 0)
+            {
+                PhotonView pv = gameObject.GetComponent<PhotonView>();
+                pv.RPC("RPC_StartGame", RpcTarget.AllViaServer);
+                PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+            }
         }
 
         IEnumerator FadeInTile(int q, int r)
@@ -273,6 +318,10 @@ namespace GeometryBattles.BoardManager
                     curr = Rotate60(curr, center);
                     boardState.AddBase(curr[0], curr[1], boardState.GetPlayer(i));
                 }
+            }
+            else if (numPlayers == 1)
+            {
+                boardState.AddBase(baseOffset, boardWidth - baseOffset - 1, boardState.GetPlayer(0));
             }
         }
 

@@ -23,7 +23,7 @@ namespace GeometryBattles.BoardManager
             if (PhotonNetwork.IsMasterClient)
             {
                 int min = baseOffset;
-                int max = numPlayers == 2 ? boardWidth - baseOffset : 2 * boardWidth - 1 - baseOffset;
+                int max = numPlayers <= 2 ? boardWidth - baseOffset : 2 * boardWidth - 1 - baseOffset;
 
                 List<SerializableVector2Int> resourceTileLocations = 
                     new List<SerializableVector2Int>();

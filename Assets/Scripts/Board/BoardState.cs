@@ -37,9 +37,14 @@ namespace GeometryBattles.BoardManager
             {
                 spreadTimer -= Time.deltaTime;
                 UpdateColors();
-                if (spreadTimer <= 0.0f && PhotonNetwork.IsMasterClient)
+                if (spreadTimer <= 0.0f)
                 {
-                    photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
+                    }
+                    SetColors();
+                    spreadTimer = spreadRate;
                 }
             }
         }
@@ -485,8 +490,6 @@ namespace GeometryBattles.BoardManager
         private void RPC_CalcBuffer()
         {
                 CalcBuffer();
-                SetColors();
-                spreadTimer = spreadRate;
         }
     }
 }
