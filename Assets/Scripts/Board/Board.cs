@@ -34,7 +34,10 @@ namespace GeometryBattles.BoardManager
         void Awake()
         {   
             numPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
-            PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+            }
             boardState.SetCap(boardWidth);
 
             boardState.SetGaps();
@@ -255,17 +258,10 @@ namespace GeometryBattles.BoardManager
                 StartCoroutine(SetBase(baseOffset, boardWidth - baseOffset - 1, 0));
             }
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                readyCheck++;
-            }
-            else
-            {
-                byte evCode = 0;
-                Photon.Realtime.RaiseEventOptions raiseEventOptions = new Photon.Realtime.RaiseEventOptions { Receivers = Photon.Realtime.ReceiverGroup.MasterClient };
-                ExitGames.Client.Photon.SendOptions sendOptions = new ExitGames.Client.Photon.SendOptions { Reliability = true };
-                PhotonNetwork.RaiseEvent(evCode, null, raiseEventOptions, sendOptions);
-            }
+            byte evCode = 0;
+            Photon.Realtime.RaiseEventOptions raiseEventOptions = new Photon.Realtime.RaiseEventOptions { Receivers = Photon.Realtime.ReceiverGroup.MasterClient };
+            ExitGames.Client.Photon.SendOptions sendOptions = new ExitGames.Client.Photon.SendOptions { Reliability = true };
+            PhotonNetwork.RaiseEvent(evCode, null, raiseEventOptions, sendOptions);
         }
 
         IEnumerator FadeInTile(int q, int r)
@@ -281,7 +277,6 @@ namespace GeometryBattles.BoardManager
                 currTile.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", currColor);
                 yield return null;
             }
-            //currTile.gameObject.GetComponent<MeshRenderer>().material.SetFloat("_Surface", 0.0f);
             fadeCount++;
         }
 
