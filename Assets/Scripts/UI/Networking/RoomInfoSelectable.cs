@@ -36,6 +36,7 @@ namespace GeometryBattles.MenuUI
 
         private void UpdateRoomNameText()
         {
+            inputField.text = "";
             inputField.text = roomInfo.Name;
             //roomInfoDisplay.SetRoomInfo(roomInfo);
         }
