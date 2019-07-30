@@ -8,15 +8,32 @@ namespace GeometryBattles.StructureManager
     {
         public Player player;
 
+        bool motion;
         float moveRate;
         float moveTimer = 0.0f;
         int movesLeft = 10;
+        float currRot;
         int q, r;
         int homeQ, homeR;
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
 
         public int Q { get => q; }
         public int R { get => r; }
+
+        void Start()
+        {
+            currRot = gameObject.transform.eulerAngles.y;
+        }
+
+        public bool GetMotion()
+        {
+            return motion;
+        }
+
+        public void SetMotion(bool motion)
+        {
+            this.motion = motion;
+        }
 
         public void SetHome(int q, int r)
         {
@@ -27,6 +44,16 @@ namespace GeometryBattles.StructureManager
         public Vector2Int GetHome()
         {
             return new Vector2Int(homeQ, homeR);
+        }
+
+        public float GetRotation()
+        {
+            return currRot;
+        }
+
+        public void SetRotation(float rot)
+        {
+            currRot = rot;
         }
 
         public void SetCoords(int q, int r)

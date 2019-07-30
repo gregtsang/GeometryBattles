@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using Photon.Pun;
+using GeometryBattles.StructureManager;
 
 namespace GeometryBattles.BoardManager
 {
@@ -30,6 +31,15 @@ namespace GeometryBattles.BoardManager
         float fadeDistance = 50.0f;
         float dropDistance = 200.0f;
         float dropSpeed = -1500.0f;
+
+        public GameObject cube;
+        public StructureStore store;
+        void TestCube()
+        {
+            store = GameObject.FindObjectOfType<StructureStore>();
+            boardState.SetNode(5, 5, boardState.GetPlayer(0));
+            store.AddStructure(5, 5, cube);
+        }
 
         void Awake()
         {   
@@ -65,6 +75,7 @@ namespace GeometryBattles.BoardManager
                     PhotonView pv = gameObject.GetComponent<PhotonView>();
                     pv.RPC("RPC_StartGame", RpcTarget.AllViaServer);
                     PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+                    TestCube();
                 }
             }
         }

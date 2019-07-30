@@ -9,6 +9,11 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
 
+        void Start()
+        {
+            boardState = GameObject.FindObjectOfType<BoardState>();
+        }
+
         void Update()
         {
             List<Structure> destroy = new List<Structure>();
@@ -35,6 +40,7 @@ namespace GeometryBattles.StructureManager
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
             boardState.AddNodeShield(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
+            currStructure.SetHP(currStructure.GetMaxHP());
             structures[new Vector2Int(q, r)] = currStructure;
         }
 
