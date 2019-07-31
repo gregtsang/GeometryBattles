@@ -11,7 +11,6 @@ namespace GeometryBattles.StructureManager
         public StructureStore structureStore;
         Dictionary<Vector2Int, CubeScout> scoutPos = new Dictionary<Vector2Int, CubeScout>();
         HashSet<CubeScout> scouts = new HashSet<CubeScout>();
-        List<CubeScout> destroy;
 
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
@@ -138,7 +137,6 @@ namespace GeometryBattles.StructureManager
                 scout.SetCoords(next[0], next[1]);
                 scoutPos[next] = scout;
             }
-            scout.SetTimer(scout.GetMoveRate());
             scout.DecMoves();
             if (scout.GetMoves() <= 0)
             {

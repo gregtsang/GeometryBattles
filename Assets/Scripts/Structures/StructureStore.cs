@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.BoardManager;
 
@@ -40,8 +41,23 @@ namespace GeometryBattles.StructureManager
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
             boardState.AddNodeShield(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
-            currStructure.SetHP(currStructure.GetMaxHP());
             structures[new Vector2Int(q, r)] = currStructure;
+            StartCoroutine(DissolveIn(currStructure));
+        }
+
+        IEnumerator DissolveIn(Structure structure)
+        {
+            float dissolveRate = 5.0f;
+            float dissolveTimer = dissolveRate;
+            while (structure.Mat.GetFloat("_Glow") != 1.0f)
+            {
+                dissolveTimer -= Time.deltaTime;
+                structure.Mat.SetFloat("_Glow", 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
+                structure.Mat.SetFloat("_Level", 0.5f - 1.65f * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
+                structure.SetHP((int)(structure.GetMaxHP() * (1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate)));
+                yield return null;
+            }
+            structure.StartEffect();
         }
 
         public void RemoveStructure(int q, int r)

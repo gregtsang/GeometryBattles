@@ -10,7 +10,6 @@ namespace GeometryBattles.StructureManager
 
         bool motion;
         float moveRate;
-        float moveTimer = 0.0f;
         int movesLeft = 10;
         float currRot;
         int q, r;
@@ -80,16 +79,6 @@ namespace GeometryBattles.StructureManager
         public float GetMoveRate()
         {
             return moveRate;
-        }
-
-        public void SetTimer(float time)
-        {
-            this.moveTimer = time;
-        }
-
-        public float GetTimer()
-        {
-            return moveTimer;
         }
 
         public void DecMoves()
