@@ -269,6 +269,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activePlayer: 0
+  hexActionCanvasPrefab: {fileID: 4397913264887874083, guid: 4d3bb775f1a774d4aaaa451cd454af88,
+    type: 3}
+  hexActionOptionPrefab: {fileID: 3661725319351172521, guid: 4aa27a246adb5c043ae00c7c2987bb4f,
+    type: 3}
 --- !u!1 &5121737777226419909
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,6 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5121737777226419906}
   - component: {fileID: 5121737777226419907}
+  - component: {fileID: 8264242676864768832}
   - component: {fileID: 8228663410458858780}
   - component: {fileID: 5327724417247064271}
   m_Layer: 0
@@ -317,6 +322,20 @@ MonoBehaviour:
   _displayname: Buy Hex
   costPerDistance: 5
   maxCost: 999
+--- !u!114 &8264242676864768832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121737777226419909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbefbc2c31fc88c4db7824a779da7acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _displayName: Sell Tile
+  valueFactor: 0.5
 --- !u!114 &8228663410458858780
 MonoBehaviour:
   m_ObjectHideFlags: 0
