@@ -56,7 +56,11 @@ namespace GeometryBattles.BoardManager
         public void StartGame()
         {
             start = true;
-            StartCoroutine(MineResource());
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StartCoroutine(MineResourceRepeat());
+            }
         }
 
         public void SetGaps()
@@ -368,11 +372,19 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        IEnumerator MineResource()
+        IEnumerator MineResourceRepeat()
         {
             while (true)
             {
-                Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
+                photonView.RPC("RPC_MineResource", RpcTarget.AllViaServer);
+                yield return new WaitForSeconds(resource.miningRate);
+            }
+        }
+
+        [PunRPC]
+        private void RPC_MineResource()
+        {
+            Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
                 foreach (Player p in players)
                 {
                     playerMining[p] = resource.miningAmount;
@@ -392,8 +404,6 @@ namespace GeometryBattles.BoardManager
                     p.AddResource(playerMining[p]);
                 }
                 EventManager.RaiseOnResourceUpdate();
-                yield return new WaitForSeconds(resource.miningRate);
-            }
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
