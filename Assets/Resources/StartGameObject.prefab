@@ -279,7 +279,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5121737777226419906}
   - component: {fileID: 5121737777226419907}
-  - component: {fileID: 5121737777226419904}
+  - component: {fileID: 8228663410458858780}
   - component: {fileID: 5327724417247064271}
   m_Layer: 0
   m_Name: HexActions
@@ -317,7 +317,7 @@ MonoBehaviour:
   _displayname: Buy Hex
   costPerDistance: 5
   maxCost: 999
---- !u!114 &5121737777226419904
+--- !u!114 &8228663410458858780
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -326,11 +326,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5121737777226419909}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbefbc2c31fc88c4db7824a779da7acc, type: 3}
+  m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _displayName: Sell Tile
-  valueFactor: 0.05
+  _displayname: Build Pyramid
+  structurePrefab: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
+    type: 3}
 --- !u!114 &5327724417247064271
 MonoBehaviour:
   m_ObjectHideFlags: 0
