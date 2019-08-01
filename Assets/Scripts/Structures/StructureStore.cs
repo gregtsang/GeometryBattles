@@ -10,9 +10,10 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
 
-        void Start()
+        void OnEnable()
         {
             boardState = GameObject.FindObjectOfType<BoardState>();
+            EventManager.onCreateBase += AddBase;
             EventManager.onStructureDamage += DamageStructure;
         }
 
@@ -26,8 +27,24 @@ namespace GeometryBattles.StructureManager
             }
             else
             {
-                RemoveStructure(q, r);
+                if (currStructure is Base)
+                {
+                    // 
+                }
+                else
+                {
+                    RemoveStructure(q, r);
+                }
             }
+        }
+
+        public void AddBase(int q, int r, GameObject playerBase)
+        {
+            Structure currBase = playerBase.GetComponent<Structure>();
+            currBase.SetCoords(q, r);
+            currBase.SetPlayer(boardState.GetNodeOwner(q, r));
+            currBase.boardState = this.boardState;
+            structures[new Vector2Int(q, r)] = currBase;
         }
 
         public void AddStructure(int q, int r, GameObject structurePrefab)

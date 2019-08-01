@@ -8,6 +8,9 @@ public class EventManager
     public delegate void OnResourceUpdate(); 
     public static event OnResourceUpdate onResourceUpdate;
 
+    public delegate void OnCreateBase(int q, int r, GameObject playerBase);
+    public static event OnCreateBase onCreateBase;
+
     public delegate void OnStructureDamage(int q, int r, int amount);
     public static event OnStructureDamage onStructureDamage;
 
@@ -24,6 +27,12 @@ public class EventManager
     {
         if (onResourceUpdate != null)
             onResourceUpdate();
+    }
+
+    public static void RaiseOnCreateBase(int q, int r, GameObject playerBase)
+    {
+        if (onCreateBase != null)
+            onCreateBase(q, r, playerBase);
     }
 
     public static void RaiseOnStructureDamage(int q, int r, int amount)
