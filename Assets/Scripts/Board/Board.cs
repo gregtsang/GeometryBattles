@@ -330,6 +330,7 @@ namespace GeometryBattles.BoardManager
                 yield return null;
             }
             boardState.SetNode(q, r, boardState.GetPlayer(player));
+            EventManager.RaiseOnCreateBase(q, r, currBase);
         }
 
         Vector2Int Rotate60(Vector2Int curr, Vector2Int center)
