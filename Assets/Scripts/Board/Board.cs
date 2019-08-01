@@ -329,6 +329,7 @@ namespace GeometryBattles.BoardManager
                 currBase.transform.Translate(0.0f, Mathf.Max(Mathf.Pow(dist / (dropDistance - 0.5f), 0.5f) * dropSpeed * Time.deltaTime, -dist), 0.0f, Space.World);
                 yield return null;
             }
+            Destroy(currBase.GetComponent<TrailRenderer>());
             boardState.SetNode(q, r, boardState.GetPlayer(player));
             EventManager.RaiseOnCreateBase(q, r, currBase);
         }
