@@ -14,6 +14,10 @@ namespace GeometryBattles.StructureManager
         void OnEnable()
         {
             stats = this.gameObject.GetComponent<PentagonData>();
+            hp = stats.currLevel.maxHP;
+            maxhp = stats.currLevel.maxHP;
+            regen = stats.currLevel.regen;
+            armor = stats.currLevel.armor;
         }
 
         public void SetTarget(int q, int r)
@@ -54,20 +58,13 @@ namespace GeometryBattles.StructureManager
             }
         }
 
-        public override int GetMaxHP()
-        {
-            return stats.currLevel.maxHP;
-        }
-
-        public override int GetHPRegen()
-        {
-            return stats.currLevel.regen;
-        }
-
         public override void Upgrade()
         {
             stats.Upgrade();
-            boardState.SetNodeShield(this.q, this.r, stats.currLevel.maxHP);
+            hp = stats.currLevel.maxHP;
+            maxhp = stats.currLevel.maxHP;
+            regen = stats.currLevel.regen;
+            armor = stats.currLevel.armor;
         }
 
         public override void Destroy()
