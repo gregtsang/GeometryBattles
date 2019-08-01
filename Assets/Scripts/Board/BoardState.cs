@@ -142,7 +142,7 @@ namespace GeometryBattles.BoardManager
             Vector2Int coords = new Vector2Int(q, r);
             Player prevOwner = gridbuffer[coords].GetOwner();
             
-            if (owner != prevOwner && prevOwner.OwnsTile(q, r))
+            if (owner != prevOwner && prevOwner != null && prevOwner.OwnsTile(q, r))
             {
                 prevOwner.RemoveTile(q, r);
             }
@@ -150,7 +150,7 @@ namespace GeometryBattles.BoardManager
             {
                 owner.AddTile(q, r);
             }
-            else if (influence < infThreshold && owner.OwnsTile(q, r))
+            else if (influence < infThreshold && owner != null && owner.OwnsTile(q, r))
             {
                 owner.RemoveTile(q, r);
             }
@@ -201,7 +201,7 @@ namespace GeometryBattles.BoardManager
                     }
                 }
                 gridbuffer[coords].Set(nextOwner, nextInfluence);
-                if (nextOwner != prevOwner && prevOwner.OwnsTile(q, r))
+                if (nextOwner != prevOwner && prevOwner != null && prevOwner.OwnsTile(q, r))
                 {
                     prevOwner.RemoveTile(q, r);
                 }
@@ -209,7 +209,7 @@ namespace GeometryBattles.BoardManager
                 {
                     nextOwner.AddTile(q, r);
                 }
-                else if (nextInfluence < infThreshold && nextOwner.OwnsTile(q, r))
+                else if (nextInfluence < infThreshold && nextOwner != null && nextOwner.OwnsTile(q, r))
                 {
                     nextOwner.RemoveTile(q, r);
                 }
