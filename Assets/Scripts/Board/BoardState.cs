@@ -24,6 +24,7 @@ namespace GeometryBattles.BoardManager
 
         public int infMax;
         public int infThreshold;
+        public int winPercent;
 
         public bool start = false;
         Dictionary<Vector2Int, TileState> grid;
@@ -35,16 +36,24 @@ namespace GeometryBattles.BoardManager
         {
             if (start)
             {
-                spreadTimer -= Time.deltaTime;
-                UpdateColors();
-                if (spreadTimer <= 0.0f)
+                Player winner = CheckEndGame();
+                if (winner == null)
                 {
-                    if (PhotonNetwork.IsMasterClient)
+                    spreadTimer -= Time.deltaTime;
+                    UpdateColors();
+                    if (spreadTimer <= 0.0f)
                     {
-                        photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
+                        if (PhotonNetwork.IsMasterClient)
+                        {
+                            photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
+                        }
+                        SetColors();
+                        spreadTimer = spreadRate;
                     }
-                    SetColors();
-                    spreadTimer = spreadRate;
+                }
+                else
+                {
+                    EventManager.RaiseOnGameOver(winner.gameObject);
                 }
             }
         }
@@ -122,11 +131,6 @@ namespace GeometryBattles.BoardManager
             return grid[new Vector2Int(q, r)].GetInfluence();
         }
 
-        public int GetNodeShield(int q, int r)
-        {
-            return grid[new Vector2Int(q, r)].GetShield();
-        }
-
         public void SetNode(int q, int r, Player owner, bool targetMain = true)
         {
             SetNode(q, r, owner, infThreshold, targetMain);
@@ -137,7 +141,19 @@ namespace GeometryBattles.BoardManager
             Dictionary<Vector2Int, TileState> gridbuffer = targetMain ? grid : buffer;
             Vector2Int coords = new Vector2Int(q, r);
             Player prevOwner = gridbuffer[coords].GetOwner();
-            int prevInfluence = gridbuffer[coords].GetInfluence();
+            
+            if (owner != prevOwner && prevOwner.OwnsTile(q, r))
+            {
+                prevOwner.RemoveTile(q, r);
+            }
+            if (influence >= infThreshold && !owner.OwnsTile(q, r))
+            {
+                owner.AddTile(q, r);
+            }
+            else if (influence < infThreshold && owner.OwnsTile(q, r))
+            {
+                owner.RemoveTile(q, r);
+            }
 
             gridbuffer[coords].Set(owner, influence);
             gridbuffer[coords].SetColor(owner, influence, infThreshold);
@@ -150,11 +166,11 @@ namespace GeometryBattles.BoardManager
             Player prevOwner = gridbuffer[coords].GetOwner();
             int prevInfluence = gridbuffer[coords].GetInfluence();
 
-            if (gridbuffer[coords].GetShield() > 0)
+            if (gridbuffer[coords].HasStructure())
             {
                 if (prevOwner != player)
                 {
-                    gridbuffer[coords].SubShield(value);
+                    EventManager.RaiseOnStructureDamage(q, r, value);
                 }
             }
             else
@@ -185,6 +201,18 @@ namespace GeometryBattles.BoardManager
                     }
                 }
                 gridbuffer[coords].Set(nextOwner, nextInfluence);
+                if (nextOwner != prevOwner && prevOwner.OwnsTile(q, r))
+                {
+                    prevOwner.RemoveTile(q, r);
+                }
+                if (nextInfluence >= infThreshold && !nextOwner.OwnsTile(q, r))
+                {
+                    nextOwner.AddTile(q, r);
+                }
+                else if (nextInfluence < infThreshold && nextOwner.OwnsTile(q, r))
+                {
+                    nextOwner.RemoveTile(q, r);
+                }
                 if (targetMain)
                 {
                     gridbuffer[coords].SetColor(nextOwner, nextInfluence, infThreshold);
@@ -192,18 +220,18 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        public void SetNodeShield(int q, int r, int amount)
+        public void AddStructure(int q, int r)
         {
             Vector2Int coords = new Vector2Int(q, r);
-            grid[coords].SetShield(amount);
-            buffer[coords].SetShield(amount);
+            grid[coords].SetStructure(true);
+            buffer[coords].SetStructure(true);
         }
 
-        public void AddNodeShield(int q, int r, int amount, int max)
+        public void RemoveStructure(int q, int r)
         {
             Vector2Int coords = new Vector2Int(q, r);
-            grid[coords].AddShield(amount, max);
-            buffer[coords].AddShield(amount, max);
+            grid[coords].SetStructure(false);
+            buffer[coords].SetStructure(false);
         }
 
         public void SetNodeBuff(int q, int r, Player player, int buff)
@@ -323,7 +351,6 @@ namespace GeometryBattles.BoardManager
             foreach (KeyValuePair<Vector2Int, TileState> tile in grid)
             {
                 buffer[tile.Key].Set(tile.Value.GetOwner(), tile.Value.GetInfluence());
-                buffer[tile.Key].SetShield(tile.Value.GetShield());
                 List<Vector2Int> neighbors = GetNeighbors(tile.Key[0], tile.Key[1]);
                 foreach (Vector2Int n in neighbors)
                 {
@@ -370,6 +397,18 @@ namespace GeometryBattles.BoardManager
                     }
                 }
             }
+        }
+
+        Player CheckEndGame()
+        {
+            foreach (Player p in players)
+            {
+                if ((float)p.GetNumTiles() / (float)grid.Count >= (float)winPercent / 100.0f)
+                {
+                    return p;
+                }
+            }
+            return null;
         }
 
         IEnumerator MineResourceRepeat()

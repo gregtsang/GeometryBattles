@@ -13,21 +13,21 @@ namespace GeometryBattles.StructureManager
         void Start()
         {
             boardState = GameObject.FindObjectOfType<BoardState>();
+            EventManager.onStructureDamage += DamageStructure;
         }
 
-        void Update()
+        void DamageStructure(int q, int r, int amount)
         {
-            List<Structure> destroy = new List<Structure>();
-            foreach(var s in structures)
+            Structure currStructure = structures[new Vector2Int(q, r)];
+            int currHP = currStructure.GetHP() - Mathf.Max(1, amount - currStructure.GetArmor());
+            if (currHP > 0)
             {
-                s.Value.SetHP(boardState.GetNodeShield(s.Key[0], s.Key[1]));
-                if (s.Value.GetHP() <= 0)
-                    destroy.Add(s.Value);
-                else
-                    boardState.AddNodeShield(s.Key[0], s.Key[1], s.Value.GetHPRegen(), s.Value.GetMaxHP());
+                currStructure.SetHP(currHP);
             }
-            foreach (var d in destroy)
-                RemoveStructure(d.Q, d.R);
+            else
+            {
+                RemoveStructure(q, r);
+            }
         }
 
         public void AddStructure(int q, int r, GameObject structurePrefab)
@@ -37,11 +37,11 @@ namespace GeometryBattles.StructureManager
             GameObject structure = Instantiate(structurePrefab, pos, structurePrefab.transform.rotation) as GameObject;
             Structure currStructure = structure.GetComponent<Structure>();
             currStructure.SetColor(boardState.GetNodeOwner(q, r).GetColor());
-            currStructure.boardState = this.boardState;
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
-            boardState.AddNodeShield(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
+            currStructure.boardState = this.boardState;
             structures[new Vector2Int(q, r)] = currStructure;
+            boardState.AddStructure(q, r);
             StartCoroutine(DissolveIn(currStructure));
         }
 
@@ -66,6 +66,7 @@ namespace GeometryBattles.StructureManager
             Vector2Int key = new Vector2Int(q, r);
             structures[key].Destroy();
             structures.Remove(key);
+            boardState.RemoveStructure(q, r);
         }
 
         public bool HasStructure(int q, int r)

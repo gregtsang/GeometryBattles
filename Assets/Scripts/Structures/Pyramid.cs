@@ -9,6 +9,10 @@ namespace GeometryBattles.StructureManager
         void OnEnable()
         {
             stats = this.gameObject.GetComponent<PyramidData>();
+            hp = stats.currLevel.maxHP;
+            maxhp = stats.currLevel.maxHP;
+            regen = stats.currLevel.regen;
+            armor = stats.currLevel.armor;
         }
 
         public override void StartEffect()
@@ -28,20 +32,13 @@ namespace GeometryBattles.StructureManager
             }
         }
 
-        public override int GetMaxHP()
-        {
-            return stats.currLevel.maxHP;
-        }
-
-        public override int GetHPRegen()
-        {
-            return stats.currLevel.regen;
-        }
-
         public override void Upgrade()
         {
             stats.Upgrade();
-            boardState.SetNodeShield(this.q, this.r, stats.currLevel.maxHP);
+            hp = stats.currLevel.maxHP;
+            maxhp = stats.currLevel.maxHP;
+            regen = stats.currLevel.regen;
+            armor = stats.currLevel.armor;
             Buff(stats.currLevel.range, stats.currLevel.strength);
         }
 

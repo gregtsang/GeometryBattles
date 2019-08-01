@@ -13,13 +13,13 @@ namespace GeometryBattles.BoardManager
             this.tile = tile;
             this.owner = null;
             this.influence = 0;
-            this.shield = 0;
+            this.structure = false;
         }
 
         Tile tile;
         Player owner;
         int influence;
-        int shield;
+        bool structure;
 
         Dictionary<Player, int> buff = new Dictionary<Player, int>();
 
@@ -78,24 +78,14 @@ namespace GeometryBattles.BoardManager
             this.buff[player] = this.buff.ContainsKey(player) ? Mathf.Max(buff, this.buff[player]) : buff;
         }
 
-        public int GetShield()
+        public bool HasStructure()
         {
-            return shield;
+            return structure;
         }
 
-        public void SetShield(int hp)
+        public void SetStructure(bool structure)
         {
-            shield = hp;
-        }
-
-        public void AddShield(int amount, int max)
-        {
-            shield = Mathf.Min(shield + amount, max);
-        }
-
-        public void SubShield(int amount)
-        {
-            shield = Mathf.Max(shield - amount, 0);
+            this.structure = structure;
         }
     }
 }

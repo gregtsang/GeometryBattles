@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace GeometryBattles.StructureManager
 {
@@ -9,6 +8,7 @@ namespace GeometryBattles.StructureManager
         public int cost;
         public int maxHP;
         public int regen;
+        public int armor;
         public float bombRate;
         public int bombStrength;
         public int bombRadius;
