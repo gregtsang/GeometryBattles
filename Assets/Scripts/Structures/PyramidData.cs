@@ -13,7 +13,7 @@ namespace GeometryBattles.StructureManager
         public int strength;
     }
 
-    public class PyramidData : MonoBehaviour
+    public class PyramidData : StructureData
     {
         public PyramidLevel currLevel;
 
@@ -22,6 +22,23 @@ namespace GeometryBattles.StructureManager
         void OnEnable()
         {
             currLevel = levels[0];
+        }
+
+        public override int GetCost()
+        {
+            if (levels.IndexOf(currLevel) < 0)
+            {
+                return levels[0].cost;
+            }
+            else
+            {
+                int totalCost = 0;
+                for (int i = 0; i <= levels.IndexOf(currLevel); i++)
+                {
+                    totalCost += levels[i].cost;
+                }
+                return totalCost;
+            }
         }
 
         public PyramidLevel GetNextLevel()
