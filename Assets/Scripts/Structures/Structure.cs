@@ -11,13 +11,20 @@ namespace GeometryBattles.StructureManager
         protected Player player;
         protected int hp;
 
+        Material mat;
+        public Material Mat { get => mat; }
+
         public int Q { get => q; }
         public int R { get => r; }
 
-        virtual public void Upgrade()
+        void Awake()
         {
-            
+            mat = gameObject.GetComponent<MeshRenderer>().material;
         }
+
+        virtual public void StartEffect() {}
+
+        virtual public void Upgrade() {}
 
         virtual public void Destroy()
         {
@@ -42,7 +49,7 @@ namespace GeometryBattles.StructureManager
 
         public void SetColor(Color color)
         {
-            this.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color);
+            this.Mat.SetColor("_BaseColor", color);
         }
 
         public void SetHP(int hp)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.BoardManager;
 
@@ -8,6 +9,11 @@ namespace GeometryBattles.StructureManager
     {
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
+
+        void Start()
+        {
+            boardState = GameObject.FindObjectOfType<BoardState>();
+        }
 
         void Update()
         {
@@ -36,6 +42,23 @@ namespace GeometryBattles.StructureManager
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
             boardState.AddNodeShield(q, r, currStructure.GetMaxHP(), currStructure.GetMaxHP());
             structures[new Vector2Int(q, r)] = currStructure;
+            StartCoroutine(DissolveIn(currStructure));
+        }
+
+        IEnumerator DissolveIn(Structure structure)
+        {
+            float dissolveRate = 5.0f;
+            float dissolveTimer = dissolveRate;
+            float height = structure.gameObject.GetComponent<MeshRenderer>().bounds.size.y;
+            while (structure.Mat.GetFloat("_Glow") != 1.0f)
+            {
+                dissolveTimer -= Time.deltaTime;
+                structure.Mat.SetFloat("_Glow", 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
+                structure.Mat.SetFloat("_Level", height / 2.0f - (height + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
+                structure.SetHP((int)(structure.GetMaxHP() * (1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate)));
+                yield return null;
+            }
+            structure.StartEffect();
         }
 
         public void RemoveStructure(int q, int r)

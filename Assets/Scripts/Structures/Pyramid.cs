@@ -11,7 +11,7 @@ namespace GeometryBattles.StructureManager
             stats = this.gameObject.GetComponent<PyramidData>();
         }
 
-        void Start()
+        public override void StartEffect()
         {
             Buff(stats.currLevel.range, stats.currLevel.strength);
         }

@@ -14,16 +14,16 @@ namespace GeometryBattles.StructureManager
             stats = this.gameObject.GetComponent<CubeData>();
         }
 
-        void Start()
+        public override void StartEffect()
         {
             StartCoroutine("SpawnScout");
         }
 
         IEnumerator SpawnScout()
         {
-            while (this.hp > 0)
+            while (true)
             {
-                GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position, cubeScoutPrefab.transform.rotation, this.transform) as GameObject;
+                GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position - new Vector3(0.0f, 0.25f, 0.0f), cubeScoutPrefab.transform.rotation, this.transform) as GameObject;
                 CubeScout currScout = scout.GetComponent<CubeScout>();
                 currScout.SetHome(this.q, this.r);
                 currScout.SetCoords(this.q, this.r);
