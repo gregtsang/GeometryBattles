@@ -32,7 +32,6 @@ namespace GeometryBattles.StructureManager
 
         IEnumerator Scout(CubeScout scout)
         {
-            yield return new WaitForSeconds(scout.GetMoveRate());
             while (scout != null)
             {
                 Vector2Int curr = new Vector2Int(scout.Q, scout.R);
