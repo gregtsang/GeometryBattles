@@ -47,7 +47,8 @@ namespace GeometryBattles.StructureManager
                     scout.SetMotion(true);
                     MoveScout(next[0], next[1], scout);
                     while (scout.GetMotion()) yield return null;
-                    ScoutEffect(next[0], next[1], scout);
+                    if (scout != null)
+                        ScoutEffect(next[0], next[1], scout);
                 }
                 yield return new WaitForSeconds(scout.GetMoveRate());
             }
@@ -88,17 +89,17 @@ namespace GeometryBattles.StructureManager
             
             float rotRate = 0.2f;
             float rotTimer = rotRate;
-            while (scout.gameObject.transform.rotation != newRot)
+            while (scout != null && scout.gameObject.transform.rotation != newRot)
             {
                 rotTimer -= Time.deltaTime;
                 scout.gameObject.transform.rotation = Quaternion.Slerp(currRot, newRot, 1.0f - Mathf.Max(rotTimer, 0.0f) / rotRate);
                 yield return null;
             }
-            
+
             float jumpRate = 0.5f;
             float jumpTimer = jumpRate;
             float jumpHeight = 5.0f;
-            while (scout.gameObject.transform.position != newPos)
+            while (scout != null && scout.gameObject.transform.position != newPos)
             {
                 jumpTimer -= Time.deltaTime;
                 scout.gameObject.transform.rotation = Quaternion.Slerp(newRot, endRot, 1.0f - Mathf.Max(jumpTimer, 0.0f) / jumpRate);
