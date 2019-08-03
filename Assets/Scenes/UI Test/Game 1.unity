@@ -247,7 +247,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 4.5905e-41, y: -1.07202445e-36, z: 4.5905e-41, w: -1.07427155e-36}
+  m_BoundingSphereOverride: {x: 2.1e-44, y: 1e-45, z: 1.63e-43, w: 0.03125}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -307,6 +307,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Bottom Collider
+      objectReference: {fileID: 0}
+    - target: {fileID: 8524595943323736278, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
         type: 3}

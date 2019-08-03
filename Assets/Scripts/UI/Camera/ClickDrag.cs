@@ -35,7 +35,8 @@ namespace GeometryBattles.UI
         private Vector3 GetPoint()
         {
             RaycastHit hit;
-            if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit))
+            int layerMask = 1 << 9;
+            if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, layerMask))
             {
                 return hit.point;
             }
