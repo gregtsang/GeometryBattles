@@ -50,7 +50,7 @@ namespace GeometryBattles.UI
 
         public Board GetBoard()
         {
-            return board;
+            return board == null ? FindObjectOfType<Board>() : board;
         }
 
         public void ShowHexActionMenu()

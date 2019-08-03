@@ -33,7 +33,7 @@ namespace GeometryBattles.BoardManager
 
         void Awake()
         {   
-            numPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+            numPlayers = NetworkedManager.GetNumberOfPlayers();
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
@@ -60,7 +60,7 @@ namespace GeometryBattles.BoardManager
             if (eventCode == 0)
             {
                 readyCheck++;
-                if (readyCheck == numPlayers)
+                if (readyCheck == NetworkedManager.GetNumberOfLivePlayers())
                 {
                     PhotonView pv = gameObject.GetComponent<PhotonView>();
                     pv.RPC("RPC_StartGame", RpcTarget.AllViaServer);

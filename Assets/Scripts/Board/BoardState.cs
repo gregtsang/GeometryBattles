@@ -26,6 +26,8 @@ namespace GeometryBattles.BoardManager
         public int infThreshold;
         public int winPercent;
 
+        public int GridCount { get => grid.Count; }
+
         public bool start = false;
         Dictionary<Vector2Int, TileState> grid;
         Dictionary<Vector2Int, TileState> buffer;
