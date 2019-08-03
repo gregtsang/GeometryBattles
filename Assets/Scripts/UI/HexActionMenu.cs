@@ -57,7 +57,7 @@ namespace GeometryBattles.UI
                 uiManager.InitializeHexActionMenu();
                 foreach (IHexAction hexAction in actions)
                 {
-                    uiManager.AddActionToHexActionMenu(hexAction.displayName).onClick.AddListener(delegate
+                    uiManager.AddActionToHexActionMenu(hexAction.displayName + "  " + hexAction.GetTipText(uiManager.GetActivePlayer(), tilePrefab)).onClick.AddListener(delegate
                     {
                         hexAction.doAction(uiManager.GetActivePlayer(), tilePrefab);
                         uiManager.HideHexActionMenu();

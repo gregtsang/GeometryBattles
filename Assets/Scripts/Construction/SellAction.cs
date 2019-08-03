@@ -65,7 +65,7 @@ namespace GeometryBattles.Construction
 
         public string GetTipText(Player player, Tile tile)
         {
-            return GetTileValue(tile).ToString();
+            return "+" + GetTileValue(tile).ToString();
         }
 
         public bool isViableAction(Player player, Tile tile)

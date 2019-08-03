@@ -10,7 +10,7 @@ namespace GeometryBattles.Construction
 {
     public class BuildAction : MonoBehaviour, IHexAction
     {
-        [SerializeField] string _displayname = "Build Pyramid";
+        [SerializeField] string _displayname = "Build ____";
         [SerializeField] GameObject structurePrefab = null;
 
         StructureStore structureStore;
@@ -63,7 +63,7 @@ namespace GeometryBattles.Construction
 
         public string GetTipText(Player player, Tile tile)
         {
-            return "build";
+            return "-" + GetStructureCost().ToString();
         }
 
         public bool isViableAction(Player player, Tile tile)
@@ -89,7 +89,7 @@ namespace GeometryBattles.Construction
 
         private int GetStructureCost()
         {
-            return structurePrefab.GetComponent<PyramidData>().GetUpgradeCost();
+            return structurePrefab.GetComponent<StructureData>().GetCost();
         }
     }
 }
