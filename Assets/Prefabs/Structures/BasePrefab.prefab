@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 356529715684416219}
   - component: {fileID: 6327043490806392354}
   - component: {fileID: -8534886050813106551}
+  - component: {fileID: 4873490697900275627}
   m_Layer: 0
   m_Name: BasePrefab
   m_TagString: Untagged
@@ -58,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e8e6479f04a5c410bb5bd3082acdea1d, type: 2}
+  - {fileID: 2100000, guid: 4f1e934f4006148c6a0b1e583f704be4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -182,3 +183,19 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &4873490697900275627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5760942321799811838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e80048b259f4f7a83ba97e3add4354, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardState: {fileID: 0}
+  baseMaxHP: 100
+  baseRegen: 5
+  baseArmor: 10

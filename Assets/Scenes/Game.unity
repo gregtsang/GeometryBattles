@@ -570,6 +570,11 @@ PrefabInstance:
       propertyPath: m_BackGroundColor.b
       value: 0.101960786
       objectReference: {fileID: 0}
+    - target: {fileID: 7677103918892611921, guid: 1da2a294d6aca304a8684e17c429d6ed,
+        type: 3}
+      propertyPath: antialiasingMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1da2a294d6aca304a8684e17c429d6ed, type: 3}
 --- !u!1001 &4071901192921161505

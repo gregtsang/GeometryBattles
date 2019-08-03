@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
 
@@ -10,14 +11,29 @@ namespace GeometryBattles.StructureManager
         protected int q, r;
         protected Player player;
         protected int hp;
+        protected int maxhp;
+        protected int regen;
+        protected int armor;
+
+        Material mat;
+        public Material Mat { get => mat; }
 
         public int Q { get => q; }
         public int R { get => r; }
 
-        virtual public void Upgrade()
+        void Awake()
         {
-            
+            mat = gameObject.GetComponent<MeshRenderer>().material;
         }
+
+        void Start()
+        {
+            StartCoroutine(RegenHP());
+        }
+
+        virtual public void StartEffect() {}
+
+        virtual public void Upgrade() {}
 
         virtual public void Destroy()
         {
@@ -42,7 +58,7 @@ namespace GeometryBattles.StructureManager
 
         public void SetColor(Color color)
         {
-            this.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color);
+            this.Mat.SetColor("_BaseColor", color);
         }
 
         public void SetHP(int hp)
@@ -55,15 +71,28 @@ namespace GeometryBattles.StructureManager
             return hp;
         }
 
-        public virtual int GetMaxHP()
+        public int GetMaxHP()
         {
-            return 0;
+            return maxhp;
         }
 
-        public virtual int GetHPRegen()
+        public int GetHPRegen()
         {
-            return 0;
+            return regen;
         }
 
+        public int GetArmor()
+        {
+            return armor;
+        }
+
+        IEnumerator RegenHP()
+        {
+            while (hp > 0)
+            {
+                hp = Mathf.Min(hp + regen, maxhp);
+                yield return new WaitForSeconds(1.0f);
+            }
+        }
     }
 }

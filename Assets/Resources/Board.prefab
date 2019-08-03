@@ -64,6 +64,7 @@ MonoBehaviour:
   - {r: 1.1424627, g: 0, b: 0.52131796, a: 1}
   - {r: 0.24171089, g: 0.13201278, b: 1.2168132, a: 1}
   - {r: 1.509434, g: 0.0071199886, b: 0.09905394, a: 1}
+  cube: {fileID: 0}
 --- !u!114 &6509530979159464688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,6 +84,7 @@ MonoBehaviour:
   spreadRate: 0.5
   infMax: 200
   infThreshold: 100
+  winPercent: 0
   start: 0
 --- !u!114 &6509530979159464703
 MonoBehaviour:
