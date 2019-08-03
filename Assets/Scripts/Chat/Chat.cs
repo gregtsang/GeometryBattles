@@ -7,18 +7,20 @@ using Photon.Pun;
 using ExitGames.Client.Photon;
 using TMPro;
 
-public class Chat : MonoBehaviour, IChatClientListener
+public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 {
     [SerializeField] private uint   historyBufferLength;
     [SerializeField] private string appVersion;
     [SerializeField] TMP_Dropdown   regionDropdown;
+    [SerializeField] TMP_Text       currentChannelText;
+    [SerializeField] TMP_Text       chatInputField;
     
-    public string   username;
-    public TMP_Text currentChannelText;
+    public string username;
 
     protected internal AppSettings chatAppSettings;
 
     private string     _currentChannelName;
+    private string     _roomName;
     private ChatClient _chatClient;
     private int        _region;
 
@@ -53,6 +55,18 @@ public class Chat : MonoBehaviour, IChatClientListener
             // Keep an active connection alive and process incoming messages
         _chatClient?.Service();
     }
+
+   public override void OnJoinedRoom()
+   {
+      _roomName = PhotonNetwork.CurrentRoom.Name;
+      _chatClient.Subscribe(new string[] {_roomName});
+   }
+
+   public override void OnLeftRoom()
+   {
+      _chatClient.Unsubscribe(new string[] {_roomName});
+   }
+
 
    public void Connect()
    {
@@ -108,21 +122,23 @@ public class Chat : MonoBehaviour, IChatClientListener
     {
         if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
         {
-            // SendChatMessage(chatInputField.text);
-            // chatInputField.text = "";
+            SendChatMessage(chatInputField.text);
+            chatInputField.text = "";
         }
     }
 
     public void OnClickSend()
     {
-        //if (!(chatInputField is null))
-        {
-            // SendChatMessage(chatInputField.text);
-            // chatInputField.text = "";
-        }
+            SendChatMessage(chatInputField.text);
+            chatInputField.text = "";
     }
 
-    // Add methods to subscribe when a room is joined and unsubscribe when it's left
+    private void SendChatMessage(string msg)
+    {
+       if (msg is null || msg.Length == 0) return;
+
+       _chatClient.PublishMessage(_currentChannelName, msg);
+    }
 
 #region IChatClientListener implementation
    void IChatClientListener.DebugReturn(DebugLevel level, string message)
@@ -150,8 +166,7 @@ public class Chat : MonoBehaviour, IChatClientListener
       string[] senders, 
       object[] messages)
    {
-      // Because all users will be in the same chat room, we don't need to worry
-      // about a callback here.
+      // Code where messages will be displayed should go here
       ;
    }
 
