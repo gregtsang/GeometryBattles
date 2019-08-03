@@ -9,6 +9,7 @@ namespace GeometryBattles.StructureManager
     {
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
+        public GameObject scouts;
 
         void OnEnable()
         {
@@ -57,6 +58,10 @@ namespace GeometryBattles.StructureManager
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
             currStructure.boardState = this.boardState;
+            if (currStructure is Cube)
+            {
+                ((Cube)currStructure).scouts = scouts;
+            }
             structures[new Vector2Int(q, r)] = currStructure;
             boardState.AddStructure(q, r);
             StartCoroutine(DissolveIn(currStructure));
