@@ -6,7 +6,7 @@
         public int baseRegen;
         public int baseArmor;
 
-        void OnEnable()
+        void Start()
         {
             hp = baseMaxHP;
             maxhp = baseMaxHP;

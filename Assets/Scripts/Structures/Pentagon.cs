@@ -9,11 +9,16 @@ namespace GeometryBattles.StructureManager
 
         int targetQ, targetR;
         bool target = false;
+        bool bombard = false;
         float bombTimer;
 
         void OnEnable()
         {
             stats = this.gameObject.GetComponent<PentagonData>();
+        }
+
+        void Start()
+        {
             hp = stats.currLevel.maxHP;
             maxhp = stats.currLevel.maxHP;
             regen = stats.currLevel.regen;
@@ -22,7 +27,7 @@ namespace GeometryBattles.StructureManager
 
         void Update()
         {
-            if (target && CheckSpace())
+            if (bombard && target && CheckSpace())
             {
                 bombTimer -= Time.deltaTime;
                 if (bombTimer <= 0.0f)
@@ -36,6 +41,7 @@ namespace GeometryBattles.StructureManager
         public override void StartEffect()
         {
             bombTimer = stats.currLevel.bombRate;
+            bombard = true;
         }
 
         bool CheckSpace()

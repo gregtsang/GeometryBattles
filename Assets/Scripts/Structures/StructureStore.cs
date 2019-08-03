@@ -59,7 +59,6 @@ namespace GeometryBattles.StructureManager
             currStructure.SetColor(boardState.GetNodeOwner(q, r).GetColor());
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
-            currStructure.SetHP(currStructure.GetMaxHP());
             currStructure.boardState = this.boardState;
             if (currStructure is Cube)
             {
@@ -67,7 +66,10 @@ namespace GeometryBattles.StructureManager
             }
             structures[new Vector2Int(q, r)] = currStructure;
             boardState.AddStructure(q, r);
-            StartCoroutine(DissolveIn(currStructure));
+            if (currStructure is Hexagon)
+                currStructure.StartEffect();
+            else
+                StartCoroutine(DissolveIn(currStructure));
         }
 
         IEnumerator DissolveIn(Structure structure)
