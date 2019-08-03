@@ -287,7 +287,6 @@ GameObject:
   - component: {fileID: 8228663410458858780}
   - component: {fileID: 425755484778596032}
   - component: {fileID: 2124318910912060964}
-  - component: {fileID: 4788524538872626636}
   - component: {fileID: 5327724417247064271}
   m_Layer: 0
   m_Name: HexActions
@@ -351,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _displayname: Build Pyramid
+  _displayname: Pyramid
   structurePrefab: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
     type: 3}
 --- !u!114 &425755484778596032
@@ -366,7 +365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _displayname: Build Cube
+  _displayname: Cube
   structurePrefab: {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4,
     type: 3}
 --- !u!114 &2124318910912060964
@@ -381,23 +380,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _displayname: Build Pentagon
+  _displayname: Pentagon
   structurePrefab: {fileID: 3714227975952305212, guid: 9bba42a490e3f4c7e924b626f78f24af,
-    type: 3}
---- !u!114 &4788524538872626636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5121737777226419909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _displayname: Build Conduit
-  structurePrefab: {fileID: 6661517343315278097, guid: 416507919fe004fd893ea2dcde6cc187,
     type: 3}
 --- !u!114 &5327724417247064271
 MonoBehaviour:
