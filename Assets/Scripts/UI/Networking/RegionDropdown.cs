@@ -11,6 +11,8 @@ namespace GeometryBattles.MenuUI
     [RequireComponent(typeof(TMP_Dropdown))]
     public class RegionDropdown : MonoBehaviour
     {
+        private TMP_Dropdown dropdown;
+
         string[,] regionCodes = new string [,]
         {
             {"USA, West", "usw"},
@@ -30,7 +32,7 @@ namespace GeometryBattles.MenuUI
 
         void Start()
         {
-            TMP_Dropdown dropdown = GetComponent<TMP_Dropdown>();
+            dropdown = GetComponent<TMP_Dropdown>();
             InitializeDropdown(dropdown);
             dropdown.onValueChanged.AddListener(delegate {
                 DropdownValueChanged(dropdown.value);
@@ -55,6 +57,7 @@ namespace GeometryBattles.MenuUI
         void DropdownValueChanged(int value)
         {
             SetRegion(regionCodes[value, 1]);
+            //dropdown.value = value;
         }
     }
 }
