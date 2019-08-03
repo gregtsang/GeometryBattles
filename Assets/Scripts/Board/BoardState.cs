@@ -330,6 +330,11 @@ namespace GeometryBattles.BoardManager
             return -1;
         }
 
+        public bool IsValidTile(int q, int r)
+        {
+            return grid.ContainsKey(new Vector2Int(q, r));
+        }
+
         public List<Vector2Int> GetNeighbors(int q, int r)
         {
             List<Vector2Int> neighbors = new List<Vector2Int>();
