@@ -5,7 +5,7 @@ namespace GeometryBattles.StructureManager
 {
     public class Cube : Structure
     {
-        public ScoutManager scoutManager;
+        public GameObject scouts;
         public Material cubeMat;
         public GameObject cubeScoutPrefab;
 
@@ -102,7 +102,7 @@ namespace GeometryBattles.StructureManager
 
         GameObject SpawnScout(Color color)
         {
-            GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position - new Vector3(0.0f, 0.25f, 0.0f), cubeScoutPrefab.transform.rotation, scoutManager.transform) as GameObject;
+            GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position - new Vector3(0.0f, 0.25f, 0.0f), cubeScoutPrefab.transform.rotation, scouts.transform) as GameObject;
             scout.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color * 5);
             CubeScout currScout = scout.GetComponent<CubeScout>();
             currScout.SetHome(this.q, this.r);

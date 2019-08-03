@@ -9,8 +9,7 @@ namespace GeometryBattles.StructureManager
     {
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
-
-        public ScoutManager scoutManager;
+        public GameObject scouts;
 
         void OnEnable()
         {
@@ -61,7 +60,7 @@ namespace GeometryBattles.StructureManager
             currStructure.boardState = this.boardState;
             if (currStructure is Cube)
             {
-                ((Cube)currStructure).scoutManager = scoutManager;
+                ((Cube)currStructure).scouts = scouts;
             }
             structures[new Vector2Int(q, r)] = currStructure;
             boardState.AddStructure(q, r);
