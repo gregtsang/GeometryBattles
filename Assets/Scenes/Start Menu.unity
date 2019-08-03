@@ -4771,6 +4771,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   username: 
+  _historyBufferLength: 0
+  appVersion: 0.0
 --- !u!1 &737858165
 GameObject:
   m_ObjectHideFlags: 0
