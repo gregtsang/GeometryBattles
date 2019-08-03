@@ -22,7 +22,7 @@ public class Chat : MonoBehaviour, IChatClientListener
 
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
             // We want to be able to chat in subsequent scenes
             // TODO - warning on this call 
@@ -41,7 +41,7 @@ public class Chat : MonoBehaviour, IChatClientListener
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
             // Keep an active connection alive and process incoming messages
         _chatClient?.Service();
@@ -76,10 +76,28 @@ public class Chat : MonoBehaviour, IChatClientListener
         _chatClient?.Disconnect();
     }
 
+    public void OnEnterSend()
+    {
+        if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+        {
+            // SendChatMessage(chatInputField.text);
+            // chatInputField.text = "";
+        }
+    }
+
+    public void OnClickSend()
+    {
+        //if (!(chatInputField is null))
+        {
+            // SendChatMessage(chatInputField.text);
+            // chatInputField.text = "";
+        }
+    }
+
 #region IChatClientListener implementation
    void IChatClientListener.DebugReturn(DebugLevel level, string message)
    {
-      throw new System.NotImplementedException();
+      Debug.Log(message);
    }
 
    void IChatClientListener.OnDisconnected()
