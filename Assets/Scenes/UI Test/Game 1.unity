@@ -308,10 +308,40 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bottom Collider
       objectReference: {fileID: 0}
-    - target: {fileID: 8524595943323736278, guid: 9b7eeb7acd7da9849944b815db68c69e,
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
         type: 3}
-      propertyPath: m_Layer
-      value: 9
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1605265889807322457, guid: 9b7eeb7acd7da9849944b815db68c69e,
         type: 3}
