@@ -56,7 +56,7 @@ namespace GeometryBattles.Construction
         {
             if (canDoAction(player, tile))
             {
-                player.AddResource(GetStructureCost());
+                player.AddResource(-1 * GetStructureCost());
                 structureStore.AddStructure(tile.Q, tile.R, structurePrefab);
             }
         }
