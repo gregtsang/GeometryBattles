@@ -92,7 +92,8 @@ namespace GeometryBattles.Construction
 
         public string GetTipText(Player player, Tile tile)
         {
-            return isViableAction(player, tile) ? GetTileCost(player, tile).ToString() : "";
+            //return isViableAction(player, tile) ? GetTileCost(player, tile).ToString() : "";
+            return "-" + GetTileCost(player, tile).ToString();
         }
     }
 }
