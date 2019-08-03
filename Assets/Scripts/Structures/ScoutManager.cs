@@ -15,6 +15,7 @@ namespace GeometryBattles.StructureManager
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
         public int moveAwayWeight = 10;
+        public int structureDamage = 20;
 
         void OnEnable()
         {
@@ -115,7 +116,10 @@ namespace GeometryBattles.StructureManager
         {
             Vector2Int curr = new Vector2Int(scout.Q, scout.R);
             Vector2Int next = new Vector2Int(q, r);
-            boardState.AddNode(q, r, scout.GetPlayer(), boardState.infMax);
+            if (structureStore.HasStructure(next[0], next[1]))
+                boardState.AddNode(q, r, scout.GetPlayer(), structureDamage);
+            else
+                boardState.AddNode(q, r, scout.GetPlayer(), boardState.infMax);
             if (scoutPos.ContainsKey(next))
             {
                 scouts.Remove(scout);

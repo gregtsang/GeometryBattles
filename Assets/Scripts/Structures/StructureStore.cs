@@ -20,6 +20,7 @@ namespace GeometryBattles.StructureManager
 
         void DamageStructure(int q, int r, int amount)
         {
+            Debug.Log(q + " " + r + " " + amount);
             Structure currStructure = structures[new Vector2Int(q, r)];
             int currHP = currStructure.GetHP() - Mathf.Max(1, amount - currStructure.GetArmor());
             if (currHP > 0)
@@ -30,7 +31,7 @@ namespace GeometryBattles.StructureManager
             {
                 if (currStructure is Base)
                 {
-                    // 
+                    Debug.Log("test");
                 }
                 else
                 {
@@ -46,6 +47,7 @@ namespace GeometryBattles.StructureManager
             currBase.SetPlayer(boardState.GetNodeOwner(q, r));
             currBase.boardState = this.boardState;
             structures[new Vector2Int(q, r)] = currBase;
+            boardState.AddStructure(q, r);
         }
 
         public void AddStructure(int q, int r, GameObject structurePrefab)
@@ -57,6 +59,7 @@ namespace GeometryBattles.StructureManager
             currStructure.SetColor(boardState.GetNodeOwner(q, r).GetColor());
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
+            currStructure.SetHP(currStructure.GetMaxHP());
             currStructure.boardState = this.boardState;
             if (currStructure is Cube)
             {
@@ -77,7 +80,6 @@ namespace GeometryBattles.StructureManager
                 dissolveTimer -= Time.deltaTime;
                 structure.Mat.SetFloat("_Glow", 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
                 structure.Mat.SetFloat("_Level", height / 2.0f - (height + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
-                structure.SetHP((int)(structure.GetMaxHP() * (1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate)));
                 yield return null;
             }
             structure.StartEffect();
