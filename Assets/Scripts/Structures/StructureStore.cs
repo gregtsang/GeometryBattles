@@ -10,6 +10,8 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
 
+        public ScoutManager scoutManager;
+
         void OnEnable()
         {
             boardState = GameObject.FindObjectOfType<BoardState>();
@@ -57,6 +59,10 @@ namespace GeometryBattles.StructureManager
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
             currStructure.boardState = this.boardState;
+            if (currStructure is Cube)
+            {
+                ((Cube)currStructure).scoutManager = scoutManager;
+            }
             structures[new Vector2Int(q, r)] = currStructure;
             boardState.AddStructure(q, r);
             StartCoroutine(DissolveIn(currStructure));
