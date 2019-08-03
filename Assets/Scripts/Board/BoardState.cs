@@ -54,21 +54,31 @@ namespace GeometryBattles.BoardManager
                 else
                 {
                     EventManager.RaiseOnGameOver(winner.gameObject);
+                    EndGame();
                 }
             }
         }
 
-        private void Start() {
+        void OnEnable()
+        {
             photonView = GetComponent<PhotonView>();
         }
 
         public void StartGame()
         {
             start = true;
-
             if (PhotonNetwork.IsMasterClient)
             {
                 StartCoroutine(MineResourceRepeat());
+            }
+        }
+
+        void EndGame()
+        {
+            start = false;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StopCoroutine(MineResourceRepeat());
             }
         }
 

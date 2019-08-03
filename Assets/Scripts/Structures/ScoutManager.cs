@@ -16,7 +16,7 @@ namespace GeometryBattles.StructureManager
         public int moveUnvisitedWeight = 3;
         public int moveAwayWeight = 10;
 
-        void Start()
+        void OnEnable()
         {
             boardState = GameObject.FindObjectOfType<BoardState>();
             EventManager.onCreateScout += AddScout;
