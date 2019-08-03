@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public class StructureData : MonoBehaviour
+namespace GeometryBattles.StructureManager
 {
-    public virtual int GetCost() 
+    public class StructureData : MonoBehaviour
     {
-        return 0;
+        public virtual int GetCost() 
+        {
+            return 0;
+        }
     }
 }

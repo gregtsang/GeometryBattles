@@ -14,6 +14,10 @@ namespace GeometryBattles.StructureManager
         void OnEnable()
         {
             stats = this.gameObject.GetComponent<CubeData>();
+        }
+
+        void Start()
+        {
             hp = stats.currLevel.maxHP;
             maxhp = stats.currLevel.maxHP;
             regen = stats.currLevel.regen;

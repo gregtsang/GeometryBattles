@@ -9,6 +9,10 @@ namespace GeometryBattles.StructureManager
         void OnEnable()
         {
             stats = this.gameObject.GetComponent<PyramidData>();
+        }
+
+        void Start()
+        {
             hp = stats.currLevel.maxHP;
             maxhp = stats.currLevel.maxHP;
             regen = stats.currLevel.regen;
