@@ -461,6 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
+  scouts: {fileID: 0}
 --- !u!4 &1315784111
 Transform:
   m_ObjectHideFlags: 0
@@ -509,6 +510,7 @@ MonoBehaviour:
   moveUnownedWeight: 3
   moveUnvisitedWeight: 5
   moveAwayWeight: 10
+  structureDamage: 20
 --- !u!4 &1320711754
 Transform:
   m_ObjectHideFlags: 0

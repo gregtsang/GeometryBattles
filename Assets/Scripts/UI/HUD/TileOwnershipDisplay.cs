@@ -9,12 +9,14 @@ namespace GeometryBattles.UI
 {
     public class TileOwnershipDisplay : MonoBehaviour
     {
+        [SerializeField] Color backgroundColor = Color.white;
+        [SerializeField] GameObject playerChunkPrefab = null;
+
         //cached References
         UIManager uiManager;
         Board board;
 
         RectTransform rectTransform;
-
 
         List<RectTransform> rects = new List<RectTransform>();
 
@@ -37,28 +39,39 @@ namespace GeometryBattles.UI
         {
             for (int i = 0; i < board.numPlayers; i++)
             {
-                GameObject newImage = CreateSubImage("Player " + i, board.boardState.GetPlayer(i).GetColor());
+                GameObject newImage = CreateSubImage("Player " + i, board.boardState.GetPlayer(i).GetColor(), i);
                 rects.Add(newImage.GetComponent<RectTransform>());
             }
         } 
 
         private void CreateBackgroundImage()
         {
-            CreateSubImage("Background", Color.white);
+            GameObject newImage = new GameObject(name);
+            newImage.AddComponent<Image>().color = backgroundColor;
+            newImage.transform.SetParent(transform);
+            SetImageSize(newImage.GetComponent<RectTransform>());
         }
 
-        private GameObject CreateSubImage(string name, Color color)
+        private GameObject CreateSubImage(string name, Color color, int playerID)
         {
-            GameObject newImage = new GameObject(name);
-            newImage.AddComponent<Image>().color = color;
+            //GameObject newImage = new GameObject(name);
+            //newImage.AddComponent<Image>().color = color;
+            GameObject newImage = Instantiate(playerChunkPrefab);
+            newImage.GetComponent<Image>().color = color;
             newImage.transform.SetParent(transform);
+            newImage.GetComponent<TileOwnershipChunk>().TileOwnershipDisplay = this;
+            newImage.GetComponent<TileOwnershipChunk>().PlayerID = playerID;
 
-            RectTransform newRectTransform = newImage.GetComponent<RectTransform>();
+            SetImageSize(newImage.GetComponent<RectTransform>());
+            return newImage;
+        }
+
+        private static void SetImageSize(RectTransform newRectTransform)
+        {
             newRectTransform.offsetMin = new Vector2(0, 0);
             newRectTransform.offsetMax = new Vector2(0, 0);
             newRectTransform.anchorMin = new Vector2(0, 0);
             newRectTransform.anchorMax = new Vector2(1, 1);
-            return newImage;
         }
 
         private void SetRectWidth(RectTransform rect, float widthFraction = 1, float startFraction = 0)
@@ -74,7 +87,7 @@ namespace GeometryBattles.UI
             float widthFraction = 0;
             for (int i = 0; i < rects.Count; i++)
             {
-                widthFraction = (float) GetOwnershipForPlayer(i) / (float) board.boardState.GridCount;
+                widthFraction = GetPercentOwned(i); //(float) GetOwnershipForPlayer(i) / (float) board.boardState.GridCount;
                 SetRectWidth(rects[i], widthFraction, startFraction);
                 startFraction += widthFraction;
             }
@@ -83,6 +96,11 @@ namespace GeometryBattles.UI
         private int GetOwnershipForPlayer(int pid)
         {
             return board.boardState.GetPlayer(pid).GetNumTiles();
+        }
+
+        public float GetPercentOwned(int pid)
+        {
+            return (float) GetOwnershipForPlayer(pid) / (float) board.boardState.GridCount;
         }
     }
 }
