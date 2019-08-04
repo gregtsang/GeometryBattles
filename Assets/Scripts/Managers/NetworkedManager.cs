@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class NetworkedManager : MonoBehaviour
 {
-   [SerializeField]
-   private GameObject _boardPrefab = null;
-
    [Header("Offline Settings")]
    [SerializeField] bool offlineMode = false;
    [SerializeField] int initNumberOfPlayers = 2;
