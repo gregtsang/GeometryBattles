@@ -79,10 +79,7 @@ namespace GeometryBattles.BoardManager
         public void EndGame()
         {
             start = false;
-            if (PhotonNetwork.IsMasterClient)
-            {
-                StopCoroutine(MineResourceRepeat());
-            }
+            Debug.Log("GAME OVER");
         }
 
         public bool IsGameOver()
@@ -460,7 +457,7 @@ namespace GeometryBattles.BoardManager
 
         IEnumerator MineResourceRepeat()
         {
-            while (true)
+            while (start)
             {
                 photonView.RPC("RPC_MineResource", RpcTarget.AllViaServer);
                 yield return new WaitForSeconds(resource.miningRate);
