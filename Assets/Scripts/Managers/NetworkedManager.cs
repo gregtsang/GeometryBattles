@@ -17,10 +17,8 @@ public class NetworkedManager : MonoBehaviour
       PhotonNetwork.OfflineMode = offlineMode;
       if (PhotonNetwork.OfflineMode)
       {
-         PhotonNetwork.CreateRoom("offline");
-         numberOfPlayers = initNumberOfPlayers;
+         InitializeOfflineGame();
       }
-      
       if (PhotonNetwork.IsMasterClient)
       {
          Debug.Log("I am the master client and I am about to instantiate the board.");
@@ -31,6 +29,13 @@ public class NetworkedManager : MonoBehaviour
             Quaternion.identity
          );
       }
+   }
+
+   private void InitializeOfflineGame()
+   {
+      PhotonNetwork.CreateRoom("offline");
+      numberOfPlayers = initNumberOfPlayers;
+      PhotonNetwork.LocalPlayer.NickName = "Offline Player";
    }
 
    static public int GetNumberOfPlayers()

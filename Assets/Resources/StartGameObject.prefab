@@ -454,6 +454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 307764eb1f36bc249b68fc457834a646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  playerChunkPrefab: {fileID: 2222612731955902791, guid: 1dc2e5f13daa7f043be7c0be06d7ad4b,
+    type: 3}
 --- !u!1001 &3192035524350768609
 PrefabInstance:
   m_ObjectHideFlags: 0
