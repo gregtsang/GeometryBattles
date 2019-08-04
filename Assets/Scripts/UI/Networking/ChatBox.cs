@@ -19,11 +19,14 @@ namespace GeometryBattles.MenuUI
 
         [SerializeField] int maxEntries = 5;
 
+        bool keepLocalMessage = false;
+
         private string userNickName = "erch";
         private Color userColor = Color.blue;
 
         public string UserNickName { get => userNickName; set => userNickName = value; }
         public Color UserColor { get => userColor; set => userColor = value; }
+        public bool KeepLocalMessage { get => keepLocalMessage; set => keepLocalMessage = value; }
 
         public event EventHandler<NewChatMessageEventArgs> NewChatMessage;
 
@@ -33,7 +36,10 @@ namespace GeometryBattles.MenuUI
             {
                 inputField.onSubmit.AddListener(delegate
                 {
-                    AddMessage(userNickName, inputField.text, userColor);
+                    if (keepLocalMessage)
+                    {
+                        AddMessage(userNickName, inputField.text, userColor);
+                    }
                     RaiseNewChatMessageEvent(userNickName, inputField.text);
                     ResetInputField();
                 });
@@ -46,6 +52,14 @@ namespace GeometryBattles.MenuUI
 
             CreateChatEntry(nickName, message, color).transform.SetParent(messageContainer);
             CheckMaxEntries();
+        }
+
+        public void DeleteMessages()
+        {
+            foreach(Transform child in messageContainer)
+            {
+                Destroy(child.gameObject);
+            }
         }
 
         private void RaiseNewChatMessageEvent(string userNickName, string text)
