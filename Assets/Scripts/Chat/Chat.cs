@@ -60,8 +60,6 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 
    void OnChatMessage(object sender, NewChatMessageEventArgs e)
    {
-      //Debug.Log($"Message sent from {e.nickName}: {e.message}");
-      //chatBox.AddMessage("TEST", "Message Received", Color.black);
       SendChatMessage(e.message);
    }
 
@@ -129,35 +127,15 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
         _chatClient?.Disconnect();
     }
 
-    public void OnEnterSend()
-    {
-        Debug.Log($"Firing OnEnterSend() msg = {chatInputField.text}");
-        //if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
-        //{
-            SendChatMessage(chatInputField.text);
-            chatInputField.text = "";
-        //}
-    }
-
-    public void OnClickSend()
-    {
-            SendChatMessage(chatInputField.text);
-            chatInputField.text = "";
-    }
-
     private void SendChatMessage(string msg)
     {
-       Debug.Log($"Calling SendChatMessage w/ msg = {msg}");
-
        if (msg is null || msg.Length == 0) return;
 
-       Debug.Log($"About to publish message to {_currentChannelName}");
        _chatClient.PublishMessage(_currentChannelName, msg);
     }
 
    public void ShowChannelText(string channelName)
    {
-      Debug.Log("Showing channel text");
          /* If no channel name was passed in or a channel by the given name cannot 
             be found, then return.
           */
