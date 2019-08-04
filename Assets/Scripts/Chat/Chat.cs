@@ -166,8 +166,10 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
       string[] senders, 
       object[] messages)
    {
-      // Code where messages will be displayed should go here
-      ;
+      if (channelName.Equals(_currentChannelName))
+      {
+         ShowChannelText(channelName);
+      }
    }
 
    void IChatClientListener.OnPrivateMessage(
@@ -177,6 +179,25 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
    {
        // Private messages are not implemented in this chat system
       ;
+   }
+
+   public void ShowChannelText(string channelName)
+   {
+         /* If no channel name was passed in or a channel by the given name cannot 
+            be found, then return.
+          */
+      if (string.IsNullOrEmpty(channelName)) return;
+
+      ChatChannel channel;
+      bool channelFound = _chatClient.TryGetChannel(channelName, out channel);
+
+      if (!channelFound)
+      {
+         Debug.Log($"Could not find channel {channelName}");
+         return;
+      }
+
+      currentChannelText.text = channel.ToStringMessages();
    }
 
    void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
