@@ -38,34 +38,31 @@ namespace GeometryBattles.UI
             float percentOwned = tileOwnershipDisplay.GetPercentOwned(playerID);
             if (percentOwned > minPercentDisplay)
             {
-                //percentText.text = tileOwnershipDisplay.GetPercentOwned(playerID).ToString("P0");
-                float H, S, V;
-                Color.RGBToHSV(MyColor(), out H, out S, out V);
-                percentText.text = V.ToString();
+                percentText.text = tileOwnershipDisplay.GetPercentOwned(playerID).ToString("P0");
             }
             else
             {
                 percentText.text = "";
             }
-            UpdateTextColor();
         }
 
         public void UpdateTextColor()
         {
-            Color color = MyColor();
-            Color lerpToColor;
-            float H, S, V;
-            Color.RGBToHSV(color, out H, out S, out V);
-            if (V < textColorThreshold)
-            {
-                lerpToColor = Color.white;
-            }
-            else
-            {
-                lerpToColor = Color.black;
-            }
+            percentText.color = Color.black;
+            // Color color = MyColor();
+            // Color lerpToColor;
+            // float H, S, V;
+            // Color.RGBToHSV(color, out H, out S, out V);
+            // if (V < textColorThreshold)
+            // {
+            //     lerpToColor = Color.white;
+            // }
+            // else
+            // {
+            //     lerpToColor = Color.black;
+            // }
 
-            percentText.color = Color.Lerp(color, lerpToColor, textColorLerpAmount);
+            // percentText.color = Color.Lerp(color, lerpToColor, textColorLerpAmount);
         }
 
         Color MyColor()
