@@ -23,7 +23,6 @@ namespace GeometryBattles.Construction
         {
             board = FindObjectOfType<Board>();
             structureStore = FindObjectOfType<StructureStore>();
-            HexActionManager.registerAction(this);
         }
 
         public bool canDoAction(Player player, Tile tile)

@@ -15,6 +15,16 @@ namespace GeometryBattles.HexAction
             hexActions.Add(action);
         }
 
+        static public void deregisterAction(IHexAction action)
+        {
+            hexActions.Remove(action);
+        }
+
+        static public void deregisterAllActions()
+        {
+            hexActions = new List<IHexAction>();
+        }
+
         static public List<IHexAction> getViableActions(Player player, Tile tile)
         {
             List<IHexAction> viableActions = new List<IHexAction>();

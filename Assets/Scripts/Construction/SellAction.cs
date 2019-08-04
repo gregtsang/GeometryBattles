@@ -23,7 +23,6 @@ namespace GeometryBattles.Construction
         // Start is called before the first frame update
         void Start()
         {
-            HexActionManager.registerAction(this);
             board = FindObjectOfType<Board>();
             structureStore = FindObjectOfType<StructureStore>();
         }
