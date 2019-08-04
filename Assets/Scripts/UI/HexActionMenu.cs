@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 namespace GeometryBattles.UI
 {
     [RequireComponent(typeof(Tile))]
-    public class HexActionMenu : MonoBehaviour, IPointerClickHandler
+    public class HexActionMenu : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
         
         //Cached References
@@ -24,20 +24,12 @@ namespace GeometryBattles.UI
             uiManager = FindObjectOfType<UIManager>();
             tilePrefab = GetComponent<Tile>();
         }
-        
-        // private void OnMouseDown()
-        // {
-        //     HandleClick();
-        // }
 
         private void HandleClick()
         {
-            uiManager.HideHexActionMenu();
-
             string errMsg = "";
             var actions = HexActionManager.getViableActions
             (uiManager.GetActivePlayer(), tilePrefab);
-            //DebugLogActions(actions);
 
             Debug.Log($"I clicked as {uiManager.GetActivePlayer().Id}");
 
@@ -104,6 +96,11 @@ namespace GeometryBattles.UI
             {
                 HandleClick();
             }
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            uiManager.HideHexActionMenu();
         }
     }
 }
