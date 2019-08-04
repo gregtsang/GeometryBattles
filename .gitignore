@@ -21,6 +21,7 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode/
 
 # Gradle cache directory
 .gradle/
@@ -42,6 +43,9 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
+
+# TextMeshPro .meta file
+/[Aa]ssets/TextMesh Pro.meta
 
 # Unity3D generated meta files
 *.pidb.meta
