@@ -20,6 +20,7 @@ namespace GeometryBattles.BoardManager
 
         public int spreadAmount;
         public float spreadRate;
+        public int fadeAmount;
         float spreadTimer = 0.0f;
 
         public int infMax;
@@ -75,13 +76,18 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        void EndGame()
+        public void EndGame()
         {
             start = false;
             if (PhotonNetwork.IsMasterClient)
             {
                 StopCoroutine(MineResourceRepeat());
             }
+        }
+
+        public bool IsGameOver()
+        {
+            return !start;
         }
 
         public void SetGaps()
@@ -268,6 +274,26 @@ namespace GeometryBattles.BoardManager
             bases[player] = new Vector2Int(q, r);
         }
 
+        public void RemoveBase(Player player)
+        {
+            bases.Remove(player);
+            if (bases.Count == 1)
+            {
+                Player winner = null;
+                foreach (Player p in bases.Keys)
+                {
+                    winner = p;
+                }
+                EventManager.RaiseOnGameOver(winner.gameObject);
+                EndGame();
+            }
+        }
+
+        public bool HasBase(Player player)
+        {
+            return bases.ContainsKey(player);
+        }
+
         public bool IsConnectedToBase(int q, int r, Player player)
         {
             HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
@@ -368,10 +394,14 @@ namespace GeometryBattles.BoardManager
             foreach (KeyValuePair<Vector2Int, TileState> tile in grid)
             {
                 buffer[tile.Key].Set(tile.Value.GetOwner(), tile.Value.GetInfluence());
+                if (tile.Value.GetOwner() != null && !HasBase(tile.Value.GetOwner()))
+                {
+                    AddNode(tile.Key[0], tile.Key[1], null, Mathf.Min(fadeAmount, tile.Value.GetInfluence()), false);
+                }
                 List<Vector2Int> neighbors = GetNeighbors(tile.Key[0], tile.Key[1]);
                 foreach (Vector2Int n in neighbors)
                 {
-                    if (grid[n].GetInfluence() >= infThreshold)
+                    if (grid[n].GetInfluence() >= infThreshold && HasBase(grid[n].GetOwner()))
                     {
                         AddNode(tile.Key[0], tile.Key[1], grid[n].GetOwner(), spreadAmount + grid[n].GetBuff(grid[n].GetOwner()), false);
                     }
@@ -441,25 +471,31 @@ namespace GeometryBattles.BoardManager
         private void RPC_MineResource()
         {
             Dictionary<Player, int> playerMining = new Dictionary<Player, int>();
-                foreach (Player p in players)
+            foreach (Player p in players)
+            {
+                if (HasBase(p))
                 {
                     playerMining[p] = resource.miningAmount;
                 }
-                HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
-                foreach (Vector2Int r in resourceTiles)
+            }
+            HashSet<Vector2Int> resourceTiles = resource.GetResourceTiles();
+            foreach (Vector2Int r in resourceTiles)
+            {
+                Player owner = grid[r].GetOwner();
+                int influence = grid[r].GetInfluence();
+                if (influence >= infThreshold && HasBase(owner) && IsConnectedToBase(r[0], r[1], owner))
                 {
-                    Player owner = grid[r].GetOwner();
-                    int influence = grid[r].GetInfluence();
-                    if (influence >= infThreshold && IsConnectedToBase(r[0], r[1], owner))
-                    {
-                        playerMining[owner] += resource.resourceTileAmount;
-                    }
+                    playerMining[owner] += resource.resourceTileAmount;
                 }
-                foreach (Player p in players)
+            }
+            foreach (Player p in players)
+            {
+                if (HasBase(p))
                 {
                     p.AddResource(playerMining[p]);
                 }
-                EventManager.RaiseOnResourceUpdate();
+            }
+            EventManager.RaiseOnResourceUpdate();
         }
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
