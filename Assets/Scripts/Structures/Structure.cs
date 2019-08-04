@@ -10,6 +10,7 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         protected int q, r;
         protected Player player;
+        [SerializeField]
         protected int hp;
         protected int maxhp;
         protected int regen;

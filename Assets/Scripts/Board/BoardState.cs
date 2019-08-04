@@ -56,21 +56,31 @@ namespace GeometryBattles.BoardManager
                 else
                 {
                     EventManager.RaiseOnGameOver(winner.gameObject);
+                    EndGame();
                 }
             }
         }
 
-        private void Start() {
+        void OnEnable()
+        {
             photonView = GetComponent<PhotonView>();
         }
 
         public void StartGame()
         {
             start = true;
-
             if (PhotonNetwork.IsMasterClient)
             {
                 StartCoroutine(MineResourceRepeat());
+            }
+        }
+
+        void EndGame()
+        {
+            start = false;
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StopCoroutine(MineResourceRepeat());
             }
         }
 
@@ -320,6 +330,11 @@ namespace GeometryBattles.BoardManager
                 }
             }
             return -1;
+        }
+
+        public bool IsValidTile(int q, int r)
+        {
+            return grid.ContainsKey(new Vector2Int(q, r));
         }
 
         public List<Vector2Int> GetNeighbors(int q, int r)

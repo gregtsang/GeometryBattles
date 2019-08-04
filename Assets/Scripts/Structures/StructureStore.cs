@@ -9,6 +9,7 @@ namespace GeometryBattles.StructureManager
     {
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
+        public GameObject scouts;
 
         void OnEnable()
         {
@@ -19,6 +20,7 @@ namespace GeometryBattles.StructureManager
 
         void DamageStructure(int q, int r, int amount)
         {
+            Debug.Log(q + " " + r + " " + amount);
             Structure currStructure = structures[new Vector2Int(q, r)];
             int currHP = currStructure.GetHP() - Mathf.Max(1, amount - currStructure.GetArmor());
             if (currHP > 0)
@@ -29,7 +31,7 @@ namespace GeometryBattles.StructureManager
             {
                 if (currStructure is Base)
                 {
-                    // 
+                    Debug.Log("test");
                 }
                 else
                 {
@@ -45,21 +47,29 @@ namespace GeometryBattles.StructureManager
             currBase.SetPlayer(boardState.GetNodeOwner(q, r));
             currBase.boardState = this.boardState;
             structures[new Vector2Int(q, r)] = currBase;
+            boardState.AddStructure(q, r);
         }
 
         public void AddStructure(int q, int r, GameObject structurePrefab)
         {
             Tile currTile = boardState.GetNodeTile(q, r);
             Vector3 pos = currTile.transform.position + new Vector3(0.0f, structurePrefab.GetComponent<MeshRenderer>().bounds.size.y / 2.0f, 0.0f);
-            GameObject structure = Instantiate(structurePrefab, pos, structurePrefab.transform.rotation) as GameObject;
+            GameObject structure = Instantiate(structurePrefab, pos, structurePrefab.transform.rotation, this.transform) as GameObject;
             Structure currStructure = structure.GetComponent<Structure>();
             currStructure.SetColor(boardState.GetNodeOwner(q, r).GetColor());
             currStructure.SetCoords(q, r);
             currStructure.SetPlayer(boardState.GetNodeOwner(q, r));
             currStructure.boardState = this.boardState;
+            if (currStructure is Cube)
+            {
+                ((Cube)currStructure).scouts = scouts;
+            }
             structures[new Vector2Int(q, r)] = currStructure;
             boardState.AddStructure(q, r);
-            StartCoroutine(DissolveIn(currStructure));
+            if (currStructure is Hexagon)
+                currStructure.StartEffect();
+            else
+                StartCoroutine(DissolveIn(currStructure));
         }
 
         IEnumerator DissolveIn(Structure structure)
@@ -72,7 +82,6 @@ namespace GeometryBattles.StructureManager
                 dissolveTimer -= Time.deltaTime;
                 structure.Mat.SetFloat("_Glow", 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
                 structure.Mat.SetFloat("_Level", height / 2.0f - (height + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
-                structure.SetHP((int)(structure.GetMaxHP() * (1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate)));
                 yield return null;
             }
             structure.StartEffect();

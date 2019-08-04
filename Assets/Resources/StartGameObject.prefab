@@ -557,6 +557,12 @@ PrefabInstance:
       propertyPath: boardWidth
       value: 35
       objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: pyramid
+      value: 
+      objectReference: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
+        type: 3}
     - target: {fileID: 6509530979159464703, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
       propertyPath: resourceTileAmount

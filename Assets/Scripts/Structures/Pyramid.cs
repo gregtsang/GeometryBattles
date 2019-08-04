@@ -9,6 +9,10 @@ namespace GeometryBattles.StructureManager
         void OnEnable()
         {
             stats = this.gameObject.GetComponent<PyramidData>();
+        }
+
+        void Start()
+        {
             hp = stats.currLevel.maxHP;
             maxhp = stats.currLevel.maxHP;
             regen = stats.currLevel.regen;
@@ -26,7 +30,7 @@ namespace GeometryBattles.StructureManager
             {
                 for (int j = Mathf.Max(-range, -range - i); j <= Mathf.Min(range, range - i); j++)
                 {
-                    if (this.q + i >= 0 && this.r + j >= 0)
+                    if (boardState.IsValidTile(this.q + i, this.r + j))
                         boardState.SetNodeBuff(this.q + i, this.r + j, boardState.GetNodeOwner(this.q, this.r), strength);
                 }
             }
