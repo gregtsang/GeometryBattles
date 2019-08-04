@@ -12,6 +12,7 @@
             maxhp = baseMaxHP;
             regen = baseRegen;
             armor = baseArmor;
+            StartCoroutine(RegenHP());
         }
     }
 }

@@ -26,6 +26,7 @@ namespace GeometryBattles.StructureManager
 
         public override void StartEffect()
         {
+            StartCoroutine(RegenHP());
             cubeMat.SetColor("_BaseColor", boardState.GetNodeOwner(q, r).GetColor());
             cubeMat.SetFloat("_Level", 0.0f);
             gameObject.GetComponent<MeshRenderer>().material = cubeMat;
