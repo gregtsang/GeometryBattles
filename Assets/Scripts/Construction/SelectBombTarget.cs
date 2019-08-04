@@ -16,46 +16,70 @@ namespace GeometryBattles.HexAction
 
         [SerializeField] SelectAHex selectionManager = null;
         StructureStore structureStore = null;
+        
+        Board board;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            board = FindObjectOfType<Board>();
+            structureStore = FindObjectOfType<StructureStore>();
+        }
 
         public bool canDoAction(Player player, Tile tile)
         {
-            return true;
+            string err = "";
+            return canDoAction(player, tile, ref err);
         }
 
         public bool canDoAction(Player player, Tile tile, ref string err)
         {
-            return true;
+            return isViableAction(player, tile, ref err);
         }
 
         public void doAction(Player player, Tile tile)
         {
-            if (structureStore.HasStructure(tile.Q, tile.R))
+            
+            if (canDoAction(player, tile))
             {
                 Structure structure = structureStore.GetStructure(tile.Q, tile.R);
-                if (structure is Pentagon)
-                {
-                    selectedPentagon = (Pentagon) structure;
+                selectedPentagon = (Pentagon) structure;
 
-                    selectionManager.SelectHex(OnHexSelection);
-                    return;
-                }
+                selectionManager.SelectHex(OnHexSelection);
+                return;
             }
-            Debug.Log("No Pentagon here");
         }
 
         public string GetTipText(Player player, Tile tile)
         {
-            return "Target";
+            return "";
         }
 
         public bool isViableAction(Player player, Tile tile)
         {
-            return true;
+            string err = "";
+            return isViableAction(player, tile, ref err);
         }
 
         public bool isViableAction(Player player, Tile tile, ref string err)
         {
-            return true;
+            if (TileContainsPentagon(tile))
+            {
+                if (board.boardState.IsOwned(tile.Q, tile.R) && 
+                    board.boardState.GetNodeOwner(tile.Q, tile.R) == player)
+                {
+                    return true;
+                }
+                else
+                {
+                    err = "Tile not Owned";
+                }
+            }
+            else
+            {
+                err = "No Pentagon here";
+            }
+            return false;
         }
 
         private void OnHexSelection(Tile tile)
@@ -64,16 +88,17 @@ namespace GeometryBattles.HexAction
             selectedPentagon.SetTarget(tile.Q, tile.R);
         }
 
-        // Start is called before the first frame update
-        void Start()
+        private bool TileContainsPentagon(Tile tile)
         {
-            structureStore = FindObjectOfType<StructureStore>();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            
+            if (structureStore.HasStructure(tile.Q, tile.R))
+            {
+                Structure structure = structureStore.GetStructure(tile.Q, tile.R);
+                if (structure is Pentagon)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
