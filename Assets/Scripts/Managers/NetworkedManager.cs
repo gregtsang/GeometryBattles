@@ -6,16 +6,19 @@ public class NetworkedManager : MonoBehaviour
    [SerializeField]
    private GameObject _boardPrefab = null;
 
+   [Header("Offline Settings")]
    [SerializeField] bool offlineMode = false;
+   [SerializeField] int initNumberOfPlayers = 2;
+
+   static int numberOfPlayers;
 
    private void Awake()
    {
       PhotonNetwork.OfflineMode = offlineMode;
       if (PhotonNetwork.OfflineMode)
       {
-         PhotonNetwork.CreateRoom("offline");
+         InitializeOfflineGame();
       }
-      
       if (PhotonNetwork.IsMasterClient)
       {
          Debug.Log("I am the master client and I am about to instantiate the board.");
@@ -26,5 +29,29 @@ public class NetworkedManager : MonoBehaviour
             Quaternion.identity
          );
       }
+   }
+
+   private void InitializeOfflineGame()
+   {
+      PhotonNetwork.CreateRoom("offline");
+      numberOfPlayers = initNumberOfPlayers;
+      PhotonNetwork.LocalPlayer.NickName = "Offline Player";
+   }
+
+   static public int GetNumberOfPlayers()
+   {
+      if (PhotonNetwork.OfflineMode)
+      {
+         return numberOfPlayers;
+      }
+      else
+      {
+         return PhotonNetwork.CurrentRoom.PlayerCount;
+      }
+   }
+
+   static public int GetNumberOfLivePlayers()
+   {
+      return PhotonNetwork.CurrentRoom.PlayerCount;
    }
 }

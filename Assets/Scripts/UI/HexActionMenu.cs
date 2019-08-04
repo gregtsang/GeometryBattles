@@ -5,11 +5,12 @@ using UnityEngine.UI;
 using GeometryBattles.HexAction;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
+using UnityEngine.EventSystems;
 
 namespace GeometryBattles.UI
 {
     [RequireComponent(typeof(Tile))]
-    public class HexActionMenu : MonoBehaviour
+    public class HexActionMenu : MonoBehaviour, IPointerClickHandler
     {
         
         //Cached References
@@ -24,8 +25,15 @@ namespace GeometryBattles.UI
             tilePrefab = GetComponent<Tile>();
         }
         
-        private void OnMouseDown()
+        // private void OnMouseDown()
+        // {
+        //     HandleClick();
+        // }
+
+        private void HandleClick()
         {
+            uiManager.HideHexActionMenu();
+
             string errMsg = "";
             var actions = HexActionManager.getViableActions
             (uiManager.GetActivePlayer(), tilePrefab);
@@ -44,9 +52,21 @@ namespace GeometryBattles.UI
                     Debug.Log(errMsg);
                 }
             }
-
+            else if (actions.Count > 1)
+            {
+                uiManager.InitializeHexActionMenu();
+                foreach (IHexAction hexAction in actions)
+                {
+                    uiManager.AddActionToHexActionMenu(hexAction.displayName + "  " + hexAction.GetTipText(uiManager.GetActivePlayer(), tilePrefab)).onClick.AddListener(delegate
+                    {
+                        hexAction.doAction(uiManager.GetActivePlayer(), tilePrefab);
+                        uiManager.HideHexActionMenu();
+                    });
+                }
+                uiManager.ShowHexActionMenu();
+            }
         }
-        
+
         private void OnMouseOver()
         {
             var actions = HexActionManager.getViableActions(uiManager.GetActivePlayer(), tilePrefab);
@@ -78,5 +98,12 @@ namespace GeometryBattles.UI
             }
         }
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                HandleClick();
+            }
+        }
     }
 }

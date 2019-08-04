@@ -4,6 +4,7 @@ using UnityEngine;
 using GeometryBattles.HexAction;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
+using GeometryBattles.StructureManager;
 using Photon.Pun;
 
 namespace GeometryBattles.Construction
@@ -14,6 +15,7 @@ namespace GeometryBattles.Construction
         [SerializeField] private float valueFactor = 0.5f;
 
         //Cached References
+        StructureStore structureStore;
         Board board;
 
         public string displayName {get => _displayName; }
@@ -23,6 +25,7 @@ namespace GeometryBattles.Construction
         {
             HexActionManager.registerAction(this);
             board = FindObjectOfType<Board>();
+            structureStore = FindObjectOfType<StructureStore>();
         }
 
         public bool canDoAction(Player player, Tile tile)
@@ -65,7 +68,7 @@ namespace GeometryBattles.Construction
 
         public string GetTipText(Player player, Tile tile)
         {
-            return GetTileValue(tile).ToString();
+            return "+" + GetTileValue(tile).ToString();
         }
 
         public bool isViableAction(Player player, Tile tile)
@@ -76,14 +79,18 @@ namespace GeometryBattles.Construction
 
         public bool isViableAction(Player player, Tile tile, ref string err)
         {
-            bool isViable = board.boardState.IsOwned(tile.Q, tile.R) && 
-                board.boardState.GetNodeOwner(tile.Q, tile.R) == player;
-            
-            if (!isViable)
+            if (!board.boardState.IsOwned(tile.Q, tile.R) || 
+                board.boardState.GetNodeOwner(tile.Q, tile.R) != player)
             {
                 err = "Cannot sell a tile that you do not own.";
+                return false;
             }
-            return isViable;
+            else if(structureStore.HasStructure(tile.Q, tile.R))
+            {
+                err = "Cannot sell a tile that contains a structure.";
+                return false;
+            }
+            return true;
         }
 
         private int GetTileValue(Tile tile)

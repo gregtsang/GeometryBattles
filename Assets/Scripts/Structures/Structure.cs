@@ -10,6 +10,7 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         protected int q, r;
         protected Player player;
+        [SerializeField]
         protected int hp;
         protected int maxhp;
         protected int regen;
@@ -24,11 +25,6 @@ namespace GeometryBattles.StructureManager
         void Awake()
         {
             mat = gameObject.GetComponent<MeshRenderer>().material;
-        }
-
-        void Start()
-        {
-            StartCoroutine(RegenHP());
         }
 
         virtual public void StartEffect() {}
@@ -86,7 +82,7 @@ namespace GeometryBattles.StructureManager
             return armor;
         }
 
-        IEnumerator RegenHP()
+        protected IEnumerator RegenHP()
         {
             while (hp > 0)
             {

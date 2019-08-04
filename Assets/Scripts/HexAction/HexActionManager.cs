@@ -18,10 +18,9 @@ namespace GeometryBattles.HexAction
         static public List<IHexAction> getViableActions(Player player, Tile tile)
         {
             List<IHexAction> viableActions = new List<IHexAction>();
-            string errMsg = "";
             foreach (IHexAction action in hexActions)
             {
-                if (action.isViableAction(player, tile, ref errMsg))
+                if (action.isViableAction(player, tile))
                 {
                     viableActions.Add(action);
                 }

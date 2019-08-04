@@ -65,6 +65,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 5121737776480154970}
+  - {fileID: 8278264756119381018}
   m_Father: {fileID: 5321664550817974417}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -269,6 +270,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activePlayer: 0
+  hexActionCanvasPrefab: {fileID: 4397913264887874083, guid: 4d3bb775f1a774d4aaaa451cd454af88,
+    type: 3}
+  hexActionOptionPrefab: {fileID: 3661725319351172521, guid: 4aa27a246adb5c043ae00c7c2987bb4f,
+    type: 3}
 --- !u!1 &5121737777226419909
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +284,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5121737777226419906}
   - component: {fileID: 5121737777226419907}
-  - component: {fileID: 5121737777226419904}
+  - component: {fileID: 8264242676864768832}
+  - component: {fileID: 8228663410458858780}
+  - component: {fileID: 425755484778596032}
+  - component: {fileID: 2124318910912060964}
   - component: {fileID: 5327724417247064271}
   m_Layer: 0
   m_Name: HexActions
@@ -317,7 +325,7 @@ MonoBehaviour:
   _displayname: Buy Hex
   costPerDistance: 5
   maxCost: 999
---- !u!114 &5121737777226419904
+--- !u!114 &8264242676864768832
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -330,7 +338,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayName: Sell Tile
-  valueFactor: 0.05
+  valueFactor: 0.5
+--- !u!114 &8228663410458858780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121737777226419909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _displayname: Pyramid
+  structurePrefab: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
+    type: 3}
+--- !u!114 &425755484778596032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121737777226419909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _displayname: Cube
+  structurePrefab: {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4,
+    type: 3}
+--- !u!114 &2124318910912060964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5121737777226419909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f835b0c3cc56dc64db54336442e3843c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _displayname: Pentagon
+  structurePrefab: {fileID: 3714227975952305212, guid: 9bba42a490e3f4c7e924b626f78f24af,
+    type: 3}
 --- !u!114 &5327724417247064271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +406,57 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!1 &7242307832192467253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8278264756119381018}
+  - component: {fileID: 4187822378277371119}
+  m_Layer: 5
+  m_Name: Tile Ownership Display
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8278264756119381018
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7242307832192467253}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5121737776393210995}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.000015259, y: 320}
+  m_SizeDelta: {x: 417.92, y: 25}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4187822378277371119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7242307832192467253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 307764eb1f36bc249b68fc457834a646, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  playerChunkPrefab: {fileID: 2222612731955902791, guid: 1dc2e5f13daa7f043be7c0be06d7ad4b,
+    type: 3}
 --- !u!1001 &3192035524350768609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -435,10 +539,42 @@ PrefabInstance:
       propertyPath: winPercent
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464688, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: spreadAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464688, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: fadeAmount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
       propertyPath: numPlayers
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: cube
+      value: 
+      objectReference: {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4,
+        type: 3}
+    - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: boardWidth
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: pyramid
+      value: 
+      objectReference: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
+        type: 3}
+    - target: {fileID: 6509530979159464703, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: resourceTileAmount
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47969af662b3c48f3bad1bb0d4096e07, type: 3}

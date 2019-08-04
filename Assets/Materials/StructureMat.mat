@@ -89,7 +89,7 @@ Material:
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
-    - _Glow: 1
+    - _Glow: 0
     - _Level: -0.25
     - _Mask_Smoothness: 1.55
     - _Metallic: 0.5

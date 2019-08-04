@@ -6,12 +6,13 @@
         public int baseRegen;
         public int baseArmor;
 
-        void OnEnable()
+        void Start()
         {
             hp = baseMaxHP;
             maxhp = baseMaxHP;
             regen = baseRegen;
             armor = baseArmor;
+            StartCoroutine(RegenHP());
         }
     }
 }
