@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Chat;
 using Photon.Realtime;
 using Photon.Pun;
@@ -10,36 +8,33 @@ using GeometryBattles.MenuUI;
 
 public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 {
-    [SerializeField] private uint   historyBufferLength;
-    [SerializeField] private string appVersion;
-    [SerializeField] TMP_Dropdown   regionDropdown;
-    //[SerializeField] TMP_Text       currentChannelText;
-    [SerializeField] TMP_InputField chatInputField;
+    [SerializeField] private string appVersion     = null;
+    [SerializeField] TMP_Dropdown   regionDropdown = null;
+    [SerializeField] TMP_InputField chatInputField = null;
     
     public string username;
 
     protected internal AppSettings chatAppSettings;
 
     private string     _currentChannelName;
-    private string     _roomName;
     private ChatClient _chatClient;
     private int        _region;
     private ChatBox    _chatBox;
 
-    // Start is called before the first frame update
+      // Start is called before the first frame update
    private void Start()
    {
       _chatBox = GetComponent<ChatBox>();
       _chatBox.NewChatMessage += OnChatMessage;
 
-         // We want to be able to chat in subsequent scenes
+         /* We want to be able to chat in subsequent scenes, so get root object and
+            prevent from being destroyed on load.
+         */
       Transform managersTransform = gameObject.transform;
-
       while (!(managersTransform.parent is null))
       {
          managersTransform = managersTransform.parent;
       }
-
       DontDestroyOnLoad(managersTransform.gameObject);
 
             // Determine if the application has an appid for Photon Chat
@@ -52,14 +47,16 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
         {
             Debug.Log($"Photon Chat appid: {chatAppSettings.AppIdChat}");
         }
+
+        appVersion = PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion;
     }
 
-    // Update is called once per frame
-    private void Update()
-    {
-            // Keep an active connection alive and process incoming messages
-        _chatClient?.Service();
-    }
+      // Update is called once per frame
+   private void Update()
+   {
+         // Keep an active connection alive and process incoming messages
+      _chatClient?.Service();
+   }
 
    void OnChatMessage(object sender, NewChatMessageEventArgs e)
    {
@@ -71,15 +68,14 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 
    public override void OnJoinedRoom()
    {
-      _roomName = PhotonNetwork.CurrentRoom.Name;
-      _currentChannelName = _roomName.Trim();
+      _currentChannelName = PhotonNetwork.CurrentRoom.Name.Trim();
       _chatClient.Subscribe(new string[] {_currentChannelName});
       Debug.Log($"Subscribed to {_currentChannelName}");
    }
 
    public override void OnLeftRoom()
    {
-      _chatClient.Unsubscribe(new string[] {_roomName});
+      _chatClient.Unsubscribe(new string[] {_currentChannelName});
    }
 
    public void Connect()
@@ -176,7 +172,7 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
          return;
       }
 
-      //currentChannelText.text = channel.ToStringMessages();
+      _chatBox.DeleteMessages();
       _chatBox.AddMessage("", channel.ToStringMessages(), Color.white);
       Debug.Log(channel.ToStringMessages());
    }
@@ -229,7 +225,7 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
       foreach (string channel in channels)
       {
          Debug.Log($"subscribed to channel: {channel}");
-          _chatClient.PublishMessage(channel, $"{username} has joined.");
+          //_chatClient.PublishMessage(channel, $"{username} has joined.");
       }
    }
 
