@@ -18,6 +18,7 @@ namespace GeometryBattles.StructureManager
             regen = baseRegen;
             armor = baseArmor;
             timer = buildTime;
+            StartCoroutine(RegenHP());
         }
 
         void Update()
@@ -26,9 +27,10 @@ namespace GeometryBattles.StructureManager
             {
                 timer -= Time.deltaTime;
             }
-            if (timer <= 0.0f)
+            if (!boardState.IsGameOver() && timer <= 0.0f)
             {
                 EventManager.RaiseOnGameOver(player.gameObject);
+                boardState.EndGame();
             }
         }
 

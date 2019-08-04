@@ -27,11 +27,6 @@ namespace GeometryBattles.StructureManager
             mat = gameObject.GetComponent<MeshRenderer>().material;
         }
 
-        void Start()
-        {
-            StartCoroutine(RegenHP());
-        }
-
         virtual public void StartEffect() {}
 
         virtual public void Upgrade() {}
@@ -87,7 +82,7 @@ namespace GeometryBattles.StructureManager
             return armor;
         }
 
-        IEnumerator RegenHP()
+        protected IEnumerator RegenHP()
         {
             while (hp > 0)
             {

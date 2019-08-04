@@ -17,6 +17,11 @@ namespace GeometryBattles.StructureManager
         public T currLevel;
         public T[] levels;
 
+        void OnEnable()
+        {
+            currLevel = levels[currIndex];
+        }
+
         public int GetCost()
         {
             int totalCost = 0;

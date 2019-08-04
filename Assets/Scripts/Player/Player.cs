@@ -27,6 +27,16 @@ namespace GeometryBattles.PlayerManager
             resource += amount;
         }
 
+        public List<Vector2Int> GetTiles()
+        {
+            List<Vector2Int> res = new List<Vector2Int>();
+            foreach (Vector2Int t in this.tiles)
+            {
+                res.Add(t);
+            }
+            return res;
+        }
+
         public int GetNumTiles()
         {
             return tiles.Count;

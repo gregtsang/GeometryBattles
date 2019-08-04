@@ -21,6 +21,7 @@ namespace GeometryBattles.StructureManager
 
         public override void StartEffect()
         {
+            StartCoroutine(RegenHP());
             Buff(stats.currLevel.range, stats.currLevel.strength);
         }
 

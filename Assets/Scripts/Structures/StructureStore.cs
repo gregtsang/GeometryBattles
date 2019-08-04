@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.BoardManager;
+using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.StructureManager
 {
@@ -20,7 +21,6 @@ namespace GeometryBattles.StructureManager
 
         void DamageStructure(int q, int r, int amount)
         {
-            Debug.Log(q + " " + r + " " + amount);
             Structure currStructure = structures[new Vector2Int(q, r)];
             int currHP = currStructure.GetHP() - Mathf.Max(1, amount - currStructure.GetArmor());
             if (currHP > 0)
@@ -31,7 +31,7 @@ namespace GeometryBattles.StructureManager
             {
                 if (currStructure is Base)
                 {
-                    Debug.Log("test");
+                    RemovePlayer(currStructure.GetPlayer());
                 }
                 else
                 {
@@ -103,6 +103,35 @@ namespace GeometryBattles.StructureManager
         public Structure GetStructure(int q, int r)
         {
             return structures[new Vector2Int(q, r)];
+        }
+
+        void RemovePlayer(Player player)
+        {
+            List<Vector2Int> destroy = new List<Vector2Int>();
+            foreach (KeyValuePair<Vector2Int, Structure> s in structures)
+            {
+                if (s.Value.GetPlayer() == player)
+                {
+                    destroy.Add(new Vector2Int(s.Key[0], s.Key[1]));
+                }
+            }
+            foreach (Vector2Int d in destroy)
+            {
+                RemoveStructure(d[0], d[1]);
+            }
+            List<GameObject> destroyScouts = new List<GameObject>();
+            foreach (Transform child in scouts.transform)
+            {
+                if (child.gameObject.GetComponent<CubeScout>().GetPlayer() == player)
+                {
+                    destroyScouts.Add(child.gameObject);
+                }
+            }
+            foreach (GameObject d in destroyScouts)
+            {
+                Destroy(d);
+            }
+            boardState.RemoveBase(player);
         }
     }
 }
