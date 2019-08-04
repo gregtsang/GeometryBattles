@@ -67,7 +67,6 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
       _chatClient.Unsubscribe(new string[] {_roomName});
    }
 
-
    public void Connect()
    {
       _chatClient = new ChatClient(this);
@@ -140,6 +139,26 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
        _chatClient.PublishMessage(_currentChannelName, msg);
     }
 
+   public void ShowChannelText(string channelName)
+   {
+         /* If no channel name was passed in or a channel by the given name cannot 
+            be found, then return.
+          */
+      if (string.IsNullOrEmpty(channelName)) return;
+
+      ChatChannel channel;
+      bool channelFound = _chatClient.TryGetChannel(channelName, out channel);
+
+      if (!channelFound)
+      {
+         Debug.Log($"Could not find channel {channelName}");
+         return;
+      }
+
+      currentChannelText.text = channel.ToStringMessages();
+   }
+
+
 #region IChatClientListener implementation
    void IChatClientListener.DebugReturn(DebugLevel level, string message)
    {
@@ -179,25 +198,6 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
    {
        // Private messages are not implemented in this chat system
       ;
-   }
-
-   public void ShowChannelText(string channelName)
-   {
-         /* If no channel name was passed in or a channel by the given name cannot 
-            be found, then return.
-          */
-      if (string.IsNullOrEmpty(channelName)) return;
-
-      ChatChannel channel;
-      bool channelFound = _chatClient.TryGetChannel(channelName, out channel);
-
-      if (!channelFound)
-      {
-         Debug.Log($"Could not find channel {channelName}");
-         return;
-      }
-
-      currentChannelText.text = channel.ToStringMessages();
    }
 
    void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
