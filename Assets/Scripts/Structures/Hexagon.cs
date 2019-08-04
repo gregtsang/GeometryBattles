@@ -34,10 +34,22 @@ namespace GeometryBattles.StructureManager
 
         bool CheckSpace()
         {
-            List<Vector2Int> neighbors = boardState.GetNeighbors(q, r);
-            foreach (Vector2Int n in neighbors)
+            List<Vector2Int> tiles = new List<Vector2Int>();
+            tiles.Add(new Vector2Int(q - 1, r));
+            tiles.Add(new Vector2Int(q + 1, r));
+            tiles.Add(new Vector2Int(q, r - 1));
+            tiles.Add(new Vector2Int(q, r + 1));
+            tiles.Add(new Vector2Int(q - 1, r + 1));
+            tiles.Add(new Vector2Int(q + 1, r - 1));
+            tiles.Add(new Vector2Int(q - 1, r - 1));
+            tiles.Add(new Vector2Int(q + 1, r + 1));
+            tiles.Add(new Vector2Int(q - 1, r + 2));
+            tiles.Add(new Vector2Int(q + 1, r - 2));
+            tiles.Add(new Vector2Int(q - 2, r + 1));
+            tiles.Add(new Vector2Int(q + 2, r - 1));
+            foreach (Vector2Int t in tiles)
             {
-                if (!boardState.IsOwned(n[0], n[1]) || boardState.GetNodeOwner(n[0], n[1]) != player)
+                if (!boardState.IsValidTile(t[0], t[1]) || !boardState.IsOwned(t[0], t[1]) || boardState.GetNodeOwner(t[0], t[1]) != player)
                     return false;
             }
             return true;
