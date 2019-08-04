@@ -13,6 +13,9 @@ namespace GeometryBattles.UI
         [SerializeField] TextMeshProUGUI percentText = null;
         [SerializeField] [Range(0, 1)] float minPercentDisplay = 0.1f;
 
+        [SerializeField] [Range(0, 2)] float textColorThreshold = 0.5f;
+        [SerializeField] [Range(0, 1)] float textColorLerpAmount = 0.8f;
+
         TileOwnershipDisplay tileOwnershipDisplay;
         int playerID = 0;
 
@@ -28,19 +31,46 @@ namespace GeometryBattles.UI
         {
             percentText.gameObject.SetActive(false);
         }
-
+        
         // Update is called once per frame
         void Update()
         {
             float percentOwned = tileOwnershipDisplay.GetPercentOwned(playerID);
             if (percentOwned > minPercentDisplay)
             {
-                percentText.text = tileOwnershipDisplay.GetPercentOwned(playerID).ToString("P0");
+                //percentText.text = tileOwnershipDisplay.GetPercentOwned(playerID).ToString("P0");
+                float H, S, V;
+                Color.RGBToHSV(MyColor(), out H, out S, out V);
+                percentText.text = V.ToString();
             }
             else
             {
                 percentText.text = "";
             }
+            UpdateTextColor();
+        }
+
+        public void UpdateTextColor()
+        {
+            Color color = MyColor();
+            Color lerpToColor;
+            float H, S, V;
+            Color.RGBToHSV(color, out H, out S, out V);
+            if (V < textColorThreshold)
+            {
+                lerpToColor = Color.white;
+            }
+            else
+            {
+                lerpToColor = Color.black;
+            }
+
+            percentText.color = Color.Lerp(color, lerpToColor, textColorLerpAmount);
+        }
+
+        Color MyColor()
+        {
+            return GetComponent<Image>().color;
         }
     }
 }
