@@ -123,9 +123,9 @@ namespace GeometryBattles.MenuUI
         protected virtual void OnNewChatMessage(NewChatMessageEventArgs e)
         {
             EventHandler<NewChatMessageEventArgs> handler = NewChatMessage;
-            if (NewChatMessage != null)
+            if (handler != null)
             {
-                NewChatMessage(this, e);
+                handler(this, e);
             }
         }
     }
