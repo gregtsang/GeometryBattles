@@ -505,6 +505,7 @@ MonoBehaviour:
   moveUnownedWeight: 3
   moveUnvisitedWeight: 5
   moveAwayWeight: 10
+  structureDamage: 20
 --- !u!4 &1320711754
 Transform:
   m_ObjectHideFlags: 0

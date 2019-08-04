@@ -89,7 +89,7 @@ namespace GeometryBattles.Construction
 
         private int GetStructureCost()
         {
-            return structurePrefab.GetComponent<StructureData>().GetCost();
+            return structurePrefab.GetComponent<IStructureData>().GetCost();
         }
     }
 }
