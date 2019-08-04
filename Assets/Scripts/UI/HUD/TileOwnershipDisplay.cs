@@ -19,6 +19,7 @@ namespace GeometryBattles.UI
         RectTransform rectTransform;
 
         List<RectTransform> rects = new List<RectTransform>();
+        RectTransform backgroundRect;
 
         // Start is called before the first frame update
         void Start()
@@ -46,10 +47,11 @@ namespace GeometryBattles.UI
 
         private void CreateBackgroundImage()
         {
-            GameObject newImage = new GameObject(name);
-            newImage.AddComponent<Image>().color = backgroundColor;
-            newImage.transform.SetParent(transform);
-            SetImageSize(newImage.GetComponent<RectTransform>());
+            //GameObject newImage = new GameObject(name);
+            //newImage.AddComponent<Image>().color = backgroundColor;
+            //newImage.transform.SetParent(transform);
+            //SetImageSize(newImage.GetComponent<RectTransform>());
+            backgroundRect = CreateSubImage("Background", backgroundColor, -1).GetComponent<RectTransform>();
         }
 
         private GameObject CreateSubImage(string name, Color color, int playerID)
@@ -57,10 +59,12 @@ namespace GeometryBattles.UI
             //GameObject newImage = new GameObject(name);
             //newImage.AddComponent<Image>().color = color;
             GameObject newImage = Instantiate(playerChunkPrefab);
+            newImage.name = name;
             newImage.GetComponent<Image>().color = color;
             newImage.transform.SetParent(transform);
             newImage.GetComponent<TileOwnershipChunk>().TileOwnershipDisplay = this;
             newImage.GetComponent<TileOwnershipChunk>().PlayerID = playerID;
+            newImage.GetComponent<TileOwnershipChunk>().UpdateTextColor();
 
             SetImageSize(newImage.GetComponent<RectTransform>());
             return newImage;
@@ -91,6 +95,8 @@ namespace GeometryBattles.UI
                 SetRectWidth(rects[i], widthFraction, startFraction);
                 startFraction += widthFraction;
             }
+            widthFraction = GetUnownedPercentage();
+            SetRectWidth(backgroundRect, widthFraction, startFraction);
         }
 
         private int GetOwnershipForPlayer(int pid)
@@ -100,7 +106,21 @@ namespace GeometryBattles.UI
 
         public float GetPercentOwned(int pid)
         {
+            if (pid == -1)
+            {
+                return GetUnownedPercentage();
+            }
             return (float) GetOwnershipForPlayer(pid) / (float) board.boardState.GridCount;
+        }
+
+        private float GetUnownedPercentage()
+        {
+            int ownedTiles = 0;
+            for (int i = 0; i < rects.Count; i++)
+            {
+                ownedTiles += GetOwnershipForPlayer(rects[i].GetComponent<TileOwnershipChunk>().PlayerID);
+            }
+            return (float) (board.boardState.GridCount - ownedTiles) / (float) board.boardState.GridCount;
         }
     }
 }
