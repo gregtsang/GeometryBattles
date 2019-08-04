@@ -6,14 +6,15 @@ using Photon.Realtime;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using TMPro;
+using GeometryBattles.MenuUI;
 
 public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 {
     [SerializeField] private uint   historyBufferLength;
     [SerializeField] private string appVersion;
     [SerializeField] TMP_Dropdown   regionDropdown;
-    [SerializeField] TMP_Text       currentChannelText;
-    [SerializeField] TMP_Text       chatInputField;
+    //[SerializeField] TMP_Text       currentChannelText;
+    [SerializeField] TMP_InputField chatInputField;
     
     public string username;
 
@@ -23,10 +24,14 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
     private string     _roomName;
     private ChatClient _chatClient;
     private int        _region;
+    private ChatBox    _chatBox;
 
     // Start is called before the first frame update
    private void Start()
    {
+      _chatBox = GetComponent<ChatBox>();
+      _chatBox.NewChatMessage += OnChatMessage;
+
          // We want to be able to chat in subsequent scenes
       Transform managersTransform = gameObject.transform;
 
@@ -56,10 +61,20 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
         _chatClient?.Service();
     }
 
+   void OnChatMessage(object sender, NewChatMessageEventArgs e)
+   {
+      //Debug.Log($"Message sent from {e.nickName}: {e.message}");
+      //chatBox.AddMessage("TEST", "Message Received", Color.black);
+      SendChatMessage(e.message);
+   }
+
+
    public override void OnJoinedRoom()
    {
       _roomName = PhotonNetwork.CurrentRoom.Name;
-      _chatClient.Subscribe(new string[] {_roomName});
+      _currentChannelName = _roomName.Trim();
+      _chatClient.Subscribe(new string[] {_currentChannelName});
+      Debug.Log($"Subscribed to {_currentChannelName}");
    }
 
    public override void OnLeftRoom()
@@ -100,6 +115,7 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
         );
 
         Debug.Log($"Connecting to Photon Chat servers as {username}");
+        _chatBox.UserNickName = username;
     }
 
     public void OnRegionChanged()
@@ -119,11 +135,12 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 
     public void OnEnterSend()
     {
-        if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
-        {
+        Debug.Log($"Firing OnEnterSend() msg = {chatInputField.text}");
+        //if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+        //{
             SendChatMessage(chatInputField.text);
             chatInputField.text = "";
-        }
+        //}
     }
 
     public void OnClickSend()
@@ -134,13 +151,17 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 
     private void SendChatMessage(string msg)
     {
+       Debug.Log($"Calling SendChatMessage w/ msg = {msg}");
+
        if (msg is null || msg.Length == 0) return;
 
+       Debug.Log($"About to publish message to {_currentChannelName}");
        _chatClient.PublishMessage(_currentChannelName, msg);
     }
 
    public void ShowChannelText(string channelName)
    {
+      Debug.Log("Showing channel text");
          /* If no channel name was passed in or a channel by the given name cannot 
             be found, then return.
           */
@@ -155,7 +176,9 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
          return;
       }
 
-      currentChannelText.text = channel.ToStringMessages();
+      //currentChannelText.text = channel.ToStringMessages();
+      _chatBox.AddMessage("", channel.ToStringMessages(), Color.white);
+      Debug.Log(channel.ToStringMessages());
    }
 
 
@@ -202,8 +225,10 @@ public class Chat : MonoBehaviourPunCallbacks, IChatClientListener
 
    void IChatClientListener.OnSubscribed(string[] channels, bool[] results)
    {
+      Debug.Log("Calling OnSubscribed");
       foreach (string channel in channels)
       {
+         Debug.Log($"subscribed to channel: {channel}");
           _chatClient.PublishMessage(channel, $"{username} has joined.");
       }
    }
