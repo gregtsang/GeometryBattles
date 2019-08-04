@@ -7,6 +7,7 @@ using System;
 
 namespace GeometryBattles.MenuUI
 {
+    [RequireComponent(typeof (Chat))]
     public class ChatBox : MonoBehaviour
     {
         [SerializeField] TMP_InputField inputField = null;
