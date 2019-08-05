@@ -352,7 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _displayname: Pyramid
-  structurePrefab: {fileID: 5372098549788178022, guid: e6bf5d55cb04c466da2258e516fa73b4,
+  structurePrefab: {fileID: 2608534636820817070, guid: fac50d04c93e84afeb0da9a2cbf00dec,
     type: 3}
 --- !u!114 &425755484778596032
 MonoBehaviour:

@@ -53,7 +53,15 @@ namespace GeometryBattles.StructureManager
         public void AddStructure(int q, int r, GameObject structurePrefab)
         {
             Tile currTile = boardState.GetNodeTile(q, r);
-            Vector3 pos = currTile.transform.position + new Vector3(0.0f, structurePrefab.GetComponent<MeshRenderer>().bounds.size.y / 2.0f, 0.0f);
+            Vector3 pos;
+            if (structurePrefab.GetComponent<Structure>() is Pyramid)
+            {
+                pos = currTile.transform.position;
+            }
+            else
+            {
+                pos = currTile.transform.position + new Vector3(0.0f, structurePrefab.GetComponent<MeshRenderer>().bounds.size.y / 2.0f, 0.0f);
+            }
             GameObject structure = Instantiate(structurePrefab, pos, structurePrefab.transform.rotation, this.transform) as GameObject;
             Structure currStructure = structure.GetComponent<Structure>();
             currStructure.SetColor(boardState.GetNodeOwner(q, r).GetColor());
@@ -67,9 +75,17 @@ namespace GeometryBattles.StructureManager
             structures[new Vector2Int(q, r)] = currStructure;
             boardState.AddStructure(q, r);
             if (currStructure is Hexagon)
+            {
                 currStructure.StartEffect();
+            }
+            else if (currStructure is Pyramid)
+            {
+                StartCoroutine(DissolveInPyramid((Pyramid)currStructure));
+            }
             else
+            {
                 StartCoroutine(DissolveIn(currStructure));
+            }
         }
 
         IEnumerator DissolveIn(Structure structure)
@@ -85,6 +101,32 @@ namespace GeometryBattles.StructureManager
                 yield return null;
             }
             structure.StartEffect();
+        }
+
+        IEnumerator DissolveInPyramid(Pyramid pyramid)
+        {
+            float dissolveRate = 5.0f;
+            float dissolveTimer = dissolveRate;
+            float heightBase = pyramid.pyramidBase.GetComponent<MeshRenderer>().bounds.size.y;
+            float heightTop = pyramid.pyramidTop.GetComponent<MeshRenderer>().bounds.size.y;
+            Material baseBot = pyramid.baseRenderer.materials[0];
+            Material baseTop = pyramid.baseRenderer.materials[1];
+            Material top = pyramid.topRenderer.material;
+            while (top.GetFloat("_Glow") != 1.0f)
+            {
+                dissolveTimer -= Time.deltaTime;
+                float glow = 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate;
+                float levelBase = heightBase - (heightBase + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
+                float levelTop = heightTop - (heightTop + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
+                baseBot.SetFloat("_Glow", glow);
+                baseTop.SetFloat("_Glow", 0.0f);
+                top.SetFloat("_Glow", glow);
+                baseBot.SetFloat("_Level", levelBase);
+                baseTop.SetFloat("_Level", levelBase);
+                top.SetFloat("_Level", levelTop);
+                yield return null;
+            }
+            pyramid.StartEffect();
         }
 
         public void RemoveStructure(int q, int r)
