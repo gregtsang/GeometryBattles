@@ -9,8 +9,11 @@ namespace GeometryBattles.StructureManager
     {
         public BoardState boardState;
         public StructureStore structureStore;
+        public GameObject cubeScoutPrefab;
+
         Dictionary<Vector2Int, CubeScout> scoutPos = new Dictionary<Vector2Int, CubeScout>();
         HashSet<CubeScout> scouts = new HashSet<CubeScout>();
+        Dictionary<CubeScout, float> scoutTimers = new Dictionary<CubeScout, float>();
 
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
@@ -53,6 +56,19 @@ namespace GeometryBattles.StructureManager
                 }
                 yield return new WaitForSeconds(scout.GetMoveRate());
             }
+        }
+
+        public void SpawnScout(Cube cube, Color color)
+        {
+            GameObject scout = Instantiate(cubeScoutPrefab, cube.transform.position - new Vector3(0.0f, 0.25f, 0.0f), cubeScoutPrefab.transform.rotation, this.transform) as GameObject;
+            scout.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color * 5);
+            CubeScout currScout = scout.GetComponent<CubeScout>();
+            currScout.SetHome(cube.Q, cube.R);
+            currScout.SetCoords(cube.Q, cube.R);
+            currScout.SetPlayer(cube.Player);
+            currScout.SetMoveRate(cube.GetMoveRate());
+            currScout.SetMoves(cube.GetNumMoves());
+            currScout.AddVisited(cube.Q, cube.R);
         }
 
         void MoveScout(int q, int r, CubeScout scout)

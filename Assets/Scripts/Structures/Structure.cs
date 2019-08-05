@@ -19,6 +19,7 @@ namespace GeometryBattles.StructureManager
         Material mat;
         public Material Mat { get => mat; }
 
+        public Player Player { get => player; }
         public int Q { get => q; }
         public int R { get => r; }
 
