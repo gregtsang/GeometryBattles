@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.StructureManager
 {
@@ -23,7 +24,7 @@ namespace GeometryBattles.StructureManager
 
         void Update()
         {
-            if (CheckSpace(q, r))
+            if (CheckSpace(q, r, player))
             {
                 timer -= Time.deltaTime;
             }
@@ -34,7 +35,7 @@ namespace GeometryBattles.StructureManager
             }
         }
 
-        public override bool CheckSpace(int q, int r)
+        public override bool CheckSpace(int q, int r, Player player)
         {
             List<Vector2Int> tiles = new List<Vector2Int>();
             tiles.Add(new Vector2Int(q - 1, r));

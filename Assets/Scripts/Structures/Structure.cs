@@ -31,7 +31,7 @@ namespace GeometryBattles.StructureManager
             }
         }
 
-        virtual public bool CheckSpace(int q, int r)
+        virtual public bool CheckSpace(int q, int r, Player player)
         {
             return (boardState.IsOwned(q, r) && boardState.GetNodeOwner(q, r) == player);
         }
