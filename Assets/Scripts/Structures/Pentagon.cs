@@ -27,7 +27,7 @@ namespace GeometryBattles.StructureManager
 
         void Update()
         {
-            if (bombard && target && CheckSpace())
+            if (bombard && target && CheckSpace(q, r))
             {
                 bombTimer -= Time.deltaTime;
                 if (bombTimer <= 0.0f)
@@ -45,7 +45,7 @@ namespace GeometryBattles.StructureManager
             bombard = true;
         }
 
-        bool CheckSpace()
+        public bool CheckSpace(int q, int r)
         {
             List<Vector2Int> tiles = new List<Vector2Int>();
             tiles.Add(new Vector2Int(q - 1, r));
