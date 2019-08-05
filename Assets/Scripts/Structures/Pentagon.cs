@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using GeometryBattles.PlayerManager;
 
 namespace GeometryBattles.StructureManager
 {
@@ -27,7 +28,7 @@ namespace GeometryBattles.StructureManager
 
         void Update()
         {
-            if (bombard && target && CheckSpace(q, r))
+            if (bombard && target && CheckSpace(q, r, player))
             {
                 bombTimer -= Time.deltaTime;
                 if (bombTimer <= 0.0f)
@@ -45,7 +46,7 @@ namespace GeometryBattles.StructureManager
             bombard = true;
         }
 
-        public bool CheckSpace(int q, int r)
+        public override bool CheckSpace(int q, int r, Player player)
         {
             List<Vector2Int> tiles = new List<Vector2Int>();
             tiles.Add(new Vector2Int(q - 1, r));
