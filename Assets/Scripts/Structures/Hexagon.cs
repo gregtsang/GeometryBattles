@@ -34,7 +34,7 @@ namespace GeometryBattles.StructureManager
             }
         }
 
-        public bool CheckSpace(int q, int r)
+        public override bool CheckSpace(int q, int r)
         {
             List<Vector2Int> tiles = new List<Vector2Int>();
             tiles.Add(new Vector2Int(q - 1, r));
