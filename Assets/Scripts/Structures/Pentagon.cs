@@ -41,7 +41,7 @@ namespace GeometryBattles.StructureManager
         public override void StartEffect()
         {
             StartCoroutine(RegenHP());
-            bombTimer = stats.currLevel.bombRate;
+            bombTimer = 0.0f;
             bombard = true;
         }
 

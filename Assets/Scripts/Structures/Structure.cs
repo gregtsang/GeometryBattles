@@ -24,7 +24,11 @@ namespace GeometryBattles.StructureManager
 
         void Awake()
         {
-            mat = gameObject.GetComponent<MeshRenderer>().material;
+            Renderer renderer = gameObject.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                mat = renderer.material;
+            }
         }
 
         virtual public void StartEffect() {}
@@ -52,7 +56,7 @@ namespace GeometryBattles.StructureManager
             return player;
         }
 
-        public void SetColor(Color color)
+        public virtual void SetColor(Color color)
         {
             this.Mat.SetColor("_BaseColor", color);
         }
