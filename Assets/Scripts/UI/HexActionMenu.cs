@@ -49,11 +49,16 @@ namespace GeometryBattles.UI
                 uiManager.InitializeHexActionMenu();
                 foreach (IHexAction hexAction in actions)
                 {
-                    uiManager.AddActionToHexActionMenu(hexAction.displayName + "  " + hexAction.GetTipText(uiManager.GetActivePlayer(), tilePrefab)).onClick.AddListener(delegate
+                    Button button = uiManager.AddActionToHexActionMenu(hexAction.displayName + "  " + hexAction.GetTipText(uiManager.GetActivePlayer(), tilePrefab));
+                    button.onClick.AddListener(delegate
                     {
                         hexAction.doAction(uiManager.GetActivePlayer(), tilePrefab);
                         uiManager.HideHexActionMenu();
                     });
+                    if (!hexAction.canDoAction(uiManager.GetActivePlayer(), tilePrefab))
+                    {
+                        button.interactable = false;
+                    }
                 }
                 uiManager.ShowHexActionMenu();
             }
