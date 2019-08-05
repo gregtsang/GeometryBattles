@@ -5,6 +5,7 @@ using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
 using System;
 using UnityEditor;
+using Photon.Pun;
 
 namespace GeometryBattles.StructureManager
 {
@@ -15,6 +16,7 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
         public GameObject scouts;
+        PhotonView photonView;
 
         [SerializeField] List<GameObject> structurePrefabs = new List<GameObject>();
 
@@ -24,6 +26,11 @@ namespace GeometryBattles.StructureManager
             Cube,
             Pentagon,
             Hexagon
+        }
+
+        private void Start()
+        {
+            photonView = GetComponent<PhotonView>();
         }
 
         void OnEnable()
@@ -144,7 +151,25 @@ namespace GeometryBattles.StructureManager
                 top.SetFloat("_Level", levelTop);
                 yield return null;
             }
-            pyramid.StartEffect();
+            //pyramid.StartEffect();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("RPC_StartStructureEffect", RpcTarget.AllViaServer, pyramid.Q, pyramid.R);
+            }
+        }
+
+        [PunRPC]
+        void RPC_StartStructureEffect(int tileQ, int tileR)
+        {
+            Structure structure;
+            if (structures.TryGetValue(new Vector2Int(tileQ, tileR), out structure))
+            {
+                structure.StartEffect();
+            }
+            else
+            {
+                Debug.LogWarning($"Could not start effect, structure at {tileQ}, {tileR}; Desync Likely!");
+            }
         }
 
         public void RemoveStructure(int q, int r)

@@ -31,7 +31,8 @@ namespace GeometryBattles.StructureManager
 
         public override void StartEffect()
         {
-            StartCoroutine(RegenHP());
+            // TODO RegenHP needs to be handled by a system calling a RPC
+            //StartCoroutine(RegenHP());
             pyramidMat.SetColor("_BaseColor", boardState.GetNodeOwner(q, r).GetColor());
             topRenderer.material = pyramidMat;
             Material[] materials = baseRenderer.materials;
