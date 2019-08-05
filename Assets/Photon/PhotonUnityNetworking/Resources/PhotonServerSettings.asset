@@ -39,5 +39,6 @@ MonoBehaviour:
   - RPC_SellTile
   - RPC_StartGame
   - RPC_MineResource
+  - RPC_BuildStructure
   DisableAutoOpenWizard: 1
   ShowSettings: 1

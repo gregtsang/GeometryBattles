@@ -5,16 +5,19 @@ using GeometryBattles.HexAction;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
 using GeometryBattles.StructureManager;
+using Photon.Pun;
 
 namespace GeometryBattles.Construction
 {
     public class BuildAction : MonoBehaviour, IHexAction
     {
         [SerializeField] string _displayname = "Build ____";
-        [SerializeField] GameObject structurePrefab = null;
+        [SerializeField] StructureStore.StructureType structureType = 0;
 
+        //Cached References
         StructureStore structureStore;
         Board board;
+        PhotonView photonView;
 
         public string displayName { get => _displayname; }
 
@@ -24,6 +27,7 @@ namespace GeometryBattles.Construction
             board = FindObjectOfType<Board>();
             structureStore = FindObjectOfType<StructureStore>();
             HexActionManager.registerAction(this);
+            photonView = GetComponent<PhotonView>();
         }
 
         public bool canDoAction(Player player, Tile tile)
@@ -56,8 +60,19 @@ namespace GeometryBattles.Construction
         {
             if (canDoAction(player, tile))
             {
+                photonView.RPC("RPC_BuildStructure", RpcTarget.AllViaServer, (byte) player.Id, tile.Q, tile.R, (byte) structureType);
+            }
+        }
+
+        [PunRPC]
+        private void RPC_BuildStructure(byte playerID, int tileQ, int tileR, byte structureType)
+        {
+            Player player = board.boardState.GetPlayer((int) playerID);
+            GameObject structurePrefab = structureStore.GetStructurePrefab((StructureStore.StructureType) structureType);
+            if (canDoAction(player, board.boardState.GetNodeTile(tileQ, tileR)))
+            {
                 player.AddResource(-1 * GetStructureCost());
-                structureStore.AddStructure(tile.Q, tile.R, structurePrefab);
+                structureStore.AddStructure(tileQ, tileR, structurePrefab);
             }
         }
 
@@ -89,7 +104,7 @@ namespace GeometryBattles.Construction
 
         private int GetStructureCost()
         {
-            return structurePrefab.GetComponent<IStructureData>().GetCost();
+            return structureStore.GetStructurePrefab(structureType).GetComponent<IStructureData>().GetCost();
         }
     }
 }
