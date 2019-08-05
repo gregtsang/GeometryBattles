@@ -125,7 +125,10 @@ namespace GeometryBattles.StructureManager
                 structure.Mat.SetFloat("_Level", height / 2.0f - (height + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
                 yield return null;
             }
-            structure.StartEffect();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("RPC_StartStructureEffect", RpcTarget.AllViaServer, structure.Q, structure.R);
+            }
         }
 
         IEnumerator DissolveInPyramid(Pyramid pyramid)
@@ -168,7 +171,7 @@ namespace GeometryBattles.StructureManager
             }
             else
             {
-                Debug.LogWarning($"Could not start effect, structure at {tileQ}, {tileR}; Desync Likely!");
+                Debug.LogWarning($"Could not start effect, structure at {tileQ}, {tileR}; Desync Possible!");
             }
         }
 

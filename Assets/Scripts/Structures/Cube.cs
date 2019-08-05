@@ -26,7 +26,8 @@ namespace GeometryBattles.StructureManager
 
         public override void StartEffect()
         {
-            StartCoroutine(RegenHP());
+            // TODO RegenHP needs to be handled by a system calling a RPC
+            //StartCoroutine(RegenHP());
             cubeMat.SetColor("_BaseColor", boardState.GetNodeOwner(q, r).GetColor());
             cubeMat.SetFloat("_Level", 0.0f);
             gameObject.GetComponent<MeshRenderer>().material = cubeMat;
