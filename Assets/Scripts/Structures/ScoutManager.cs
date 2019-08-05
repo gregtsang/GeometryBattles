@@ -19,7 +19,6 @@ namespace GeometryBattles.StructureManager
 
         void OnEnable()
         {
-            boardState = GameObject.FindObjectOfType<BoardState>();
             EventManager.onCreateScout += AddScout;
         }
 

@@ -28,7 +28,6 @@ namespace GeometryBattles.StructureManager
 
         void OnEnable()
         {
-            boardState = GameObject.FindObjectOfType<BoardState>();
             EventManager.onCreateBase += AddBase;
             EventManager.onStructureDamage += DamageStructure;
         }
