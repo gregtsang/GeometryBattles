@@ -3,14 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
+using System;
+using UnityEditor;
 
 namespace GeometryBattles.StructureManager
 {
+    
+    
     public class StructureStore : MonoBehaviour
     {
         public BoardState boardState;
         Dictionary<Vector2Int, Structure> structures = new Dictionary<Vector2Int, Structure>();
         public GameObject scouts;
+
+        [SerializeField] List<GameObject> structurePrefabs = new List<GameObject>();
+
+        public enum StructureType : byte
+        {
+            Pyramid = 0,
+            Cube,
+            Pentagon,
+            Hexagon
+        }
 
         void OnEnable()
         {
@@ -38,6 +52,11 @@ namespace GeometryBattles.StructureManager
                     RemoveStructure(q, r);
                 }
             }
+        }
+
+        public GameObject GetStructurePrefab(StructureType structureType)
+        {
+            return structurePrefabs[(int) structureType];
         }
 
         public void AddBase(int q, int r, GameObject playerBase)
