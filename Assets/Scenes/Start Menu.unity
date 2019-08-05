@@ -4978,7 +4978,7 @@ MonoBehaviour:
   scrollView: {fileID: 1105781078}
   msgSize: 20
   msgColor: {r: 1, g: 1, b: 1, a: 1}
-  seperator: '  '
+  seperator: 
   maxEntries: 50
 --- !u!1 &737858165
 GameObject:
@@ -5425,10 +5425,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb3ef55a01ab4e5fbc93746f442ca6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  historyBufferLength: 0
   appVersion: 
   regionDropdown: {fileID: 446818563}
-  currentChannelText: {fileID: 0}
   chatInputField: {fileID: 27456563}
   username: 
 --- !u!114 &777891102
