@@ -247,7 +247,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1e-45, y: 6.1540925e-30, z: 1e-45, w: 6.1541045e-30}
+  m_BoundingSphereOverride: {x: 1.1754945e-38, y: 0, z: 0, w: 1.83672e-40}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -753,6 +753,11 @@ PrefabInstance:
         type: 3}
       propertyPath: offlineMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4071901192865503511, guid: 312b9456860d74e07bd610a4df3495ee,
+        type: 3}
+      propertyPath: initNumberOfPlayers
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 312b9456860d74e07bd610a4df3495ee, type: 3}
