@@ -23,7 +23,7 @@ namespace GeometryBattles.StructureManager
 
         void Update()
         {
-            if (CheckSpace())
+            if (CheckSpace(q, r))
             {
                 timer -= Time.deltaTime;
             }
@@ -34,7 +34,7 @@ namespace GeometryBattles.StructureManager
             }
         }
 
-        bool CheckSpace()
+        public bool CheckSpace(int q, int r)
         {
             List<Vector2Int> tiles = new List<Vector2Int>();
             tiles.Add(new Vector2Int(q - 1, r));

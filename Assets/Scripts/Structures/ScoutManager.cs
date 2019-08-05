@@ -126,7 +126,8 @@ namespace GeometryBattles.StructureManager
                 scout.SelfDestruct();
                 scoutPos.Remove(curr);
                 scouts.Remove(scoutPos[next]);
-                scoutPos[next].SelfDestruct();
+                if (scoutPos[next] != null)
+                    scoutPos[next].SelfDestruct();
                 scoutPos.Remove(next);
             }
             else if (structureStore.HasStructure(next[0], next[1]) && structureStore.GetStructure(next[0], next[1]).GetPlayer() != scout.GetPlayer())
