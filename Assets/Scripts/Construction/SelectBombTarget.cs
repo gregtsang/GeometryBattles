@@ -88,13 +88,18 @@ namespace GeometryBattles.HexAction
         private void OnHexSelection(Tile tile)
         {
             Debug.Log($"tile selected: {tile.Q}, {tile.R}");
-            photonView.RPC("RPC_SetTarget", RpcTarget.AllViaServer, tile.Q, tile.R);
+            photonView.RPC("RPC_SetTarget", RpcTarget.AllViaServer, selectedPentagon.Q, selectedPentagon.R, tile.Q, tile.R);
         }
 
         [PunRPC]
-        private void RPC_SetTarget(int tileQ, int tileR)
+        private void RPC_SetTarget(int structureQ, int structureR, int tileQ, int tileR)
         {
-            selectedPentagon.SetTarget(tileQ, tileR);
+            if (TileContainsPentagon(board.boardState.GetNodeTile(structureQ, structureR)))
+            {
+                Structure structure = structureStore.GetStructure(structureQ, structureR);
+                Pentagon pentagon = (Pentagon) structure;
+                pentagon.SetTarget(tileQ, tileR);
+            }
         }
 
         private bool TileContainsPentagon(Tile tile)
