@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.BoardManager;
+using Photon.Pun;
 
 namespace GeometryBattles.StructureManager
 {
@@ -10,52 +11,15 @@ namespace GeometryBattles.StructureManager
         public BoardState boardState;
         public StructureStore structureStore;
         public GameObject cubeScoutPrefab;
+        public PhotonView photonView;
 
         Dictionary<Vector2Int, CubeScout> scoutPos = new Dictionary<Vector2Int, CubeScout>();
         HashSet<CubeScout> scouts = new HashSet<CubeScout>();
-        Dictionary<CubeScout, float> scoutTimers = new Dictionary<CubeScout, float>();
 
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
         public int moveAwayWeight = 10;
         public int structureDamage = 20;
-
-        void OnEnable()
-        {
-            EventManager.onCreateScout += AddScout;
-        }
-
-        void AddScout(GameObject scout)
-        {
-            CubeScout currScout = scout.GetComponent<CubeScout>();
-            scouts.Add(currScout);
-            scoutPos[new Vector2Int(currScout.Q, currScout.R)] = currScout;
-            StartCoroutine(Scout(currScout));
-        }
-
-        IEnumerator Scout(CubeScout scout)
-        {
-            while (scout != null)
-            {
-                Vector2Int curr = new Vector2Int(scout.Q, scout.R);
-                Vector2Int next = NextTile(scout);
-                if (next[0] == -1)
-                {
-                    scouts.Remove(scout);
-                    scout.SelfDestruct();
-                    scoutPos.Remove(curr);
-                }
-                else
-                {
-                    scout.SetMotion(true);
-                    MoveScout(next[0], next[1], scout);
-                    while (scout.GetMotion()) yield return null;
-                    if (scout != null)
-                        ScoutEffect(next[0], next[1], scout);
-                }
-                yield return new WaitForSeconds(scout.GetMoveRate());
-            }
-        }
 
         public void SpawnScout(Cube cube, Color color)
         {
@@ -68,28 +32,147 @@ namespace GeometryBattles.StructureManager
             currScout.SetMoveRate(cube.GetMoveRate());
             currScout.SetMoves(cube.GetNumMoves());
             currScout.AddVisited(cube.Q, cube.R);
+            scouts.Add(currScout);
+            scoutPos[new Vector2Int(currScout.Q, currScout.R)] = currScout;
+            StartCoroutine(Drop(currScout, color));
         }
 
-        void MoveScout(int q, int r, CubeScout scout)
+        IEnumerator Drop(CubeScout scout, Color color)
         {
-            Vector3 pos = scout.gameObject.transform.position;
-            if (q - scout.Q == 1 && r - scout.R == -1)
-                StartCoroutine(Jump(scout, pos + new Vector3(0, 0, boardState.GetTileWidth()), 0.0f));
-            else if (q - scout.Q == -1 && r - scout.R == 1)
-                StartCoroutine(Jump(scout, pos + new Vector3(0, 0, -boardState.GetTileWidth()), 0.0f, -1));
-            else if (q - scout.Q == 1)
-                StartCoroutine(Jump(scout, pos + new Vector3(0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f), -30.0f, -1));
-            else if (q - scout.Q == -1)
-                StartCoroutine(Jump(scout, pos + new Vector3(-0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f), -30.0f));
-            else if (r - scout.R == 1)
-                StartCoroutine(Jump(scout, pos + new Vector3(0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f), 30.0f, -1));
-            else
-                StartCoroutine(Jump(scout, pos + new Vector3(-0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f), 30.0f));
+            float timer = 0.8f;
+            while (timer >= 0.0f)
+            {
+                timer -= Time.deltaTime;
+                float scoutX = scout.gameObject.transform.position.x;
+                float scoutY = scout.gameObject.transform.position.y;
+                float scoutZ = scout.gameObject.transform.position.z;
+                scout.gameObject.transform.position = new Vector3(scoutX, (scoutY - 0.25f) * Mathf.Max(0.0f, timer / 1.0f) + 0.25f, scoutZ);
+                scout.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.Lerp(color * 5, color, 1.0f - Mathf.Max(0.0f, timer)));
+                yield return null;
+            }
+            yield return new WaitForSeconds(0.5f);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                StartCoroutine(Scout(scout));
+            }
         }
 
-        IEnumerator Jump(CubeScout scout, Vector3 newPos, float direction, int sign = 1)
+        [PunRPC]
+        void RPC_RemoveScout(int scoutQ, int scoutR, int q, int r)
+        {
+            RemoveScout(scoutPos[new Vector2Int(scoutQ, scoutR)], new Vector2Int(q, r));
+        }
+
+        void RemoveScout(CubeScout scout, Vector2Int coords)
+        {
+            scouts.Remove(scout);
+            if (scout != null)
+            {
+                scout.SelfDestruct();
+            }
+            scoutPos.Remove(coords);
+        }
+
+        IEnumerator Scout(CubeScout scout)
+        {
+            while (scout != null)
+            {
+                Vector2Int curr = new Vector2Int(scout.Q, scout.R);
+                Vector2Int next = NextTile(scout);
+                if (next[0] == -1)
+                {
+                    photonView.RPC("RPC_RemoveScout", RpcTarget.AllViaServer, scout.Q, scout.R, curr[0], curr[1]);
+                }
+                else
+                {
+                    photonView.RPC("RPC_Jump", RpcTarget.AllViaServer, next[0], next[1], scout.Q, scout.R);
+                    yield return StartCoroutine(Jump(next[0], next[1], scout));
+                    if (scout != null)
+                        photonView.RPC("RPC_ScoutEffect", RpcTarget.AllViaServer, next[0], next[1], scout.Q, scout.R);
+                }
+                yield return new WaitForSeconds(scout.GetMoveRate());
+            }
+        }
+
+        Vector2Int NextTile(CubeScout scout)
+        {
+            List<Vector2Int> neighbors = boardState.GetNeighbors(scout.Q, scout.R);
+            List<Vector2Int> valid = new List<Vector2Int>();
+            foreach (var n in neighbors)
+            {
+                int totalWeight = 1;
+                if (structureStore.HasStructure(n[0], n[1]))
+                {
+                    if (structureStore.GetStructure(n[0], n[1]).GetPlayer() == scout.GetPlayer())
+                        totalWeight *= 0;
+                    else
+                        return new Vector2Int(n[0], n[1]);
+                }
+                else
+                {
+                    if (boardState.GetNodeOwner(n[0], n[1]) != scout.GetPlayer())
+                        totalWeight *= moveUnownedWeight;
+                    if (!scout.HasVisited(n[0], n[1]))
+                        totalWeight *= moveUnvisitedWeight;
+                    Vector2Int home = scout.GetHome();
+                    if (CalcDistance(home[0], home[1], n[0], n[1]) > CalcDistance(home[0], home[1], scout.Q, scout.R))
+                        totalWeight *= moveAwayWeight;
+                }
+                for (int i = 0; i < totalWeight; i++)
+                    valid.Add(new Vector2Int(n[0], n[1]));
+            }
+            return valid.Count == 0 ? new Vector2Int(-1, -1) : valid[UnityEngine.Random.Range(0, valid.Count)];
+        }
+
+        [PunRPC]
+        void RPC_Jump(int q, int r, int scoutQ, int scoutR)
+        {
+            if (!(PhotonNetwork.IsMasterClient))
+            {
+                StartCoroutine(Jump(q, r, scoutPos[new Vector2Int(scoutQ, scoutR)]));
+            }
+        }
+
+        IEnumerator Jump(int q, int r, CubeScout scout)
         {
             Vector3 currPos = scout.gameObject.transform.position;
+            Vector3 newPos;
+            float direction;
+            int sign = 1;
+            if (q - scout.Q == 1 && r - scout.R == -1)
+            {
+                newPos = currPos + new Vector3(0, 0, boardState.GetTileWidth());
+                direction = 0.0f;
+            }
+            else if (q - scout.Q == -1 && r - scout.R == 1)
+            {
+                newPos = currPos + new Vector3(0, 0, -boardState.GetTileWidth());
+                direction = 0.0f;
+                sign = -1;
+            }
+            else if (q - scout.Q == 1)
+            {
+                newPos = currPos + new Vector3(0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
+                direction = -30.0f;
+                sign = -1;
+            }
+            else if (q - scout.Q == -1)
+            {
+                newPos = currPos + new Vector3(-0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
+                direction = -30.0f;
+            }
+            else if (r - scout.R == 1)
+            {
+                newPos = currPos + new Vector3(0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
+                direction = 30.0f;
+                sign = -1;
+            }
+            else
+            {
+                newPos = currPos + new Vector3(-0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
+                direction = 30.0f;
+            }
+
             float distX = newPos.x - currPos.x;
             float distZ = newPos.z - currPos.z;
             
@@ -127,6 +210,12 @@ namespace GeometryBattles.StructureManager
             scout.SetMotion(false);
         }
         
+        [PunRPC]
+        void RPC_ScoutEffect(int q, int r, int scoutQ, int scoutR)
+        {
+            ScoutEffect(q, r, scoutPos[new Vector2Int(scoutQ, scoutR)]);
+        }
+
         void ScoutEffect(int q, int r, CubeScout scout)
         {
             Vector2Int curr = new Vector2Int(scout.Q, scout.R);
@@ -137,19 +226,12 @@ namespace GeometryBattles.StructureManager
                 boardState.AddNode(q, r, scout.GetPlayer(), boardState.infMax);
             if (scoutPos.ContainsKey(next))
             {
-                scouts.Remove(scout);
-                scout.SelfDestruct();
-                scoutPos.Remove(curr);
-                scouts.Remove(scoutPos[next]);
-                if (scoutPos[next] != null)
-                    scoutPos[next].SelfDestruct();
-                scoutPos.Remove(next);
+                RemoveScout(scout, curr);
+                RemoveScout(scoutPos[next], next);
             }
             else if (structureStore.HasStructure(next[0], next[1]) && structureStore.GetStructure(next[0], next[1]).GetPlayer() != scout.GetPlayer())
             {
-                scouts.Remove(scout);
-                scout.SelfDestruct();
-                scoutPos.Remove(curr);
+                RemoveScout(scout, curr);
             }
             else
             {
@@ -160,40 +242,8 @@ namespace GeometryBattles.StructureManager
             scout.DecMoves();
             if (scout.GetMoves() <= 0)
             {
-                scouts.Remove(scout);
-                scout.SelfDestruct();
-                scoutPos.Remove(next);
+                RemoveScout(scout, next);
             }
-        }
-
-        Vector2Int NextTile(CubeScout scout)
-        {
-            List<Vector2Int> neighbors = boardState.GetNeighbors(scout.Q, scout.R);
-            List<Vector2Int> valid = new List<Vector2Int>();
-            foreach (var n in neighbors)
-            {
-                int totalWeight = 1;
-                if (structureStore.HasStructure(n[0], n[1]))
-                {
-                    if (structureStore.GetStructure(n[0], n[1]).GetPlayer() == scout.GetPlayer())
-                        totalWeight *= 0;
-                    else
-                        return new Vector2Int(n[0], n[1]);
-                }
-                else
-                {
-                    if (boardState.GetNodeOwner(n[0], n[1]) != scout.GetPlayer())
-                        totalWeight *= moveUnownedWeight;
-                    if (!scout.HasVisited(n[0], n[1]))
-                        totalWeight *= moveUnvisitedWeight;
-                    Vector2Int home = scout.GetHome();
-                    if (CalcDistance(home[0], home[1], n[0], n[1]) > CalcDistance(home[0], home[1], scout.Q, scout.R))
-                        totalWeight *= moveAwayWeight;
-                }
-                for (int i = 0; i < totalWeight; i++)
-                    valid.Add(new Vector2Int(n[0], n[1]));
-            }
-            return valid.Count == 0 ? new Vector2Int(-1, -1) : valid[Random.Range(0, valid.Count)];
         }
 
         int CalcDistance(int q1, int r1, int q2, int r2)

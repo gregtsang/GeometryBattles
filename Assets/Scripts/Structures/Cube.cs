@@ -27,7 +27,7 @@ namespace GeometryBattles.StructureManager
 
         public override void StartEffect()
         {
-            StartCoroutine(RegenHP());
+            //StartCoroutine(RegenHP());
             cubeMat.SetColor("_BaseColor", boardState.GetNodeOwner(q, r).GetColor());
             cubeMat.SetFloat("_Level", 0.0f);
             gameObject.GetComponent<MeshRenderer>().material = cubeMat;
@@ -78,9 +78,6 @@ namespace GeometryBattles.StructureManager
                     transform.Translate(translateX, 0.0f, translateZ);
                     yield return null;
                 }
-                //GameObject scout = SpawnScout(color);
-                //Material scoutMat = scout.GetComponent<MeshRenderer>().material;
-                //bool scoutStart = false;
                 timer = 1.0f;
                 while (timer >= -0.5f)
                 {
@@ -88,21 +85,6 @@ namespace GeometryBattles.StructureManager
                     transform.Rotate(Vector3.up, Time.deltaTime * 180.0f * (Mathf.Max(0.0f, timer) + 0.1f));
                     mat.SetFloat("_Level", 1.0f - Mathf.Pow(Mathf.Max(0.0f, timer), 2.0f));
                     yield return null;
-                /*  if (timer >= 0.0f)
-                    {
-                        float scoutY = scout.gameObject.transform.position.y;
-                        scout.transform.position = new Vector3(x, (scoutY - 0.25f) * Mathf.Max(0.0f, timer / 1.0f) + 0.25f, z);
-                        scoutMat.SetColor("_BaseColor", Color.Lerp(color * 5, color, 1.0f - Mathf.Max(0.0f, timer)));
-                    }
-                    else
-                    {
-                        if (!scoutStart)
-                        {
-                            EventManager.RaiseOnCreateScout(scout);
-                            scoutStart = true;
-                        }
-                    }*/
-                    
                 }
                 timer = 0.5f;
                 while (timer > 0.0f)
@@ -134,20 +116,6 @@ namespace GeometryBattles.StructureManager
         public void SpawnScout()
         {
             spawn = true;
-        }
-
-        public GameObject SpawnScout(Color color)
-        {
-            GameObject scout = Instantiate(cubeScoutPrefab, this.transform.position - new Vector3(0.0f, 0.25f, 0.0f), cubeScoutPrefab.transform.rotation, scouts.transform) as GameObject;
-            scout.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color * 5);
-            CubeScout currScout = scout.GetComponent<CubeScout>();
-            currScout.SetHome(this.q, this.r);
-            currScout.SetCoords(this.q, this.r);
-            currScout.SetPlayer(this.player);
-            currScout.SetMoveRate(stats.currLevel.moveRate);
-            currScout.SetMoves(stats.currLevel.numMoves);
-            currScout.AddVisited(this.q, this.r);
-            return scout;
         }
 
         public override void Upgrade()
