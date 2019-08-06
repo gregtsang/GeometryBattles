@@ -24,7 +24,7 @@ namespace GeometryBattles.StructureManager
 
         void Update()
         {
-            if (CheckSpace(q, r, player))
+            if (CheckSpace())
             {
                 timer -= Time.deltaTime;
             }
@@ -33,6 +33,11 @@ namespace GeometryBattles.StructureManager
                 EventManager.RaiseOnGameOver(player.gameObject);
                 boardState.EndGame();
             }
+        }
+
+        public bool CheckSpace()
+        {
+            return this.CheckSpace(this.q, this.r, this.player);
         }
 
         public override bool CheckSpace(int q, int r, Player player)
