@@ -92,7 +92,7 @@ namespace GeometryBattles.HexAction
         }
 
         [PunRPC]
-        private void PRC_SetTarget(int tileQ, int tileR)
+        private void RPC_SetTarget(int tileQ, int tileR)
         {
             selectedPentagon.SetTarget(tileQ, tileR);
         }
