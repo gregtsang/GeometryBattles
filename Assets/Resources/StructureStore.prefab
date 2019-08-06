@@ -46,9 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
   scouts: {fileID: 2531520755768471856}
+  photonView: {fileID: 0}
   structurePrefabs:
   - {fileID: 2608534636820817070, guid: fac50d04c93e84afeb0da9a2cbf00dec, type: 3}
   - {fileID: 8421495773974870550, guid: 304e5a8d0c806407ba0afbf75beb6ff4, type: 3}
+  - {fileID: 3714227975952305212, guid: 9bba42a490e3f4c7e924b626f78f24af, type: 3}
   - {fileID: 3714227975952305212, guid: 9bba42a490e3f4c7e924b626f78f24af, type: 3}
 --- !u!1 &2531520755768471856
 GameObject:
