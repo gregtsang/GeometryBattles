@@ -12,6 +12,7 @@ namespace GeometryBattles.StructureManager
         public StructureStore structureStore;
         public ScoutManager scoutManager;
         public PhotonView photonView;
+        public GameObject projectilePrefab;
 
         void OnEnable()
         {
@@ -70,6 +71,13 @@ namespace GeometryBattles.StructureManager
                     }
                 }
             }
+        }
+
+        IEnumerator FireProjectile(int q, int r, Pentagon pentagon)
+        {
+            GameObject projectile = Instantiate(projectilePrefab, pentagon.gameObject.transform.position, Quaternion.identity, pentagon.gameObject.transform) as GameObject;
+            Vector3 targetPos = boardState.GetNodeTile(q, r).gameObject.transform.position;
+            
         }
     }
 }
