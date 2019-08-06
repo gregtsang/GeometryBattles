@@ -32,6 +32,7 @@ namespace GeometryBattles.StructureManager
         {
             EventManager.onCreateBase += AddBase;
             EventManager.onStructureDamage += DamageStructure;
+            EventManager.onStructureHeal += HealStructure;
         }
 
         void DamageStructure(int q, int r, int amount)
@@ -53,6 +54,13 @@ namespace GeometryBattles.StructureManager
                     RemoveStructure(q, r);
                 }
             }
+        }
+
+        void HealStructure(int q, int r, int amount)
+        {
+            Structure currStructure = structures[new Vector2Int(q, r)];
+            int currHP = currStructure.GetHP();
+            currStructure.SetHP(Mathf.Min(currHP + amount, currStructure.GetMaxHP()));
         }
 
         public GameObject GetStructurePrefab(StructureType structureType)
