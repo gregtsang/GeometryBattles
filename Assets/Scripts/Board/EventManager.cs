@@ -14,6 +14,9 @@ public class EventManager
     public delegate void OnStructureDamage(int q, int r, int amount);
     public static event OnStructureDamage onStructureDamage;
 
+    public delegate void OnStructureHeal(int q, int r, int amount);
+    public static event OnStructureHeal onStructureHeal;
+
     public delegate void OnCreateCube(GameObject cube);
     public static event OnCreateCube onCreateCube;
 
@@ -42,6 +45,12 @@ public class EventManager
     {
         if (onStructureDamage != null)
             onStructureDamage(q, r, amount);
+    }
+
+    public static void RaiseOnStructureHeal(int q, int r, int amount)
+    {
+        if (onStructureHeal != null)
+            onStructureHeal(q, r, amount);
     }
 
     public static void RaiseOnCreateCube(GameObject cube)

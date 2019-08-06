@@ -187,6 +187,10 @@ namespace GeometryBattles.BoardManager
                 {
                     EventManager.RaiseOnStructureDamage(q, r, value);
                 }
+                else
+                {
+                    EventManager.RaiseOnStructureHeal(q, r, value);
+                }
             }
             else
             {
