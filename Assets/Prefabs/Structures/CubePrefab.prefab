@@ -106,6 +106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
+  hp: 0
+  scouts: {fileID: 0}
   cubeMat: {fileID: 2100000, guid: a63cf6b1c88b64edfb5fe95fcaeed760, type: 2}
   cubeScoutPrefab: {fileID: 1092256797006367249, guid: c5097a8fe34f2466e9a00b22bf439008,
     type: 3}
@@ -131,13 +133,13 @@ MonoBehaviour:
     moveRate: 2
     numMoves: 10
   levels:
-  - cost: 10
+  - cost: 15
     maxHP: 100
     regen: 1
     armor: 0
     spawnRate: 10
     moveRate: 2
-    numMoves: 10
+    numMoves: 12
   - cost: 20
     maxHP: 200
     regen: 2

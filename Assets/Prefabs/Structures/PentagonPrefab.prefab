@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
+  hp: 0
   stats: {fileID: 0}
 --- !u!114 &-3935411873274314879
 MonoBehaviour:
@@ -124,25 +125,29 @@ MonoBehaviour:
     cost: 0
     maxHP: 0
     regen: 0
+    armor: 0
     bombRate: 0
     bombStrength: 0
     bombRadius: 0
   levels:
-  - cost: 10
+  - cost: 50
     maxHP: 100
     regen: 1
-    bombRate: 2
-    bombStrength: 20
+    armor: 0
+    bombRate: 5
+    bombStrength: 80
     bombRadius: 1
   - cost: 20
     maxHP: 200
     regen: 2
+    armor: 0
     bombRate: 2
     bombStrength: 20
     bombRadius: 2
   - cost: 30
     maxHP: 300
     regen: 3
+    armor: 0
     bombRate: 2
     bombStrength: 40
     bombRadius: 2
