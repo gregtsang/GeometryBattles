@@ -186,7 +186,7 @@ namespace GeometryBattles.StructureManager
             Quaternion jumpRot = Quaternion.AngleAxis(sign * 90.0f, axis);
             Quaternion endRot = jumpRot * newRot;
             
-            float rotRate = 0.2f;
+            float rotRate = 0.1f;
             float rotTimer = rotRate;
             while (scout != null && scout.gameObject.transform.rotation != newRot)
             {
@@ -195,7 +195,7 @@ namespace GeometryBattles.StructureManager
                 yield return null;
             }
 
-            float jumpRate = 0.5f;
+            float jumpRate = 0.35f;
             float jumpTimer = jumpRate;
             float jumpHeight = 5.0f;
             while (scout != null && scout.gameObject.transform.position != newPos)
@@ -207,13 +207,15 @@ namespace GeometryBattles.StructureManager
                                                                   currPos.z + distZ * (1.0f - Mathf.Max(jumpTimer, 0.0f) / jumpRate));
                 yield return null;
             }
-            scout.SetMotion(false);
         }
         
         [PunRPC]
         void RPC_ScoutEffect(int q, int r, int scoutQ, int scoutR)
         {
-            ScoutEffect(q, r, scoutPos[new Vector2Int(scoutQ, scoutR)]);
+            if (scoutPos[new Vector2Int(scoutQ, scoutR)] != null)
+            {
+                ScoutEffect(q, r, scoutPos[new Vector2Int(scoutQ, scoutR)]);
+            }
         }
 
         void ScoutEffect(int q, int r, CubeScout scout)

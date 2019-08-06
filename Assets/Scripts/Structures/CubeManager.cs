@@ -28,7 +28,7 @@ namespace GeometryBattles.StructureManager
         IEnumerator SpawnScout(Cube cube)
         {
             yield return new WaitForSeconds(cube.GetSpawnRate());
-            while (true)
+            while (cube != null)
             {
                 photonView.RPC("RPC_SpawnScout", RpcTarget.AllViaServer, cube.Q, cube.R);
                 yield return new WaitForSeconds(cube.GetSpawnRate());
