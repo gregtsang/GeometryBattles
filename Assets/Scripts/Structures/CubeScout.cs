@@ -8,7 +8,6 @@ namespace GeometryBattles.StructureManager
     {
         public Player player;
 
-        bool motion;
         float moveRate;
         int movesLeft = 10;
         float currRot;
@@ -22,16 +21,6 @@ namespace GeometryBattles.StructureManager
         void Start()
         {
             currRot = gameObject.transform.eulerAngles.y;
-        }
-
-        public bool GetMotion()
-        {
-            return motion;
-        }
-
-        public void SetMotion(bool motion)
-        {
-            this.motion = motion;
         }
 
         public void SetHome(int q, int r)

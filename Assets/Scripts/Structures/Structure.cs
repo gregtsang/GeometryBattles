@@ -19,12 +19,22 @@ namespace GeometryBattles.StructureManager
         Material mat;
         public Material Mat { get => mat; }
 
+        public Player Player { get => player; }
         public int Q { get => q; }
         public int R { get => r; }
 
         void Awake()
         {
-            mat = gameObject.GetComponent<MeshRenderer>().material;
+            Renderer renderer = gameObject.GetComponent<MeshRenderer>();
+            if (renderer != null)
+            {
+                mat = renderer.material;
+            }
+        }
+
+        virtual public bool CheckSpace(int q, int r, Player player)
+        {
+            return (boardState.IsOwned(q, r) && boardState.GetNodeOwner(q, r) == player);
         }
 
         virtual public void StartEffect() {}
@@ -52,7 +62,7 @@ namespace GeometryBattles.StructureManager
             return player;
         }
 
-        public void SetColor(Color color)
+        public virtual void SetColor(Color color)
         {
             this.Mat.SetColor("_BaseColor", color);
         }
