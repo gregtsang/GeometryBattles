@@ -12,6 +12,7 @@ namespace GeometryBattles.HexAction
         
         static public void registerAction(IHexAction action)
         {
+            Debug.Log("registered " + action.displayName);
             hexActions.Add(action);
         }
 

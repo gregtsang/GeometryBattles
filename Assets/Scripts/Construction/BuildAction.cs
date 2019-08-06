@@ -26,7 +26,6 @@ namespace GeometryBattles.Construction
         {
             board = FindObjectOfType<Board>();
             structureStore = FindObjectOfType<StructureStore>();
-            HexActionManager.registerAction(this);
             photonView = GetComponent<PhotonView>();
         }
 

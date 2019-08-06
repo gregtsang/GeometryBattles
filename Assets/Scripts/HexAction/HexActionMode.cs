@@ -36,7 +36,7 @@ namespace GeometryBattles.HexAction
 
         public void DerigsterActions()
         {
-            foreach(IHexAction hexAction in GetComponents<IHexAction>())
+            foreach(IHexAction hexAction in GetComponentsInChildren<IHexAction>())
             {
                 HexActionManager.deregisterAction(hexAction);
             }
@@ -44,7 +44,7 @@ namespace GeometryBattles.HexAction
 
         public void RegisterActions()
         {
-            foreach(IHexAction hexAction in GetComponents<IHexAction>())
+            foreach(IHexAction hexAction in GetComponentsInChildren<IHexAction>())
             {
                 HexActionManager.registerAction(hexAction);
             }
