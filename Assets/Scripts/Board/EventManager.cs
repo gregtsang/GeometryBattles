@@ -17,6 +17,9 @@ public class EventManager
     public delegate void OnCreateCube(GameObject cube);
     public static event OnCreateCube onCreateCube;
 
+    public delegate void OnCreatePentagon(GameObject pentagon);
+    public static event OnCreatePentagon onCreatePentagon;
+
     public static void RaiseOnGameOver(GameObject winner)
     {
         if (onGameOver != null)
@@ -45,5 +48,11 @@ public class EventManager
     {
         if (onCreateCube != null)
             onCreateCube(cube);
+    }
+
+    public static void RaiseOnCreatePentagon(GameObject pentagon)
+    {
+        if (onCreatePentagon != null)
+            onCreatePentagon(pentagon);
     }
 }
