@@ -19,7 +19,6 @@ namespace GeometryBattles.StructureManager
         public int moveUnownedWeight = 3;
         public int moveUnvisitedWeight = 3;
         public int moveAwayWeight = 10;
-        public int structureDamage = 20;
 
         public void SpawnScout(Cube cube, Color color)
         {
@@ -35,6 +34,8 @@ namespace GeometryBattles.StructureManager
             currScout.SetMoveRate(cube.GetMoveRate());
             currScout.SetMoves(cube.GetNumMoves());
             currScout.AddVisited(cube.Q, cube.R);
+            currScout.SetDamage(cube.GetDamage());
+            currScout.SetInfluence(cube.GetInfluence());
             scouts.Add(currScout);
             scoutPos[new Vector2Int(currScout.Q, currScout.R)] = currScout;
             StartCoroutine(Drop(currScout, color));
@@ -196,9 +197,9 @@ namespace GeometryBattles.StructureManager
             Vector2Int curr = new Vector2Int(scout.Q, scout.R);
             Vector2Int next = new Vector2Int(q, r);
             if (structureStore.HasStructure(next[0], next[1]))
-                boardState.AddNode(q, r, scout.GetPlayer(), structureDamage);
+                boardState.AddNode(q, r, scout.GetPlayer(), scout.GetDamage());
             else
-                boardState.AddNode(q, r, scout.GetPlayer(), boardState.infMax);
+                boardState.AddNode(q, r, scout.GetPlayer(), scout.GetInfluence());
             if (scoutPos.ContainsKey(next))
             {
                 RemoveScout(scout, curr);

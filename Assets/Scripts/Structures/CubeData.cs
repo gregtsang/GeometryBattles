@@ -6,6 +6,8 @@
         public float spawnRate;
         public float moveRate;
         public int numMoves;
+        public int structureDamage;
+        public int tileInfluence;
     }
 
     public class CubeData : StructureData<CubeLevel> { }
