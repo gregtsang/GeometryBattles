@@ -23,6 +23,9 @@ public class EventManager
     public delegate void OnCreatePentagon(GameObject pentagon);
     public static event OnCreatePentagon onCreatePentagon;
 
+    public delegate void OnProjectileCollision(GameObject projectile);
+    public static event OnProjectileCollision onProjectileCollision;
+
     public static void RaiseOnGameOver(GameObject winner)
     {
         if (onGameOver != null)
@@ -63,5 +66,11 @@ public class EventManager
     {
         if (onCreatePentagon != null)
             onCreatePentagon(pentagon);
+    }
+
+    public static void RaiseOnProjectileCollision(GameObject projectile)
+    {
+        if (onProjectileCollision != null)
+            onProjectileCollision(projectile);
     }
 }

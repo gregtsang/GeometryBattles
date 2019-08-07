@@ -46,5 +46,7 @@ MonoBehaviour:
   - RPC_StartGame
   - RPC_StartStructureEffect
   - RPC_StopCountdown
+  - RPC_Fire
+  - RPC_DestroyProjectile
   DisableAutoOpenWizard: 1
   ShowSettings: 1
