@@ -99,7 +99,7 @@ namespace GeometryBattles.StructureManager
             float currLerp = 0.0f;
             while (projectile != null && currLerp < 1.0f)
             {
-                currLerp += (projectileSpeed / 10.0f) / dist;
+                currLerp += Time.deltaTime * projectileSpeed / dist;
                 Vector3 lerp = Vector3.Lerp(pos, targetPos, Mathf.Min(1.0f, currLerp));
                 projectile.transform.position = lerp + new Vector3(0.0f, -(projectileHeight * dist * Mathf.Pow(currLerp - 0.5f, 2.0f)) + (projectileHeight * dist) / 4.0f, 0.0f);
                 yield return null;

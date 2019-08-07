@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
+using Photon.Pun;
 
 namespace GeometryBattles.StructureManager
 {
     public class Hexagon : Structure
     {
+        public PhotonView photonView;
+
         public int baseMaxHP;
         public int baseRegen;
         public int baseArmor;
@@ -19,20 +22,26 @@ namespace GeometryBattles.StructureManager
             regen = baseRegen;
             armor = baseArmor;
             timer = buildTime;
-            StartCoroutine(RegenHP());
+            //StartCoroutine(RegenHP());
         }
 
         void Update()
         {
-            if (CheckSpace())
+            if (PhotonNetwork.IsMasterClient && CheckSpace())
             {
-                timer -= Time.deltaTime;
+                photonView.RPC("RPB_SubTimer", RpcTarget.AllViaServer);
             }
             if (!boardState.IsGameOver() && timer <= 0.0f)
             {
                 EventManager.RaiseOnGameOver(player.gameObject);
                 boardState.EndGame();
             }
+        }
+
+        [PunRPC]
+        void RPC_SubTimer()
+        {
+            timer -= Time.deltaTime;
         }
 
         public bool CheckSpace()
