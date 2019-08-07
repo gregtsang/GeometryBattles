@@ -14,6 +14,8 @@ namespace GeometryBattles.StructureManager
         int q, r;
         int homeQ, homeR;
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        int structureDamage;
+        int tileInfluence;
 
         public int Q { get => q; }
         public int R { get => r; }
@@ -93,6 +95,26 @@ namespace GeometryBattles.StructureManager
         public bool HasVisited(int q, int r)
         {
             return visited.Contains(new Vector2Int(q, r));
+        }
+
+        public int GetDamage()
+        {
+            return structureDamage;
+        }
+
+        public void SetDamage(int damage)
+        {
+            structureDamage = damage;
+        }
+
+        public int GetInfluence()
+        {
+            return tileInfluence;
+        }
+
+        public void SetInfluence(int influence)
+        {
+            tileInfluence = influence;
         }
 
         public void SelfDestruct()
