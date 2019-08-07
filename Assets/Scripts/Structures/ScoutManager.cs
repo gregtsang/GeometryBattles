@@ -23,7 +23,10 @@ namespace GeometryBattles.StructureManager
 
         public void SpawnScout(Cube cube, Color color)
         {
-            GameObject scout = Instantiate(cubeScoutPrefab, cube.transform.position - new Vector3(0.0f, 0.25f, 0.0f), cubeScoutPrefab.transform.rotation, this.transform) as GameObject;
+            float cubeY = cube.transform.position.y;
+            Vector3 tilePos = boardState.GetNodeTile(cube.Q, cube.R).gameObject.transform.position;
+            Vector3 pos = new Vector3(tilePos.x, cubeY - 0.25f, tilePos.z);
+            GameObject scout = Instantiate(cubeScoutPrefab, pos, cubeScoutPrefab.transform.rotation, this.transform) as GameObject;
             scout.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", color * 5);
             CubeScout currScout = scout.GetComponent<CubeScout>();
             currScout.SetHome(cube.Q, cube.R);
@@ -46,7 +49,7 @@ namespace GeometryBattles.StructureManager
                 float scoutX = scout.gameObject.transform.position.x;
                 float scoutY = scout.gameObject.transform.position.y;
                 float scoutZ = scout.gameObject.transform.position.z;
-                scout.gameObject.transform.position = new Vector3(scoutX, (scoutY - 0.25f) * Mathf.Max(0.0f, timer / 1.0f) + 0.25f, scoutZ);
+                scout.gameObject.transform.position = new Vector3(scoutX, (scoutY - 0.25f) * Mathf.Max(0.0f, timer / 0.8f) + 0.25f, scoutZ);
                 scout.gameObject.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.Lerp(color * 5, color, 1.0f - Mathf.Max(0.0f, timer)));
                 yield return null;
             }
@@ -136,42 +139,12 @@ namespace GeometryBattles.StructureManager
         IEnumerator Jump(int q, int r, CubeScout scout)
         {
             Vector3 currPos = scout.gameObject.transform.position;
-            Vector3 newPos;
-            float direction;
-            int sign = 1;
-            if (q - scout.Q == 1 && r - scout.R == -1)
-            {
-                newPos = currPos + new Vector3(0, 0, boardState.GetTileWidth());
-                direction = 0.0f;
-            }
-            else if (q - scout.Q == -1 && r - scout.R == 1)
-            {
-                newPos = currPos + new Vector3(0, 0, -boardState.GetTileWidth());
-                direction = 0.0f;
-                sign = -1;
-            }
-            else if (q - scout.Q == 1)
-            {
-                newPos = currPos + new Vector3(0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
-                direction = -30.0f;
-                sign = -1;
-            }
-            else if (q - scout.Q == -1)
-            {
-                newPos = currPos + new Vector3(-0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
-                direction = -30.0f;
-            }
-            else if (r - scout.R == 1)
-            {
-                newPos = currPos + new Vector3(0.75f * boardState.GetTileLength(), 0, -boardState.GetTileWidth() / 2.0f);
-                direction = 30.0f;
-                sign = -1;
-            }
-            else
-            {
-                newPos = currPos + new Vector3(-0.75f * boardState.GetTileLength(), 0, boardState.GetTileWidth() / 2.0f);
-                direction = 30.0f;
-            }
+            Vector3 newPos = boardState.GetNodeTile(q, r).gameObject.transform.position + new Vector3(0.0f, 0.25f, 0.0f);
+            float changeX = newPos.x - currPos.x;
+            float changeZ = newPos.z - currPos.z;
+            float direction = changeX == 0.0f ? 0.0f : 30.0f;
+            direction = (changeX > 0.0f && changeZ > 0.0f) || (changeX < 0.0f && changeZ < 0.0f) ? -direction : direction;
+            int sign = (changeX > 0.0f) || (changeX == 0.0f && changeZ < 0.0f) ? -1 : 1;
 
             float distX = newPos.x - currPos.x;
             float distZ = newPos.z - currPos.z;
