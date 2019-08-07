@@ -89,7 +89,7 @@ namespace GeometryBattles.StructureManager
                 }
                 else
                 {
-                    photonView.RPC("RPC_Jump", RpcTarget.AllViaServer, next[0], next[1], scout.Q, scout.R);
+                    photonView.RPC("RPC_Jump", RpcTarget.Others, next[0], next[1], scout.Q, scout.R);
                     yield return StartCoroutine(Jump(next[0], next[1], scout));
                     if (scout != null)
                         photonView.RPC("RPC_ScoutEffect", RpcTarget.AllViaServer, next[0], next[1], scout.Q, scout.R);
@@ -131,10 +131,7 @@ namespace GeometryBattles.StructureManager
         [PunRPC]
         void RPC_Jump(int q, int r, int scoutQ, int scoutR)
         {
-            if (!(PhotonNetwork.IsMasterClient))
-            {
                 StartCoroutine(Jump(q, r, scoutPos[new Vector2Int(scoutQ, scoutR)]));
-            }
         }
 
         IEnumerator Jump(int q, int r, CubeScout scout)
