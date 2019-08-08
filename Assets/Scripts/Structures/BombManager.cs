@@ -37,10 +37,16 @@ namespace GeometryBattles.StructureManager
             {
                 while (!pentagon.HasTarget() || !pentagon.CheckSpace())
                 {
-                    photonView.RPC("RPC_StopGlow", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
+                    if (pentagon.IsGlowing())
+                    {
+                        photonView.RPC("RPC_StopGlow", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
+                    }
                     yield return null;
                 }
-                photonView.RPC("RPC_StartGlow", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
+                if (!pentagon.IsGlowing())
+                {
+                    photonView.RPC("RPC_StartGlow", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
+                }
                 yield return new WaitForSeconds(pentagon.GetBombRate());
                 Vector2Int target = pentagon.GetTarget();
                 pentagon.Reset();
@@ -111,6 +117,7 @@ namespace GeometryBattles.StructureManager
             projectile.GetComponent<Projectile>().R = pentagon.R;
             projectile.GetComponent<MeshRenderer>().material.SetColor("_BaseColor", pentagon.Player.GetColor() * 3);
             Vector3 targetPos = boardState.GetNodeTile(q, r).gameObject.transform.position;
+            targetPos -= new Vector3(0.0f, targetPos.y, 0.0f);
             float dist = Vector3.Distance(pos, targetPos);
             MeshCollider collider = projectile.GetComponent<MeshCollider>();
             float currLerp = 0.0f;

@@ -107,22 +107,21 @@ namespace GeometryBattles.StructureManager
             target = true;
         }
 
+        public bool IsGlowing()
+        {
+            return rotate != null;
+        }
+
         public void StartGlow()
         {
-            if (rotate == null)
-            {
-                rotate = StartCoroutine(Glow());
-            }
+            rotate = StartCoroutine(Glow());
         }
 
         public void StopGlow()
         {
-            if (rotate != null)
-            {
-                StopCoroutine(rotate);
-                StartCoroutine(ShutDown());
-                rotate = null;
-            }
+            StopCoroutine(rotate);
+            StartCoroutine(ShutDown());
+            rotate = null;
         }
 
         IEnumerator Glow()

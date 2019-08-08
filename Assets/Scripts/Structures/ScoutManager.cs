@@ -137,7 +137,8 @@ namespace GeometryBattles.StructureManager
         IEnumerator Jump(int q, int r, CubeScout scout)
         {
             Vector3 currPos = scout.gameObject.transform.position;
-            Vector3 newPos = boardState.GetNodeTile(q, r).gameObject.transform.position + new Vector3(0.0f, 0.25f, 0.0f);
+            Vector3 newPos = boardState.GetNodeTile(q, r).gameObject.transform.position;
+            newPos += new Vector3(0.0f, 0.25f - newPos.y, 0.0f);
             float changeX = newPos.x - currPos.x;
             float changeZ = newPos.z - currPos.z;
             float direction = changeX == 0.0f ? 0.0f : 30.0f;
