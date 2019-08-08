@@ -9,8 +9,6 @@ using Photon.Pun;
 
 namespace GeometryBattles.StructureManager
 {
-    
-    
     public class StructureStore : MonoBehaviour
     {
         public BoardState boardState;
@@ -82,7 +80,7 @@ namespace GeometryBattles.StructureManager
         {
             Tile currTile = boardState.GetNodeTile(q, r);
             Vector3 pos;
-            if (structurePrefab.GetComponent<Structure>() is Pyramid)
+            if (structurePrefab.GetComponent<Structure>() is Pyramid || structurePrefab.GetComponent<Structure>() is Pentagon)
             {
                 pos = currTile.transform.position;
             }
@@ -109,6 +107,10 @@ namespace GeometryBattles.StructureManager
             else if (currStructure is Pyramid)
             {
                 StartCoroutine(DissolveInPyramid((Pyramid)currStructure));
+            }
+            else if (currStructure is Pentagon)
+            {
+                StartCoroutine(DissolveInPentagon((Pentagon)currStructure));
             }
             else
             {
@@ -162,6 +164,28 @@ namespace GeometryBattles.StructureManager
             if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("RPC_StartStructureEffect", RpcTarget.AllViaServer, pyramid.Q, pyramid.R);
+            }
+        }
+
+        IEnumerator DissolveInPentagon(Pentagon pentagon)
+        {
+            float dissolveRate = 5.0f;
+            float dissolveTimer = dissolveRate;
+            float height = pentagon.gameObject.GetComponent<MeshRenderer>().bounds.size.y;
+            Material[] mats = pentagon.gameObject.GetComponent<MeshRenderer>().materials;
+            while (mats[0].GetFloat("_Glow") != 1.0f)
+            {
+                dissolveTimer -= Time.deltaTime;
+                foreach (Material m in mats)
+                {
+                    m.SetFloat("_Glow", 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
+                    m.SetFloat("_Level", height - (height + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
+                }
+                yield return null;
+            }
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("RPC_StartStructureEffect", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
             }
         }
 

@@ -49,5 +49,7 @@ MonoBehaviour:
   - RPC_Fire
   - RPC_DestroyProjectile
   - RPC_SubTimer
+  - RPC_StartGlow
+  - RPC_StopGlow
   DisableAutoOpenWizard: 1
   ShowSettings: 1

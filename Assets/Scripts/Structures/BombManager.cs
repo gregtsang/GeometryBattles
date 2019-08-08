@@ -37,13 +37,30 @@ namespace GeometryBattles.StructureManager
             {
                 while (!pentagon.HasTarget() || !pentagon.CheckSpace())
                 {
+                    photonView.RPC("RPC_StopGlow", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
                     yield return null;
                 }
+                photonView.RPC("RPC_StartGlow", RpcTarget.AllViaServer, pentagon.Q, pentagon.R);
+                yield return new WaitForSeconds(pentagon.GetBombRate());
                 Vector2Int target = pentagon.GetTarget();
+                pentagon.Reset();
                 photonView.RPC("RPC_Fire", RpcTarget.Others, target[0], target[1], pentagon.Q, pentagon.R);
                 yield return StartCoroutine(FireProjectile(target[0], target[1], pentagon));
-                yield return new WaitForSeconds(pentagon.GetBombRate());
             }
+        }
+
+        [PunRPC]
+        void RPC_StartGlow(int pentagonQ, int pentagonR)
+        {
+            Pentagon pentagon = (Pentagon)(structureStore.GetStructure(pentagonQ, pentagonR));
+            pentagon.StartGlow();
+        }
+
+        [PunRPC]
+        void RPC_StopGlow(int pentagonQ, int pentagonR)
+        {
+            Pentagon pentagon = (Pentagon)(structureStore.GetStructure(pentagonQ, pentagonR));
+            pentagon.StopGlow();
         }
 
         [PunRPC]
@@ -99,7 +116,7 @@ namespace GeometryBattles.StructureManager
             float currLerp = 0.0f;
             while (projectile != null && currLerp < 1.0f)
             {
-                currLerp += Time.deltaTime * projectileSpeed / dist;
+                currLerp += Time.deltaTime * projectileSpeed / Mathf.Pow(Mathf.Max(1.0f, dist), 0.8f);
                 Vector3 lerp = Vector3.Lerp(pos, targetPos, Mathf.Min(1.0f, currLerp));
                 projectile.transform.position = lerp + new Vector3(0.0f, -(projectileHeight * dist * Mathf.Pow(currLerp - 0.5f, 2.0f)) + (projectileHeight * dist) / 4.0f, 0.0f);
                 yield return null;
