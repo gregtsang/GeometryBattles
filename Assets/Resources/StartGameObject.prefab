@@ -848,7 +848,7 @@ MonoBehaviour:
   photonView: {fileID: 1058018363261053307}
   projectilePrefab: {fileID: 863164761467119349, guid: 12ab3f8e2a2f345a1b2f5ab7651ebfc8,
     type: 3}
-  projectileSpeed: 5
+  projectileSpeed: 7
   projectileHeight: 2
 --- !u!114 &1058018363261053307
 MonoBehaviour:
@@ -1272,6 +1272,18 @@ PrefabInstance:
       propertyPath: photonView
       value: 
       objectReference: {fileID: 4140880811400325612}
+    - target: {fileID: 241284371204720984, guid: 91ed581a5e618344fad5abc90ea85a0f,
+        type: 3}
+      propertyPath: structurePrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 385222903083993359, guid: e0a3dd58a79d544119407e70101457be,
+        type: 3}
+    - target: {fileID: 241284371204720984, guid: 91ed581a5e618344fad5abc90ea85a0f,
+        type: 3}
+      propertyPath: structurePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 385222903083993359, guid: e0a3dd58a79d544119407e70101457be,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91ed581a5e618344fad5abc90ea85a0f, type: 3}
 --- !u!114 &1069710772052206878 stripped
