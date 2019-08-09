@@ -1436,6 +1436,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Board
       objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464688, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: winPercent
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464688, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: spreadAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464688, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: fadeAmount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6509530979159464689, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1490,6 +1505,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6509530979159464703, guid: 47969af662b3c48f3bad1bb0d4096e07,
+        type: 3}
+      propertyPath: resourceTileAmount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6509530979159464690, guid: 47969af662b3c48f3bad1bb0d4096e07,
         type: 3}
