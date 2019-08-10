@@ -17,7 +17,7 @@ namespace GeometryBattles.UI
         int hoverHighlightSize = 1;
         Color hoverHighlightColor = Color.clear;
 
-        public int HoverHighlightSize { get => hoverHighlightSize; set => hoverHighlightSize = value; }
+        public int HoverHighlightSize { get => hoverHighlightSize; set { hoverHighlightSize = value; OnSelectionSettingsChanged(); } }
         public Color HoverHighlightColor { get => hoverHighlightColor; set => hoverHighlightColor = value; }
 
         public event EventHandler<TileEventArgs> HexActionMenuShown;
@@ -25,7 +25,8 @@ namespace GeometryBattles.UI
 
         public event EventHandler<TileEventArgs> TileMouseEntered;
         public event EventHandler<TileEventArgs> TileMouseExited;
-        
+        public event EventHandler SelectionSettingsChanged;
+
         private void Awake()
         {
             CreateHexActionMenuPrefab();
@@ -126,6 +127,15 @@ namespace GeometryBattles.UI
             if (handler != null)
             {
                 handler(this, e);
+            }
+        }
+
+        private void OnSelectionSettingsChanged()
+        {
+            var handler = SelectionSettingsChanged;
+            if (handler != null)
+            {
+                handler(this, new EventArgs());
             }
         }
     }

@@ -11,6 +11,7 @@ namespace GeometryBattles.UI
         [SerializeField] UIManager uiManager = null;
         
         Tile selectedTile;
+        List<Tile> hoveredTiles;
         
         private void Start()
         {
@@ -18,11 +19,18 @@ namespace GeometryBattles.UI
             uiManager.HexSelectionManager.HexActionMenuHide += OnDeselect;
             uiManager.HexSelectionManager.TileMouseEntered += OnMouseEntered;
             uiManager.HexSelectionManager.TileMouseExited += OnMouseExited;
+            uiManager.HexSelectionManager.SelectionSettingsChanged += RefreshSelection;
+        }
+
+        private void RefreshSelection(object sender, EventArgs e)
+        {
+            RemoveColor(hoveredTiles);
         }
 
         private void OnMouseEntered(object sender, TileEventArgs e)
         {
-            foreach (Tile tile in GetAllTiles(e.tile, uiManager.HexSelectionManager.HoverHighlightSize))
+            hoveredTiles = GetAllTiles(e.tile, uiManager.HexSelectionManager.HoverHighlightSize);
+            foreach (Tile tile in hoveredTiles)
             {
                 if (tile != selectedTile)
                 {
@@ -33,10 +41,8 @@ namespace GeometryBattles.UI
 
         private void OnMouseExited(object sender, TileEventArgs e)
         {
-            if (e.tile != selectedTile)
-            {
-                RemoveColor(e.tile);
-            }
+            RemoveColor(hoveredTiles, true);
+            hoveredTiles = null;
         }
 
         private void OnSelect(object sender, TileEventArgs e)
@@ -47,12 +53,14 @@ namespace GeometryBattles.UI
 
         private void OnDeselect(object sender, EventArgs e)
         {
-            RemoveColor(selectedTile);
+            RemoveColor(new List<Tile>(new Tile[] {selectedTile}));
             selectedTile = null;
         }
 
         private void SetSelectedColor(Tile tile)
         {
+            if (tile == null) return;
+            
             Material material = tile.GetComponent<Renderer>().material;
             material.EnableKeyword("_EMISSION");
             material.SetColor("_EmissionColor", material.GetColor("_BaseColor") * 2);
@@ -60,6 +68,8 @@ namespace GeometryBattles.UI
 
         private void SetHoverColor(Tile tile)
         {
+            if (tile == null) return;
+            
             Material material = tile.GetComponent<Renderer>().material;
             Color emissionColor = uiManager.HexSelectionManager.HoverHighlightColor;
 
@@ -71,10 +81,18 @@ namespace GeometryBattles.UI
             material.SetColor("_EmissionColor", emissionColor);
         }
 
-        private void RemoveColor(Tile tile)
+        private void RemoveColor(List<Tile> tiles, bool ignoreSelected = false)
         {
-            Material material = tile.GetComponent<Renderer>().material;
-            material.DisableKeyword("_EMISSION");
+            if (tiles == null) return;
+            
+            foreach (Tile tile in tiles)
+            {
+                if (tile != null && (!ignoreSelected || tile != selectedTile))
+                {
+                    Material material = tile.GetComponent<Renderer>().material;
+                    material.DisableKeyword("_EMISSION");
+                }
+            }
         }
 
         private List<Tile> GetAllTiles(Tile centerTile, int count)
