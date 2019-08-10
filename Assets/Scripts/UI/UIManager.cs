@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using GeometryBattles.BoardManager;
+using GeometryBattles.HexAction;
 using Photon.Pun;
 using UnityEngine.UI;
 using TMPro;
@@ -16,7 +17,9 @@ namespace GeometryBattles.UI
         [SerializeField] private int activePlayer = 0;
         
         public HexSelectionManager HexSelectionManager { get => hexSelectionManager; set => hexSelectionManager = value; }
+        
         private Board board;
+        private HexActionModeManager modeManager;
 
         private void Awake()
         {
@@ -35,6 +38,8 @@ namespace GeometryBattles.UI
         void Start()
         {
             board = FindObjectOfType<Board>();
+            modeManager = FindObjectOfType<HexActionModeManager>();
+            modeManager.ModeChanged += ActionModeChanged;
         }
 
         public Player GetActivePlayer()
@@ -48,6 +53,12 @@ namespace GeometryBattles.UI
         public Board GetBoard()
         {
             return board == null ? FindObjectOfType<Board>() : board;
+        }
+
+        private void ActionModeChanged(object sender, ModeChangedEventArgs e)
+        {
+            hexSelectionManager.HoverHighlightColor = e.newMode.HoverColor;
+            hexSelectionManager.HoverHighlightSize = e.newMode.HoverSize;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using GeometryBattles.BoardManager;
 
 namespace GeometryBattles.UI
 {
@@ -9,8 +10,7 @@ namespace GeometryBattles.UI
     {
         [SerializeField] UIManager uiManager = null;
         
-        bool selected = false;
-        Material selectedMaterial;
+        Tile selectedTile;
         
         private void Start()
         {
@@ -22,50 +22,76 @@ namespace GeometryBattles.UI
 
         private void OnMouseEntered(object sender, TileEventArgs e)
         {
-            Material material = e.tile.GetComponent<Renderer>().material;
-            if (material != selectedMaterial)
+            foreach (Tile tile in GetAllTiles(e.tile, uiManager.HexSelectionManager.HoverHighlightSize))
             {
-                SetHoverColor(material);
+                if (tile != selectedTile)
+                {
+                    SetHoverColor(tile);
+                }
             }
         }
 
         private void OnMouseExited(object sender, TileEventArgs e)
         {
-            Material material = e.tile.GetComponent<Renderer>().material;
-            if (material != selectedMaterial)
+            if (e.tile != selectedTile)
             {
-                RemoveColor(material);
+                RemoveColor(e.tile);
             }
         }
 
         private void OnSelect(object sender, TileEventArgs e)
         {
-            selected = true;
-            selectedMaterial = e.tile.GetComponent<Renderer>().material;
-            SetSelectedColor(selectedMaterial);
+            selectedTile = e.tile;
+            SetSelectedColor(selectedTile);
         }
 
         private void OnDeselect(object sender, EventArgs e)
         {
-            selected = false;
-            RemoveColor(selectedMaterial);
+            RemoveColor(selectedTile);
+            selectedTile = null;
         }
 
-        private void SetSelectedColor(Material material)
+        private void SetSelectedColor(Tile tile)
         {
+            Material material = tile.GetComponent<Renderer>().material;
             material.EnableKeyword("_EMISSION");
             material.SetColor("_EmissionColor", material.GetColor("_BaseColor") * 2);
         }
 
-        private void SetHoverColor(Material material)
+        private void SetHoverColor(Tile tile)
         {
+            Material material = tile.GetComponent<Renderer>().material;
+            Color emissionColor = uiManager.HexSelectionManager.HoverHighlightColor;
+
             material.EnableKeyword("_EMISSION");
-            material.SetColor("_EmissionColor", material.GetColor("_BaseColor"));
+            if (emissionColor == Color.clear)
+            {
+                emissionColor = material.GetColor("_BaseColor");
+            }
+            material.SetColor("_EmissionColor", emissionColor);
         }
 
-        private void RemoveColor(Material material)
+        private void RemoveColor(Tile tile)
         {
+            Material material = tile.GetComponent<Renderer>().material;
             material.DisableKeyword("_EMISSION");
+        }
+
+        private List<Tile> GetAllTiles(Tile centerTile, int count)
+        {
+            BoardState boardState = uiManager.GetBoard().boardState;
+
+            var tileList = new List<Tile>();
+            tileList.Add(centerTile);
+
+            if (count > 1)
+            {
+                foreach (Vector2Int tileVector in boardState.GetNeighbors(centerTile.Q, centerTile.R))
+                {
+                    tileList.Add(boardState.GetNodeTile(tileVector[0], tileVector[1]));
+                }
+            }
+            return tileList;
         }
     }
 }

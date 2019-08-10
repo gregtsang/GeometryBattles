@@ -204,6 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeName: Selection
   initModeOnStart: 0
+  hoverColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!1 &2298364410339059006
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modeName: Default
   initModeOnStart: 1
+  hoverColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2424323618524779840
 GameObject:
   m_ObjectHideFlags: 0
