@@ -9,17 +9,13 @@ namespace GeometryBattles.HexAction
     {
         [SerializeField] string modeName = "Default";
         [SerializeField] bool initModeOnStart = false;
+        [SerializeField] Color hoverColor = Color.clear;
+        [SerializeField] int hoverSize = 1;
 
         public bool InitModeOnStart { get => initModeOnStart; set => initModeOnStart = value; }
         public string ModeName { get => modeName; set => modeName = value; }
-
-        // private void Start()
-        // {
-        //     if (initModeOnStart)
-        //     {
-        //         SetActionMode(true);
-        //     }
-        // }
+        public Color HoverColor { get => hoverColor; set => hoverColor = value; }
+        public int HoverSize { get => hoverSize; set => hoverSize = value; }
 
         public void SetActionMode(bool on = true)
         {

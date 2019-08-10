@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,10 @@ namespace GeometryBattles.HexAction
         HexActionMode currentMode;
         HexActionMode prevMode;
 
+        public Dictionary<string, HexActionMode> Modes { get => modes; set => modes = value; }
+
+        public event EventHandler<ModeChangedEventArgs> ModeChanged;
+
         public void EnterMode(string modeName)
         {
             if (modes.ContainsKey(modeName))
@@ -19,15 +24,16 @@ namespace GeometryBattles.HexAction
                 modes[modeName].SetActionMode(true);
                 currentMode = modes[modeName];
                 Debug.Log($"Entereing mode {modeName}");
+
+                var e = new ModeChangedEventArgs();
+                e.newMode = currentMode;
+                e.prevMode = prevMode;
+                OnModeChanged(e);
             }
         }
 
         public void ReturnToPrevMode()
         {
-            // prevMode.SetActionMode(true);
-            // HexActionMode temp = currentMode;
-            // currentMode = prevMode;
-            // prevMode = temp;
             EnterMode(prevMode.ModeName);
         }
 
@@ -53,10 +59,20 @@ namespace GeometryBattles.HexAction
             } 
         }
 
-        // Update is called once per frame
-        void Update()
+        // Event Handlers
+        private void OnModeChanged(ModeChangedEventArgs e)
         {
-            
+            var handler = ModeChanged;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
+    }
+
+    public class ModeChangedEventArgs : EventArgs
+    {
+        public HexActionMode newMode { get; set; }
+        public HexActionMode prevMode { get; set; }
     }
 }
