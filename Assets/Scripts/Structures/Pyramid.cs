@@ -99,7 +99,7 @@ namespace GeometryBattles.StructureManager
 
         public override void Destroy()
         {
-            Buff(stats.currLevel.range, 0);
+            Buff(stats.currLevel.range, -stats.currLevel.strength);
             Destroy(gameObject);
         }
     }

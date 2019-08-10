@@ -50,6 +50,16 @@ namespace GeometryBattles.StructureManager
             return stats.currLevel.numMoves;
         }
 
+        public int GetDamage()
+        {
+            return stats.currLevel.structureDamage;
+        }
+
+        public int GetInfluence()
+        {
+            return stats.currLevel.tileInfluence;
+        }
+
         IEnumerator Spawn()
         {
             Transform transform = gameObject.transform;

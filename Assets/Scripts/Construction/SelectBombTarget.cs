@@ -4,6 +4,7 @@ using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
 using GeometryBattles.StructureManager;
 using UnityEngine;
+using Photon.Pun;
 
 namespace GeometryBattles.HexAction
 {
@@ -18,12 +19,14 @@ namespace GeometryBattles.HexAction
         StructureStore structureStore = null;
         
         Board board;
+        PhotonView photonView;
 
         // Start is called before the first frame update
         void Start()
         {
             board = FindObjectOfType<Board>();
             structureStore = FindObjectOfType<StructureStore>();
+            photonView = GetComponent<PhotonView>();
         }
 
         public bool canDoAction(Player player, Tile tile)
@@ -85,7 +88,18 @@ namespace GeometryBattles.HexAction
         private void OnHexSelection(Tile tile)
         {
             Debug.Log($"tile selected: {tile.Q}, {tile.R}");
-            selectedPentagon.SetTarget(tile.Q, tile.R);
+            photonView.RPC("RPC_SetTarget", RpcTarget.AllViaServer, selectedPentagon.Q, selectedPentagon.R, tile.Q, tile.R);
+        }
+
+        [PunRPC]
+        private void RPC_SetTarget(int structureQ, int structureR, int tileQ, int tileR)
+        {
+            if (TileContainsPentagon(board.boardState.GetNodeTile(structureQ, structureR)))
+            {
+                Structure structure = structureStore.GetStructure(structureQ, structureR);
+                Pentagon pentagon = (Pentagon) structure;
+                pentagon.SetTarget(tileQ, tileR);
+            }
         }
 
         private bool TileContainsPentagon(Tile tile)

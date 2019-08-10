@@ -53,7 +53,6 @@ MonoBehaviour:
   baseRenderer: {fileID: 0}
   topRenderer: {fileID: 0}
   pyramidMat: {fileID: 2100000, guid: fbc204e111c75434c958b8e32fe4252d, type: 2}
-  particles: {fileID: 0}
 --- !u!114 &-9159481547879253078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,12 +73,12 @@ MonoBehaviour:
     range: 0
     strength: 0
   levels:
-  - cost: 10
+  - cost: 20
     maxHP: 100
     regen: 1
     armor: 0
     range: 3
-    strength: 5
+    strength: 2
   - cost: 20
     maxHP: 100
     regen: 2

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &385222903083993359
+--- !u!1 &863164761467119349
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,25 +8,26 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3676010318724365084}
-  - component: {fileID: 5645483510571680042}
-  - component: {fileID: 2117888354639461843}
-  - component: {fileID: 1305981898478679822}
-  - component: {fileID: 8093234027953959381}
+  - component: {fileID: 4441052938071643366}
+  - component: {fileID: 4682279754546032336}
+  - component: {fileID: 1424903067210601001}
+  - component: {fileID: -3022845144476160447}
+  - component: {fileID: 667111501594220002}
+  - component: {fileID: -3223131164623693098}
   m_Layer: 0
-  m_Name: PentagonPrefab
+  m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3676010318724365084
+--- !u!4 &4441052938071643366
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385222903083993359}
+  m_GameObject: {fileID: 863164761467119349}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,21 +35,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5645483510571680042
+--- !u!33 &4682279754546032336
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385222903083993359}
-  m_Mesh: {fileID: 2534964839176971238, guid: 96ec823aa0dc642cfa5a1e523c1fc89a, type: 3}
---- !u!23 &2117888354639461843
+  m_GameObject: {fileID: 863164761467119349}
+  m_Mesh: {fileID: -8156870392999314590, guid: a2c3a1ce73fab448e851664beef01290, type: 3}
+--- !u!23 &1424903067210601001
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385222903083993359}
+  m_GameObject: {fileID: 863164761467119349}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,11 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e8e6479f04a5c410bb5bd3082acdea1d, type: 2}
-  - {fileID: 2100000, guid: e8e6479f04a5c410bb5bd3082acdea1d, type: 2}
-  - {fileID: 2100000, guid: e8e6479f04a5c410bb5bd3082acdea1d, type: 2}
-  - {fileID: 2100000, guid: e8e6479f04a5c410bb5bd3082acdea1d, type: 2}
-  - {fileID: 2100000, guid: e8e6479f04a5c410bb5bd3082acdea1d, type: 2}
+  - {fileID: 2100000, guid: 2f10fd1e7f26944ee9ee285a17ec7721, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -83,61 +80,47 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1305981898478679822
+--- !u!64 &-3022845144476160447
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 863164761467119349}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -8156870392999314590, guid: a2c3a1ce73fab448e851664beef01290, type: 3}
+--- !u!114 &667111501594220002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385222903083993359}
+  m_GameObject: {fileID: 863164761467119349}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5326936158364fb5b01c69d524a8222, type: 3}
+  m_Script: {fileID: 11500000, guid: 954f631fa0ad64a27959d54594c4e9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardState: {fileID: 0}
-  hp: 0
-  stats: {fileID: 0}
-  pentagonMat: {fileID: 2100000, guid: fbc204e111c75434c958b8e32fe4252d, type: 2}
---- !u!114 &8093234027953959381
-MonoBehaviour:
+  Q: 0
+  R: 0
+--- !u!54 &-3223131164623693098
+Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385222903083993359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ef697a411a24f0aad4ce0605cfd957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currLevel:
-    cost: 0
-    maxHP: 0
-    regen: 0
-    armor: 0
-    bombRate: 0
-    bombStrength: 0
-    bombRadius: 0
-  levels:
-  - cost: 10
-    maxHP: 100
-    regen: 1
-    armor: 0
-    bombRate: 5
-    bombStrength: 80
-    bombRadius: 1
-  - cost: 0
-    maxHP: 0
-    regen: 0
-    armor: 0
-    bombRate: 0
-    bombStrength: 0
-    bombRadius: 0
-  - cost: 0
-    maxHP: 0
-    regen: 0
-    armor: 0
-    bombRate: 0
-    bombStrength: 0
-    bombRadius: 0
+  m_GameObject: {fileID: 863164761467119349}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

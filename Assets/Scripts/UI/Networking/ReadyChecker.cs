@@ -48,10 +48,12 @@ public class ReadyChecker : MonoBehaviourPunCallbacks
         if (room == null) return;
         if ((room.PlayerCount == room.MaxPlayers || !requireMaxPlayers) && CheckAllPlayersReady())
         {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             this.photonView.RPC("RPC_StartCountdown", RpcTarget.AllViaServer);
         }
         else
         {
+            PhotonNetwork.CurrentRoom.IsOpen = true;
             this.photonView.RPC("RPC_StopCountdown", RpcTarget.AllViaServer);
         }
     }
