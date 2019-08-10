@@ -12,16 +12,16 @@ namespace GeometryBattles.UI
     [RequireComponent(typeof(Tile))]
     public class HexActionMenu : MonoBehaviour, IPointerClickHandler, IPointerDownHandler
     {
-        
         //Cached References
-        UIManager uiManager;
-
         Tile tilePrefab;
+        UIManager uiManager;
+        HexSelectionManager hexSelectionManager;
         
         // Start is called before the first frame update
         void Start()
         {
             uiManager = FindObjectOfType<UIManager>();
+            hexSelectionManager = uiManager.HexSelectionManager;
             tilePrefab = GetComponent<Tile>();
         }
 
@@ -46,26 +46,28 @@ namespace GeometryBattles.UI
             }
             else if (actions.Count > 1)
             {
-                uiManager.InitializeHexActionMenu();
+                hexSelectionManager.InitializeHexActionMenu();
                 foreach (IHexAction hexAction in actions)
                 {
-                    Button button = uiManager.AddActionToHexActionMenu(hexAction.displayName + "  " + hexAction.GetTipText(uiManager.GetActivePlayer(), tilePrefab));
+                    Button button = hexSelectionManager.AddActionToHexActionMenu(hexAction.displayName + "  " + hexAction.GetTipText(uiManager.GetActivePlayer(), tilePrefab));
                     button.onClick.AddListener(delegate
                     {
                         hexAction.doAction(uiManager.GetActivePlayer(), tilePrefab);
-                        uiManager.HideHexActionMenu();
+                        hexSelectionManager.HideHexActionMenu();
                     });
                     if (!hexAction.canDoAction(uiManager.GetActivePlayer(), tilePrefab))
                     {
                         button.interactable = false;
                     }
                 }
-                uiManager.ShowHexActionMenu();
+                hexSelectionManager.ShowHexActionMenu(tilePrefab);
             }
         }
 
         private void OnMouseOver()
         {
+            hexSelectionManager.MouseEnteredTile(tilePrefab);
+            
             var actions = HexActionManager.getViableActions(uiManager.GetActivePlayer(), tilePrefab);
             if (actions.Count == 1)
             {            
@@ -79,6 +81,8 @@ namespace GeometryBattles.UI
 
         private void OnMouseExit()
         {
+            hexSelectionManager.MouseExitedTile(tilePrefab);
+            
             GetComponentInChildren<TextMesh>().text = "";
         }
 
@@ -105,7 +109,7 @@ namespace GeometryBattles.UI
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            uiManager.HideHexActionMenu();
+            hexSelectionManager.HideHexActionMenu();
         }
     }
 }
