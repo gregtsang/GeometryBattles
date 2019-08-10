@@ -82,13 +82,16 @@ namespace GeometryBattles.MenuUI
         {
             if (PhotonNetwork.InRoom)
             {
-                ShowGameLobbyCanvas();
                 PhotonNetwork.LeaveRoom();
+                PhotonNetwork.LeaveLobby();
+                PhotonNetwork.Disconnect();
+                // PhotonNetwork.JoinLobby();
+                // ShowGameLobbyCanvas();
             }
-            else
-            {
+            // else
+            // {
                 ShowStartMenuCanvas();
-            }
+            // }
         }
     }
 }
