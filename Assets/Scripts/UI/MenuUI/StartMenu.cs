@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 namespace GeometryBattles.MenuUI
 { 
@@ -14,7 +15,7 @@ namespace GeometryBattles.MenuUI
         [SerializeField] GameObject connectCanvas = null;
         [SerializeField] GameObject connectingCanvas = null;
         [SerializeField] GameObject preGameCanvas = null;
-        
+
         public void QuitGame()
         {
             Application.Quit();
@@ -79,7 +80,15 @@ namespace GeometryBattles.MenuUI
         // Start is called before the first frame update
         void Start()
         {
-            ShowStartMenuCanvas();
+            if (PhotonNetwork.InRoom)
+            {
+                ShowGameLobbyCanvas();
+                PhotonNetwork.LeaveRoom();
+            }
+            else
+            {
+                ShowStartMenuCanvas();
+            }
         }
     }
 }
