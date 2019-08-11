@@ -37,10 +37,11 @@ namespace GeometryBattles.Networking
 
         private void ResetGame()
         {
-            if (PhotonNetwork.IsMasterClient)
-            {
-                PhotonNetwork.LoadLevel(0);
-            }
+            // if (PhotonNetwork.IsMasterClient)
+            // {
+            //     PhotonNetwork.LoadLevel(0);
+            // }
+            Application.Quit();
         }
     }
 }

@@ -249,5 +249,12 @@ namespace GeometryBattles.StructureManager
             }
             boardState.RemoveBase(player);
         }
+
+        private void OnDestroy()
+        {
+            EventManager.onCreateBase -= AddBase;
+            EventManager.onStructureDamage -= DamageStructure;
+            EventManager.onStructureHeal -= HealStructure;
+        }
     }
 }

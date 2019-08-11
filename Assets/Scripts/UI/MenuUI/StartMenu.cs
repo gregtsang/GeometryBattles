@@ -80,6 +80,9 @@ namespace GeometryBattles.MenuUI
         // Start is called before the first frame update
         void Start()
         {
+            Resources.UnloadUnusedAssets();
+            System.GC.Collect();
+
             // if (PhotonNetwork.InRoom)
             // {
             //     PhotonNetwork.LeaveRoom();
@@ -90,7 +93,11 @@ namespace GeometryBattles.MenuUI
             // }
             // else
             // {
-                ShowStartMenuCanvas();
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.Disconnect();
+            }
+            ShowStartMenuCanvas();
             // }
         }
     }
