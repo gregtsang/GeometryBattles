@@ -80,14 +80,14 @@ namespace GeometryBattles.MenuUI
         // Start is called before the first frame update
         void Start()
         {
-            if (PhotonNetwork.InRoom)
-            {
-                PhotonNetwork.LeaveRoom();
-                PhotonNetwork.LeaveLobby();
-                PhotonNetwork.Disconnect();
-                // PhotonNetwork.JoinLobby();
-                // ShowGameLobbyCanvas();
-            }
+            // if (PhotonNetwork.InRoom)
+            // {
+            //     PhotonNetwork.LeaveRoom();
+            //     PhotonNetwork.LeaveLobby();
+            //     PhotonNetwork.Disconnect();
+            //     PhotonNetwork.JoinLobby();
+            //     ShowGameLobbyCanvas();
+            // }
             // else
             // {
                 ShowStartMenuCanvas();
