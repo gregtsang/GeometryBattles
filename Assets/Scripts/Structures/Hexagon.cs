@@ -60,7 +60,6 @@ namespace GeometryBattles.StructureManager
             while (dissolveRend.materials[0].GetFloat("_Glow") != 1.0f)
             {
                 Debug.Log(dissolveRend.materials[0].GetFloat("_Glow"));
-                timer -= Time.deltaTime;
                 dissolveRend.materials[0].SetFloat("_Glow", 1.0f - Mathf.Max(timer, 0.0f) / buildTime);
                 dissolveRend.materials[0].SetFloat("_Level", height - (height + 0.65f) * (Mathf.Max(timer, 0.0f) / buildTime));
                 yield return null;

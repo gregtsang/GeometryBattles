@@ -102,7 +102,10 @@ namespace GeometryBattles.StructureManager
             boardState.AddStructure(q, r);
             if (currStructure is Hexagon)
             {
-                currStructure.StartEffect();
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    photonView.RPC("RPC_StartStructureEffect", RpcTarget.AllViaServer, currStructure.Q, currStructure.R);
+                }
             }
             else if (currStructure is Pyramid)
             {
