@@ -33,7 +33,7 @@ namespace GeometryBattles.BoardManager
         Dictionary<Vector2Int, TileState> grid;
         Dictionary<Vector2Int, TileState> buffer;
 
-        private PhotonView photonView;
+        public PhotonView photonView;
 
         void Update()
         {

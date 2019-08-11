@@ -80,13 +80,13 @@ namespace GeometryBattles.StructureManager
         {
             Tile currTile = boardState.GetNodeTile(q, r);
             Vector3 pos;
-            if (structurePrefab.GetComponent<Structure>() is Pyramid || structurePrefab.GetComponent<Structure>() is Pentagon)
+            if (structurePrefab.GetComponent<Structure>() is Cube)
             {
-                pos = currTile.transform.position;
+                pos = currTile.transform.position + new Vector3(0.0f, structurePrefab.GetComponent<MeshRenderer>().bounds.size.y / 2.0f, 0.0f);
             }
             else
             {
-                pos = currTile.transform.position + new Vector3(0.0f, structurePrefab.GetComponent<MeshRenderer>().bounds.size.y / 2.0f, 0.0f);
+                pos = currTile.transform.position;
             }
             GameObject structure = Instantiate(structurePrefab, pos, structurePrefab.transform.rotation, this.transform) as GameObject;
             Structure currStructure = structure.GetComponent<Structure>();
@@ -102,7 +102,10 @@ namespace GeometryBattles.StructureManager
             boardState.AddStructure(q, r);
             if (currStructure is Hexagon)
             {
-                currStructure.StartEffect();
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    photonView.RPC("RPC_StartStructureEffect", RpcTarget.AllViaServer, currStructure.Q, currStructure.R);
+                }
             }
             else if (currStructure is Pyramid)
             {

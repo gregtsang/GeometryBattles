@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using Photon.Pun;
@@ -9,33 +10,62 @@ namespace GeometryBattles.StructureManager
     {
         public PhotonView photonView;
 
-        public int baseMaxHP;
-        public int baseRegen;
-        public int baseArmor;
-        public float buildTime;
+        float buildTime;
         float timer;
+
+        public HexagonData stats;
+
+        void OnEnable()
+        {
+            stats = this.gameObject.GetComponent<HexagonData>();
+        }
 
         void Start()
         {
-            hp = baseMaxHP;
-            maxhp = baseMaxHP;
-            regen = baseRegen;
-            armor = baseArmor;
-            timer = buildTime;
-            //StartCoroutine(RegenHP());
+            hp = stats.currLevel.maxHP;
+            maxhp = stats.currLevel.maxHP;
+            regen = stats.currLevel.regen;
+            armor = stats.currLevel.armor;
+            timer = stats.currLevel.buildTime;
+            buildTime = timer;
         }
 
         void Update()
         {
             if (PhotonNetwork.IsMasterClient && CheckSpace())
             {
-                photonView.RPC("RPB_SubTimer", RpcTarget.AllViaServer);
+                photonView.RPC("RPC_SubTimer", RpcTarget.AllViaServer);
             }
             if (!boardState.IsGameOver() && timer <= 0.0f && PhotonNetwork.IsMasterClient)
             {
-                photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) player.Id);
+                boardState.photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) player.Id);
             }
         }
+
+        public override void StartEffect()
+        {
+            Color color = boardState.GetNodeOwner(q, r).GetColor();
+            color.a = 0.2f;
+            gameObject.GetComponent<MeshRenderer>().materials[1].SetColor("_BaseColor", color);
+            gameObject.GetComponent<MeshRenderer>().materials[0].SetColor("_BaseColor", boardState.GetNodeOwner(q, r).GetColor());
+            gameObject.GetComponent<MeshRenderer>().materials[0].SetFloat("_Glow", 0.0f);
+            gameObject.GetComponent<MeshRenderer>().materials[0].SetFloat("_Level", -0.65f);
+            StartCoroutine(DissolveIn());
+        }
+
+        IEnumerator DissolveIn()
+        {
+            float height = gameObject.GetComponent<MeshRenderer>().bounds.size.y;
+            MeshRenderer dissolveRend = gameObject.GetComponent<MeshRenderer>();
+            while (dissolveRend.materials[0].GetFloat("_Glow") != 1.0f)
+            {
+                Debug.Log(dissolveRend.materials[0].GetFloat("_Glow"));
+                dissolveRend.materials[0].SetFloat("_Glow", 1.0f - Mathf.Max(timer, 0.0f) / buildTime);
+                dissolveRend.materials[0].SetFloat("_Level", height - (height + 0.65f) * (Mathf.Max(timer, 0.0f) / buildTime));
+                yield return null;
+            }
+        }
+
 
         [PunRPC]
         void RPC_SubTimer()
