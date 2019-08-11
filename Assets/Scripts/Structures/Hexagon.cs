@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using GeometryBattles.PlayerManager;
 using Photon.Pun;
@@ -37,6 +38,22 @@ namespace GeometryBattles.StructureManager
                 boardState.EndGame();
             }
         }
+
+        IEnumerator DissolveIn()
+        {
+            float dissolveRate = buildTime;
+            float dissolveTimer = timer;
+            float height = gameObject.GetComponent<MeshRenderer>().bounds.size.y;
+            Material dissolveMat = gameObject.GetComponent<MeshRenderer>().materials[0];
+            while (dissolveMat.GetFloat("_Glow") != 1.0f)
+            {
+                dissolveTimer -= Time.deltaTime;
+                dissolveMat.SetFloat("_Glow", 1.0f - Mathf.Max(dissolveTimer, 0.0f) / dissolveRate);
+                dissolveMat.SetFloat("_Level", height / 2.0f - (height + 0.65f) * (Mathf.Max(dissolveTimer, 0.0f) / dissolveRate));
+                yield return null;
+            }
+        }
+
 
         [PunRPC]
         void RPC_SubTimer()
