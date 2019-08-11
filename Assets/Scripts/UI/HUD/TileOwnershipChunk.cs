@@ -38,7 +38,7 @@ namespace GeometryBattles.UI
             float percentOwned = tileOwnershipDisplay.GetPercentOwned(playerID);
             if (percentOwned > minPercentDisplay)
             {
-                percentText.text = tileOwnershipDisplay.GetPercentOwned(playerID).ToString("P0");
+                percentText.text = Mathf.FloorToInt(tileOwnershipDisplay.GetPercentOwned(playerID) * 100).ToString() + "%";
             }
             else
             {
