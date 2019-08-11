@@ -227,7 +227,7 @@ MonoBehaviour:
   imageContainer: {fileID: 7197971805992568109}
   winText: YOU WIN!!
   loseText: YOU LOSE!!
-  winColor: {r: 1, g: 1, b: 1, a: 0.1764706}
+  winColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 0.1764706}
   loseColor: {r: 1, g: 0, b: 0, a: 0.105882354}
 --- !u!114 &3939872986217188458
 MonoBehaviour:
