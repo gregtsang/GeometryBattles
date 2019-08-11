@@ -96,7 +96,7 @@ namespace GeometryBattles.Construction
             }
             else
             {
-                err = "Cannot construct on a tile you do not own";
+                err = "Cannot construct on this tile";
                 return false;
             }
         }

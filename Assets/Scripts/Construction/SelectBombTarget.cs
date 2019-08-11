@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using GeometryBattles.BoardManager;
 using GeometryBattles.PlayerManager;
@@ -20,6 +21,10 @@ namespace GeometryBattles.HexAction
         
         Board board;
         PhotonView photonView;
+
+        public event EventHandler<BombSelectionEnteredEventArgs> BombSelectionEntered;
+        public event EventHandler BombSelectionLeft;
+
 
         // Start is called before the first frame update
         void Start()
@@ -49,6 +54,11 @@ namespace GeometryBattles.HexAction
                 selectedPentagon = (Pentagon) structure;
 
                 selectionManager.SelectHex(OnHexSelection);
+
+                var e = new BombSelectionEnteredEventArgs();
+                e.tile = tile;
+                OnBombSelectionEntered(e);
+
                 return;
             }
         }
@@ -88,6 +98,7 @@ namespace GeometryBattles.HexAction
         private void OnHexSelection(Tile tile)
         {
             Debug.Log($"tile selected: {tile.Q}, {tile.R}");
+            OnBombSelectionLeft();
             photonView.RPC("RPC_SetTarget", RpcTarget.AllViaServer, selectedPentagon.Q, selectedPentagon.R, tile.Q, tile.R);
         }
 
@@ -114,5 +125,29 @@ namespace GeometryBattles.HexAction
             }
             return false;
         }
+
+        //Event Handlers
+        private void OnBombSelectionEntered(BombSelectionEnteredEventArgs e)
+        {
+            var handler = BombSelectionEntered;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        private void OnBombSelectionLeft()
+        {
+            var handler = BombSelectionLeft;
+            if (handler != null)
+            {
+                handler(this, new EventArgs());
+            }
+        }
+    }
+
+    public class BombSelectionEnteredEventArgs : EventArgs
+    {
+        public Tile tile { get; set; }
     }
 }

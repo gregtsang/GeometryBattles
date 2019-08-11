@@ -5,9 +5,6 @@ using GeometryBattles.PlayerManager;
 using GeometryBattles.BoardManager;
 using GeometryBattles.HexAction;
 using Photon.Pun;
-using UnityEngine.UI;
-using TMPro;
-using System;
 
 namespace GeometryBattles.UI
 {
@@ -48,6 +45,11 @@ namespace GeometryBattles.UI
             Player player = board.boardState.GetPlayer(activePlayer);
             if (player == null) return null;
             return player;
+        }
+
+        public string GetPlayerUserName(int playerID)
+        {
+            return PhotonNetwork.PlayerList[playerID].NickName;
         }
 
         public Board GetBoard()
