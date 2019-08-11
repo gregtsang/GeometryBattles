@@ -31,10 +31,9 @@ namespace GeometryBattles.StructureManager
             {
                 photonView.RPC("RPB_SubTimer", RpcTarget.AllViaServer);
             }
-            if (!boardState.IsGameOver() && timer <= 0.0f)
+            if (!boardState.IsGameOver() && timer <= 0.0f && PhotonNetwork.IsMasterClient)
             {
-                EventManager.RaiseOnGameOver(player.gameObject);
-                boardState.EndGame();
+                photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) player.Id);
             }
         }
 
