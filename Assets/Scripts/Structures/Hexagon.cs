@@ -34,11 +34,11 @@ namespace GeometryBattles.StructureManager
         {
             if (PhotonNetwork.IsMasterClient && CheckSpace())
             {
-                photonView.RPC("RPB_SubTimer", RpcTarget.AllViaServer);
+                photonView.RPC("RPC_SubTimer", RpcTarget.AllViaServer);
             }
             if (!boardState.IsGameOver() && timer <= 0.0f && PhotonNetwork.IsMasterClient)
             {
-                photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) player.Id);
+                boardState.photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) player.Id);
             }
         }
 

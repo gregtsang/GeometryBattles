@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6476988815690852008}
   - component: {fileID: 6971573899822871653}
   - component: {fileID: 8285407412691932404}
+  - component: {fileID: 1462460735122393542}
   m_Layer: 0
   m_Name: HexagonPrefab
   m_TagString: Untagged
@@ -94,11 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardState: {fileID: 0}
   hp: 100
-  photonView: {fileID: 0}
-  baseMaxHP: 100
-  baseRegen: 10
-  baseArmor: 10
-  buildTime: 5
+  photonView: {fileID: 1462460735122393542}
   stats: {fileID: 8285407412691932404}
 --- !u!114 &8285407412691932404
 MonoBehaviour:
@@ -124,3 +121,25 @@ MonoBehaviour:
     regen: 2
     armor: 10
     buildTime: 10
+--- !u!114 &1462460735122393542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4746289392899609204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
