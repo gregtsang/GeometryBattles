@@ -48,6 +48,8 @@ namespace GeometryBattles.UI
                 titleText.text = loseText;
                 imageContainer.color = loseColor;
             }
+
+            winnerText.text = winnerText.text.Replace("%P", uiManager.GetPlayerUserName(winningPlayer.Id));
         }
     }
 }
