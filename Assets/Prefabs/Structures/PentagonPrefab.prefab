@@ -120,12 +120,12 @@ MonoBehaviour:
     bombStrength: 0
     bombRadius: 0
   levels:
-  - cost: 10
+  - cost: 50
     maxHP: 100
     regen: 1
     armor: 0
     bombRate: 5
-    bombStrength: 80
+    bombStrength: 30
     bombRadius: 1
   - cost: 0
     maxHP: 0

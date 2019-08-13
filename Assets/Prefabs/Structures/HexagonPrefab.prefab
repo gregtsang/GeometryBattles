@@ -116,11 +116,11 @@ MonoBehaviour:
     armor: 0
     buildTime: 0
   levels:
-  - cost: 1
+  - cost: 1000
     maxHP: 100
     regen: 2
     armor: 10
-    buildTime: 10
+    buildTime: 30
 --- !u!114 &1462460735122393542
 MonoBehaviour:
   m_ObjectHideFlags: 0
