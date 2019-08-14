@@ -33,6 +33,15 @@ namespace GeometryBattles.BoardManager
         void Awake()
         {   
             numPlayers = NetworkedManager.GetNumberOfPlayers();
+            if (numPlayers <= 2)
+            {
+                boardWidth = 35;
+            }
+            else
+            {
+                boardWidth = 12;
+            }
+
             if (PhotonNetwork.IsMasterClient)
             {
                 PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
