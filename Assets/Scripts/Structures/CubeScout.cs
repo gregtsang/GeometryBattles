@@ -8,13 +8,14 @@ namespace GeometryBattles.StructureManager
     {
         public Player player;
 
-        bool motion;
         float moveRate;
         int movesLeft = 10;
         float currRot;
         int q, r;
         int homeQ, homeR;
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        int structureDamage;
+        int tileInfluence;
 
         public int Q { get => q; }
         public int R { get => r; }
@@ -22,16 +23,6 @@ namespace GeometryBattles.StructureManager
         void Start()
         {
             currRot = gameObject.transform.eulerAngles.y;
-        }
-
-        public bool GetMotion()
-        {
-            return motion;
-        }
-
-        public void SetMotion(bool motion)
-        {
-            this.motion = motion;
         }
 
         public void SetHome(int q, int r)
@@ -104,6 +95,26 @@ namespace GeometryBattles.StructureManager
         public bool HasVisited(int q, int r)
         {
             return visited.Contains(new Vector2Int(q, r));
+        }
+
+        public int GetDamage()
+        {
+            return structureDamage;
+        }
+
+        public void SetDamage(int damage)
+        {
+            structureDamage = damage;
+        }
+
+        public int GetInfluence()
+        {
+            return tileInfluence;
+        }
+
+        public void SetInfluence(int influence)
+        {
+            tileInfluence = influence;
         }
 
         public void SelfDestruct()

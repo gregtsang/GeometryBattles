@@ -21,7 +21,6 @@ namespace GeometryBattles.Construction
 
         private void Start()
         {
-            HexActionManager.registerAction(this);
             board = FindObjectOfType<Board>();
         }
 

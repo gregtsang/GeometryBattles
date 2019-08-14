@@ -14,8 +14,17 @@ public class EventManager
     public delegate void OnStructureDamage(int q, int r, int amount);
     public static event OnStructureDamage onStructureDamage;
 
-    public delegate void OnCreateScout(GameObject scout);
-    public static event OnCreateScout onCreateScout;
+    public delegate void OnStructureHeal(int q, int r, int amount);
+    public static event OnStructureHeal onStructureHeal;
+
+    public delegate void OnCreateCube(GameObject cube);
+    public static event OnCreateCube onCreateCube;
+
+    public delegate void OnCreatePentagon(GameObject pentagon);
+    public static event OnCreatePentagon onCreatePentagon;
+
+    public delegate void OnProjectileCollision(GameObject projectile);
+    public static event OnProjectileCollision onProjectileCollision;
 
     public static void RaiseOnGameOver(GameObject winner)
     {
@@ -41,9 +50,27 @@ public class EventManager
             onStructureDamage(q, r, amount);
     }
 
-    public static void RaiseOnCreateScout(GameObject scout)
+    public static void RaiseOnStructureHeal(int q, int r, int amount)
     {
-        if (onCreateScout != null)
-            onCreateScout(scout);
+        if (onStructureHeal != null)
+            onStructureHeal(q, r, amount);
+    }
+
+    public static void RaiseOnCreateCube(GameObject cube)
+    {
+        if (onCreateCube != null)
+            onCreateCube(cube);
+    }
+
+    public static void RaiseOnCreatePentagon(GameObject pentagon)
+    {
+        if (onCreatePentagon != null)
+            onCreatePentagon(pentagon);
+    }
+
+    public static void RaiseOnProjectileCollision(GameObject projectile)
+    {
+        if (onProjectileCollision != null)
+            onProjectileCollision(projectile);
     }
 }

@@ -29,15 +29,28 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   RpcList:
+  - RPC_Bombard
+  - RPC_BuildStructure
   - RPC_CalcBuffer
   - RPC_ChangeReadyState
-  - RPC_StartCountdown
-  - RPC_StopCountdown
-  - RPC_SetResourceTileLocation
-  - RPC_SetColors
-  - RPC_PurchaseTile
-  - RPC_SellTile
-  - RPC_StartGame
+  - RPC_Jump
   - RPC_MineResource
+  - RPC_PurchaseTile
+  - RPC_RemoveScout
+  - RPC_ScoutEffect
+  - RPC_SellTile
+  - RPC_SetResourceTileLocation
+  - RPC_SetTarget
+  - RPC_SpawnScout
+  - RPC_StartCountdown
+  - RPC_StartGame
+  - RPC_StartStructureEffect
+  - RPC_StopCountdown
+  - RPC_Fire
+  - RPC_DestroyProjectile
+  - RPC_SubTimer
+  - RPC_StartGlow
+  - RPC_StopGlow
+  - RPC_EndGame
   DisableAutoOpenWizard: 1
   ShowSettings: 1

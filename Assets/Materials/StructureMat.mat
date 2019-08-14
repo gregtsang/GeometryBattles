@@ -90,7 +90,7 @@ Material:
     - _GlossinessSource: 0
     - _GlossyReflections: 0
     - _Glow: 0
-    - _Level: -0.25
+    - _Level: 1
     - _Mask_Smoothness: 1.55
     - _Metallic: 0.5
     - _NoiseScale: 1
@@ -114,7 +114,7 @@ Material:
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.83033794, b: 0.9150943, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color1: {r: 1.9476438, g: 0, b: 0.18354759, a: 1}
     - _EdgeColor: {r: 16.94838, g: 16.94838, b: 16.94838, a: 0}

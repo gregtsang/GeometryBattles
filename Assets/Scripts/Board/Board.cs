@@ -19,7 +19,6 @@ namespace GeometryBattles.BoardManager
         public int baseOffset;
         public int numPlayers;
         int readyCheck = 0;
-        [ColorUsageAttribute(true,true)]
         public List<Color> playerColors;
 
         float tileWidth;
@@ -357,7 +356,7 @@ namespace GeometryBattles.BoardManager
                 GameObject player = Instantiate(playerPrefab, this.transform.position, Quaternion.identity, this.transform) as GameObject;
                 player.name = "Player" + (i + 1);
                 Player currPlayer = player.GetComponent<Player>();
-                currPlayer.SetColor(playerColors[i]);
+                currPlayer.SetColor(playerColors[i] * 1.2f);
                 currPlayer.SetResource(resource.startResource);
                 currPlayer.Id = i;
                 boardState.AddPlayer(player.GetComponent<Player>());

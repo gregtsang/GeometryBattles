@@ -33,31 +33,31 @@ namespace GeometryBattles.BoardManager
         Dictionary<Vector2Int, TileState> grid;
         Dictionary<Vector2Int, TileState> buffer;
 
-        private PhotonView photonView;
+        public PhotonView photonView;
 
         void Update()
         {
             if (start)
             {
-                Player winner = CheckEndGame();
-                if (winner == null)
+                spreadTimer -= Time.deltaTime;
+                UpdateColors();
+                if (spreadTimer <= 0.0f)
                 {
-                    spreadTimer -= Time.deltaTime;
-                    UpdateColors();
-                    if (spreadTimer <= 0.0f)
+                    if (PhotonNetwork.IsMasterClient)
                     {
-                        if (PhotonNetwork.IsMasterClient)
-                        {
-                            photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
-                        }
-                        SetColors();
-                        spreadTimer = spreadRate;
+                        photonView.RPC("RPC_CalcBuffer", RpcTarget.AllViaServer);
                     }
+                    SetColors();
+                    spreadTimer = spreadRate;
                 }
-                else
+                
+                if (PhotonNetwork.IsMasterClient)
                 {
-                    EventManager.RaiseOnGameOver(winner.gameObject);
-                    EndGame();
+                    Player winner = CheckEndGame();
+                    if (winner != null)
+                    {
+                        photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) winner.Id);
+                    }
                 }
             }
         }
@@ -76,8 +76,11 @@ namespace GeometryBattles.BoardManager
             }
         }
 
-        public void EndGame()
+        [PunRPC]
+        public void RPC_EndGame(byte playerID)
         {
+            Player winner = GetPlayer((int) playerID);
+            EventManager.RaiseOnGameOver(winner.gameObject);
             start = false;
             Debug.Log("GAME OVER");
         }
@@ -187,6 +190,10 @@ namespace GeometryBattles.BoardManager
                 {
                     EventManager.RaiseOnStructureDamage(q, r, value);
                 }
+                else
+                {
+                    EventManager.RaiseOnStructureHeal(q, r, value);
+                }
             }
             else
             {
@@ -274,15 +281,17 @@ namespace GeometryBattles.BoardManager
         public void RemoveBase(Player player)
         {
             bases.Remove(player);
-            if (bases.Count == 1)
+            if (PhotonNetwork.IsMasterClient)
             {
-                Player winner = null;
-                foreach (Player p in bases.Keys)
+                if (bases.Count == 1)
                 {
-                    winner = p;
+                    Player winner = null;
+                    foreach (Player p in bases.Keys)
+                    {
+                        winner = p;
+                    }
+                    photonView.RPC("RPC_EndGame", RpcTarget.All, (byte) winner.Id);
                 }
-                EventManager.RaiseOnGameOver(winner.gameObject);
-                EndGame();
             }
         }
 

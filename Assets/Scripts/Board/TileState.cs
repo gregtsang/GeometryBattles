@@ -75,7 +75,7 @@ namespace GeometryBattles.BoardManager
 
         public void SetBuff(Player player, int buff)
         {
-            this.buff[player] = this.buff.ContainsKey(player) ? Mathf.Max(buff, this.buff[player]) : buff;
+            this.buff[player] = this.buff.ContainsKey(player) ? buff + this.buff[player] : buff;
         }
 
         public bool HasStructure()
