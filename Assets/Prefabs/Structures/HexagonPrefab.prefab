@@ -116,7 +116,7 @@ MonoBehaviour:
     armor: 0
     buildTime: 0
   levels:
-  - cost: 1000
+  - cost: 100
     maxHP: 100
     regen: 2
     armor: 10

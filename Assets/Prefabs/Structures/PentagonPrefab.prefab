@@ -125,7 +125,7 @@ MonoBehaviour:
     regen: 1
     armor: 0
     bombRate: 5
-    bombStrength: 30
+    bombStrength: 75
     bombRadius: 1
   - cost: 0
     maxHP: 0
